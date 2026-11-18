@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>基于区块链FISCO BCOS的高校食堂肉类供应链溯源系统架构图</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html,body { background:#ffffff; }
+  body { font-family:"Microsoft YaHei","PingFang SC","Noto Sans CJK SC",sans-serif; color:#1f3a5f; }
+  .stage{ position:relative; width:1840px; height:1060px; overflow:hidden; background:#f7fafd; background-image:radial-gradient(#dce8f5 1.1px, transparent 1.1px); background-size:26px 26px; }
+
+  /* ---------- 标题 ---------- */
+  .title{ position:absolute; left:0; top:20px; width:100%; text-align:center; font-size:40px; font-weight:700; color:#12467e; letter-spacing:1.5px; }
+  .subtitle{ position:absolute; left:0; top:80px; width:100%; text-align:center; font-size:15.5px; color:#5b7ea9; letter-spacing:.6px; }
+
+  /* ---------- 通用 ---------- */
+  .chip{ display:block; width:max-content; margin:0 auto 10px; padding:5px 18px; border-radius:9px; font-size:16px; font-weight:700; letter-spacing:.5px; }
+  .arr{ position:absolute; }
+
+  /* ---------- 输入层 ---------- */
+  .col-input{ position:absolute; left:30px; top:112px; width:208px; height:828px; background:#fff8ee; border:1.5px solid #efc98e; border-radius:16px; padding:12px 10px; box-shadow:0 6px 16px rgba(196,146,61,.10); }
+  .chip.in{ background:#fff; border:1.5px solid #f0c88c; color:#c4761a; }
+  .col-cards{ display:flex; flex-direction:column; gap:10px; height:calc(100% - 43px); }
+  .in-card{ flex:1; display:flex; align-items:center; gap:9px; background:#fff; border:1.5px solid #f1cd96; border-radius:12px; padding:0 9px; box-shadow:0 2px 6px rgba(196,146,61,.06); }
+  .in-ic{ flex:0 0 32px; width:32px; height:32px; border-radius:9px; background:#fdeed9; display:flex; align-items:center; justify-content:center; color:#d9822b; }
+  .in-ic svg{ width:19px; height:19px; }
+  .in-tx{ flex:1 1 auto; min-width:0; }
+  .in-tx .t{ font-size:14.5px; font-weight:700; color:#8a5514; line-height:1.25; }
+  .in-tx .s{ font-size:10.5px; color:#b28a58; line-height:1.4; margin-top:2px; }
+
+  /* ---------- 应用功能层 ---------- */
+  .box-app{ position:absolute; left:284px; top:112px; width:1230px; height:300px; background:#eaf3fc; border:1.5px solid #bcd8f1; border-radius:16px; padding:12px 18px; box-shadow:0 6px 16px rgba(47,111,181,.08); }
+  .chip.app{ background:#fff; border:1.5px solid #a8cdec; color:#1d5fa8; }
+  .fn-row{ display:flex; gap:8px; height:calc(100% - 43px); }
+  .fn-card{ flex:1; background:#fff; border:1.5px solid #d3e5f8; border-radius:12px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; padding:10px 6px; box-shadow:0 2px 6px rgba(47,111,181,.05); }
+  .fn-ic{ width:34px; height:34px; border-radius:50%; background:#e8f2fd; display:flex; align-items:center; justify-content:center; color:#2f6fb5; }
+  .fn-ic svg{ width:19px; height:19px; }
+  .fn-t{ font-size:13px; font-weight:700; color:#1c5590; letter-spacing:.4px; }
+  .fn-p{ width:100%; text-align:center; font-size:10.5px; color:#38689d; background:#f0f7fe; border:1px solid #d9eafa; border-radius:7px; padding:2.5px 2px; }
+
+  /* ---------- 区块链层 ---------- */
+  .box-chain{ position:absolute; left:284px; top:454px; width:1230px; height:240px; border-radius:16px; padding:12px 18px; background:linear-gradient(150deg,#17458f 0%,#0e2f68 100%); box-shadow:0 8px 20px rgba(14,47,104,.25); }
+  .chip.chain{ background:rgba(255,255,255,.14); border:1.5px solid rgba(255,255,255,.42); color:#fff; }
+  .bc-row{ display:flex; gap:16px; height:118px; }
+  .bc-card{ flex:1; border:1.5px solid rgba(255,255,255,.45); background:rgba(255,255,255,.07); border-radius:12px; padding:8px 10px; display:flex; flex-direction:column; justify-content:center; gap:5px; }
+  .bc-t{ text-align:center; font-size:14.5px; font-weight:700; color:#fff; letter-spacing:1px; margin-bottom:2px; }
+  .bc-p{ text-align:center; font-size:11px; color:#e8f1ff; background:rgba(255,255,255,.13); border:1px solid rgba(255,255,255,.24); border-radius:7px; padding:2.5px 2px; }
+  .bc-net{ margin-top:10px; height:40px; display:flex; align-items:center; justify-content:center; border:1.5px dashed rgba(255,255,255,.42); background:rgba(255,255,255,.08); border-radius:10px; color:#dbe8ff; font-size:12.5px; letter-spacing:.4px; }
+
+  /* ---------- 存储层 / 数据分析层 ---------- */
+  .box-store{ position:absolute; left:284px; top:736px; width:590px; height:204px; background:#e9f6f8; border:1.5px solid #b6dde6; border-radius:16px; padding:12px 14px; box-shadow:0 6px 16px rgba(46,139,163,.08); }
+  .chip.store{ background:#fff; border:1.5px solid #9ed3de; color:#1e7f95; }
+  .st-row{ display:flex; gap:10px; height:calc(100% - 43px); }
+  .st-card{ flex:1; background:#fff; border:1.5px solid #c4e4ea; border-radius:12px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:5px; padding:8px 6px; }
+  .st-dot{ width:10px; height:10px; border-radius:3px; }
+  .st-t{ font-size:13px; font-weight:700; color:#166d81; }
+  .st-s{ font-size:10.5px; color:#4f93a5; text-align:center; line-height:1.45; }
+
+  .box-ana{ position:absolute; left:924px; top:736px; width:590px; height:204px; background:#f1ecfb; border:1.5px solid #cfc2ef; border-radius:16px; padding:12px 14px; box-shadow:0 6px 16px rgba(122,92,191,.10); }
+  .chip.ana{ background:#fff; border:1.5px solid #bda9e8; color:#6b4fc0; }
+  .an-t{ color:#5b3fa8; } .an-s{ color:#7a63b5; } .an-dot{ background:#8a6fd0; }
+
+  /* ---------- 输出层 ---------- */
+  .col-out{ position:absolute; left:1560px; top:112px; width:250px; height:828px; background:#f0f8ea; border:1.5px solid #c2e0b2; border-radius:16px; padding:12px 10px; box-shadow:0 6px 16px rgba(90,150,60,.10); }
+  .chip.out{ background:#fff; border:1.5px solid #b7dba4; color:#4f8f33; }
+  .out-cards{ display:flex; flex-direction:column; gap:12px; height:calc(100% - 43px); }
+  .out-card{ flex:1; background:#fff; border:1.5px solid #cbe5bd; border-radius:12px; padding:10px 12px; display:flex; flex-direction:column; justify-content:center; }
+  .out-head{ display:flex; align-items:center; gap:8px; margin-bottom:7px; }
+  .out-ic{ width:30px; height:30px; border-radius:8px; background:#e6f4dc; color:#5da03c; display:flex; align-items:center; justify-content:center; }
+  .out-ic svg{ width:18px; height:18px; }
+  .out-t{ font-size:14px; font-weight:700; color:#3f7a26; }
+  .out-li{ display:flex; align-items:center; gap:7px; font-size:11.5px; color:#5a7a49; padding:2.5px 0 2.5px 1px; }
+  .out-li::before{ content:""; width:5px; height:5px; border-radius:1.5px; background:#6fae4e; flex:0 0 5px; }
+
+  /* ---------- 图例 ---------- */
+  .legend{ position:absolute; left:284px; top:972px; width:1230px; height:62px; background:#fff; border:1.5px solid #d9e4f2; border-radius:14px; display:flex; align-items:center; justify-content:center; gap:19px; box-shadow:0 4px 12px rgba(31,74,140,.05); font-size:13px; color:#33547e; }
+  .lg-item{ display:flex; align-items:center; gap:7px; }
+  .lg-sq{ width:14px; height:14px; border-radius:4px; }
+  .lg-sep{ width:1px; height:26px; background:#dbe5f2; }
+  .lg-arrow{ display:flex; align-items:center; gap:6px; }
+  .lg-label{ font-weight:700; color:#12467e; }
+</style>
+</head>
+<body>
+<!-- 图标库 -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <linearGradient id="gH" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#5aa2f7"/><stop offset="1" stop-color="#2e6fd2"/></linearGradient>
+    <linearGradient id="gV" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5aa2f7"/><stop offset="1" stop-color="#2e6fd2"/></linearGradient>
+    <symbol id="i-person" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7.8" r="3.3"/><path d="M5.3 19.2c1.1-3.5 3.6-5.3 6.7-5.3s5.6 1.8 6.7 5.3"/></symbol>
+    <symbol id="i-barn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.4 12 4.8l8 6.6"/><path d="M6.4 10.6v8.6h11.2v-8.6"/><path d="M10.1 19.2v-4.4h3.8v4.4"/></symbol>
+    <symbol id="i-factory" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4.4 19.5V10l4.4 2.7V10l4.4 2.7V10l4.4 2.7V7.2h2.2v12.3H4.4z"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.9l6.2 2.2v5.2c0 4.1-2.6 6.7-6.2 8.3-3.6-1.6-6.2-4.2-6.2-8.3V6.1z"/><path d="M9.3 11.8l1.9 1.9 3.5-3.8"/></symbol>
+    <symbol id="i-truck" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3.7 7.4h10v8.4h-10z"/><path d="M13.7 10h3.3l2.5 2.8v3h-5.8"/><circle cx="7.3" cy="17.4" r="1.7"/><circle cx="16.3" cy="17.4" r="1.7"/></symbol>
+    <symbol id="i-cart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3.6 5.4h2.1l2.3 9.4h9.1l1.9-6.8H6.5"/><circle cx="8.6" cy="18.3" r="1.5"/><circle cx="15.7" cy="18.3" r="1.5"/></symbol>
+    <symbol id="i-utensils" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M7.4 4.8v4.7c0 1.2.8 2.1 1.8 2.1s1.8-.9 1.8-2.1V4.8"/><path d="M9.2 11.7v7.5"/><path d="M15.7 19.2V4.8c1.9 1.3 2.9 3.1 2.9 5.4 0 1.9-1 3.2-2.9 3.7"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6.4 16.2v-4.5a5.6 5.6 0 0 1 11.2 0v4.5l1.7 2.1H4.7z"/><path d="M10.2 20.2h3.6"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.7" cy="10.7" r="5.3"/><path d="M14.8 14.8l4.4 4.4"/></symbol>
+    <symbol id="i-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4.2 4.8v14.6h15.6"/><path d="M8.6 16.1v-4.4"/><path d="M12.6 16.1V7.6"/><path d="M16.6 16.1v-6.3"/></symbol>
+    <symbol id="i-scan" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4.2 8.2V5.6c0-.8.6-1.4 1.4-1.4h2.6"/><path d="M15.8 4.2h2.6c.8 0 1.4.6 1.4 1.4v2.6"/><path d="M19.8 15.8v2.6c0 .8-.6 1.4-1.4 1.4h-2.6"/><path d="M8.2 19.8H5.6c-.8 0-1.4-.6-1.4-1.4v-2.6"/><path d="M4.8 12h14.4"/></symbol>
+    <symbol id="i-shop" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4.9 9.6 6.3 5h11.4l1.4 4.6"/><path d="M5.2 9.6v9.6h13.6V9.6"/><path d="M9.9 19.2v-4.6h4.2v4.6"/></symbol>
+    <symbol id="i-monitor" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3.6" y="5.2" width="16.8" height="11.2" rx="1.6"/><path d="M9.2 20h5.6"/><path d="M12 16.4V20"/><path d="M8.1 13.2v-2.2"/><path d="M12 13.2V8.9"/><path d="M15.9 13.2v-1.4"/></symbol>
+  </defs>
+</svg>
+
+<div class="stage">
+  <div class="title">基于区块链FISCO BCOS的高校食堂肉类供应链溯源系统架构图</div>
+  <div class="subtitle">面向高校食堂场景 &nbsp;|&nbsp; 覆盖「养殖 → 屠宰加工 → 检疫质检 → 冷链运输 → 采购验收 → 加工销售」全链路 &nbsp;|&nbsp; 多主体协同 · 可信溯源 · 联动监管</div>
+
+  <!-- ============ 输入层 ============ -->
+  <div class="col-input">
+    <span class="chip in">输入层</span>
+    <div class="col-cards">
+      <div class="in-card"><span class="in-ic"><svg><use href="#i-barn"/></svg></span>
+        <div class="in-tx"><div class="t">养殖信息录入</div><div class="s">养殖备案 · 饲料兽药<br>出栏登记</div></div></div>
+      <div class="in-card"><span class="in-ic"><svg><use href="#i-factory"/></svg></span>
+        <div class="in-tx"><div class="t">屠宰加工录入</div><div class="s">屠宰批次 · 分割包装<br>批次赋码</div></div></div>
+      <div class="in-card"><span class="in-ic"><svg><use href="#i-shield"/></svg></span>
+        <div class="in-tx"><div class="t">检疫质检录入</div><div class="s">检疫合格证 · 检验报告<br>抽检记录</div></div></div>
+      <div class="in-card"><span class="in-ic"><svg><use href="#i-truck"/></svg></span>
+        <div class="in-tx"><div class="t">冷链运输录入</div><div class="s">温控数据 · 运输轨迹<br>交接记录</div></div></div>
+      <div class="in-card"><span class="in-ic"><svg><use href="#i-cart"/></svg></span>
+        <div class="in-tx"><div class="t">采购验收录入</div><div class="s">采购订单 · 入库验收<br>索证索票</div></div></div>
+      <div class="in-card"><span class="in-ic"><svg><use href="#i-utensils"/></svg></span>
+        <div class="in-tx"><div class="t">加工销售录入</div><div class="s">加工记录 · 留样管理<br>销售登记</div></div></div>
+      <div class="in-card"><span class="in-ic"><svg><use href="#i-bell"/></svg></span>
+        <div class="in-tx"><div class="t">监管巡查录入</div><div class="s">日常巡查 · 抽检处置<br>整改复核</div></div></div>
+    </div>
+  </div>
+
+  <!-- ============ 应用功能层 ============ -->
+  <div class="box-app">
+    <span class="chip app">应用功能层</span>
+    <div class="fn-row">
+      <div class="fn-card"><span class="fn-ic"><svg><use href="#i-person"/></svg></span><div class="fn-t">角色管理</div><div class="fn-p">主体注册</div><div class="fn-p">身份认证</div><div class="fn-p">权限分配</div></div>
+      <div class="fn-card"><span class="fn-ic"><svg><use href="#i-barn"/></svg></span><div class="fn-t">养殖管理</div><div class="fn-p">养殖档案</div><div class="fn-p">饲料兽药</div><div class="fn-p">出栏管理</div></div>
+      <div class="fn-card"><span class="fn-ic"><svg><use href="#i-factory"/></svg></span><div class="fn-t">屠宰加工</div><div class="fn-p">屠宰批次</div><div class="fn-p">分割包装</div><div class="fn-p">批次赋码</div></div>
+      <div class="fn-card"><span class="fn-ic"><svg><use href="#i-shield"/></svg></span><div class="fn-t">检疫质检</div><div class="fn-p">检疫登记</div><div class="fn-p">检验报告</div><div class="fn-p">合格判定</div></div>
+      <div class="fn-card"><span class="fn-ic"><svg><use href="#i-truck"/></svg></span><div class="fn-t">冷链物流</div><div class="fn-p">运输登记</div><div class="fn-p">温控监测</div><div class="fn-p">交接确认</div></div>
+      <div class="fn-card"><span class="fn-ic"><svg><use href="#i-cart"/></svg></span><div class="fn-t">采购验收</div><div class="fn-p">采购订单</div><div class="fn-p">入库验收</div><div class="fn-p">索证索票</div></div>
+      <div class="fn-card"><span class="fn-ic"><svg><use href="#i-utensils"/></svg></span><div class="fn-t">加工销售</div><div class="fn-p">加工记录</div><div class="fn-p">留样管理</div><div class="fn-p">销售登记</div></div>
+      <div class="fn-card"><span class="fn-ic"><svg><use href="#i-bell"/></svg></span><div class="fn-t">监管预警</div><div class="fn-p">批次巡查</div><div class="fn-p">风险预警</div><div class="fn-p">处置跟踪</div></div>
+      <div class="fn-card"><span class="fn-ic"><svg><use href="#i-search"/></svg></span><div class="fn-t">溯源查询</div><div class="fn-p">追溯码生成</div><div class="fn-p">扫码溯源</div><div class="fn-p">全链查询</div></div>
+      <div class="fn-card"><span class="fn-ic"><svg><use href="#i-chart"/></svg></span><div class="fn-t">数据分析</div><div class="fn-p">数据统计</div><div class="fn-p">趋势分析</div><div class="fn-p">报表生成</div></div>
+    </div>
+  </div>
+
+  <!-- ============ 区块链层 ============ -->
+  <div class="box-chain">
+    <span class="chip chain">区块链层（FISCO BCOS）</span>
+    <div class="bc-row">
+      <div class="bc-card"><div class="bc-t">智能合约</div><div class="bc-p">数据上链</div><div class="bc-p">业务规则</div><div class="bc-p">存证校验</div></div>
+      <div class="bc-card"><div class="bc-t">共识机制</div><div class="bc-p">PBFT共识</div><div class="bc-p">多节点验证</div><div class="bc-p">区块生成</div></div>
+      <div class="bc-card"><div class="bc-t">区块存储</div><div class="bc-p">交易记录</div><div class="bc-p">区块账本</div><div class="bc-p">哈希存证</div></div>
+      <div class="bc-card"><div class="bc-t">权限管理</div><div class="bc-p">身份认证</div><div class="bc-p">RBAC控制</div><div class="bc-p">权限策略</div></div>
+    </div>
+    <div class="bc-net">联盟链网络 · 多机构节点：养殖场 | 屠宰加工企业 | 检疫机构 | 冷链物流企业 | 高校食堂 | 监管部门</div>
+  </div>
+
+  <!-- ============ 存储层 ============ -->
+  <div class="box-store">
+    <span class="chip store">存储层</span>
+    <div class="st-row">
+      <div class="st-card"><span class="st-dot" style="background:#2e8ba3"></span><div class="st-t">链上存储</div><div class="st-s">哈希指纹<br>索引映射</div></div>
+      <div class="st-card"><span class="st-dot" style="background:#2e8ba3"></span><div class="st-t">链下存储</div><div class="st-s">报告单据<br>照片凭证</div></div>
+      <div class="st-card"><span class="st-dot" style="background:#2e8ba3"></span><div class="st-t">业务数据库</div><div class="st-s">用户数据<br>业务元数据</div></div>
+      <div class="st-card"><span class="st-dot" style="background:#2e8ba3"></span><div class="st-t">备份存储</div><div class="st-s">数据备份<br>灾备恢复</div></div>
+    </div>
+  </div>
+
+  <!-- ============ 数据分析层 ============ -->
+  <div class="box-ana">
+    <span class="chip ana">数据分析层</span>
+    <div class="st-row">
+      <div class="st-card"><span class="st-dot an-dot"></span><div class="st-t an-t">数据统计</div><div class="st-s an-s">上链数据<br>统计分析</div></div>
+      <div class="st-card"><span class="st-dot an-dot"></span><div class="st-t an-t">溯源分析</div><div class="st-s an-s">全链路追踪<br>责任定位</div></div>
+      <div class="st-card"><span class="st-dot an-dot"></span><div class="st-t an-t">风险评估</div><div class="st-s an-s">预警模型<br>供应商画像</div></div>
+      <div class="st-card"><span class="st-dot an-dot"></span><div class="st-t an-t">报表生成</div><div class="st-s an-s">监管报表<br>统计报表</div></div>
+    </div>
+  </div>
+
+  <!-- ============ 输出层 ============ -->
+  <div class="col-out">
+    <span class="chip out">输出层</span>
+    <div class="out-cards">
+      <div class="out-card">
+        <div class="out-head"><span class="out-ic"><svg><use href="#i-scan"/></svg></span><div class="out-t">就餐者扫码查验</div></div>
+        <div class="out-li">批次来源信息</div>
+        <div class="out-li">检疫检验证明</div>
+        <div class="out-li">冷链流转轨迹</div>
+        <div class="out-li">抽检报告结果</div>
+      </div>
+      <div class="out-card">
+        <div class="out-head"><span class="out-ic"><svg><use href="#i-shop"/></svg></span><div class="out-t">食堂管理端</div></div>
+        <div class="out-li">采购验收台账</div>
+        <div class="out-li">供应商考核评价</div>
+        <div class="out-li">留样与风险提醒</div>
+      </div>
+      <div class="out-card">
+        <div class="out-head"><span class="out-ic"><svg><use href="#i-shield"/></svg></span><div class="out-t">监管部门</div></div>
+        <div class="out-li">批次追溯调阅</div>
+        <div class="out-li">风险预警处置</div>
+        <div class="out-li">监管报告导出</div>
+      </div>
+      <div class="out-card">
+        <div class="out-head"><span class="out-ic"><svg><use href="#i-monitor"/></svg></span><div class="out-t">数据可视化</div></div>
+        <div class="out-li">溯源数据看板</div>
+        <div class="out-li">统计分析报表</div>
+        <div class="out-li">风险趋势预警</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 箭头 ============ -->
+  <!-- 输入层 -> 应用功能层 -->
+  <svg class="arr" style="left:238px;top:148px;" width="46" height="38" viewBox="0 0 46 38">
+    <rect x="0" y="9" width="29" height="20" rx="5" fill="url(#gH)"/>
+    <path d="M28 3.5 L46 19 L28 34.5 Z" fill="#2e6fd2"/>
+  </svg>
+  <!-- 应用功能层 -> 区块链层 -->
+  <svg class="arr" style="left:745px;top:412px;" width="30" height="42" viewBox="0 0 30 42">
+    <rect x="5" y="0" width="20" height="26" rx="5" fill="url(#gV)"/>
+    <path d="M4 25 L15 42 L26 25 Z" fill="#2e6fd2"/>
+  </svg>
+  <svg class="arr" style="left:1025px;top:412px;" width="30" height="42" viewBox="0 0 30 42">
+    <rect x="5" y="0" width="20" height="26" rx="5" fill="url(#gV)"/>
+    <path d="M4 25 L15 42 L26 25 Z" fill="#2e6fd2"/>
+  </svg>
+  <!-- 区块链层 <-> 存储层 / 数据分析层 -->
+  <svg class="arr" style="left:562px;top:694px;" width="34" height="42" viewBox="0 0 34 42">
+    <path d="M17 0 L4 13 L30 13 Z" fill="#4a8fe8"/>
+    <rect x="9.5" y="11" width="15" height="20" rx="4" fill="url(#gV)"/>
+    <path d="M17 42 L4 29 L30 29 Z" fill="#2e6fd2"/>
+  </svg>
+  <svg class="arr" style="left:1202px;top:694px;" width="34" height="42" viewBox="0 0 34 42">
+    <path d="M17 0 L4 13 L30 13 Z" fill="#4a8fe8"/>
+    <rect x="9.5" y="11" width="15" height="20" rx="4" fill="url(#gV)"/>
+    <path d="M17 42 L4 29 L30 29 Z" fill="#2e6fd2"/>
+  </svg>
+  <!-- 应用功能层 -> 输出层（信息流） -->
+  <svg class="arr" style="left:1514px;top:146px;" width="46" height="32" viewBox="0 0 46 32">
+    <rect x="0" y="7" width="29" height="18" rx="5" fill="url(#gH)"/>
+    <path d="M28 3 L46 16 L28 29 Z" fill="#2e6fd2"/>
+  </svg>
+  <!-- 输出层 -> 应用功能层（反馈流） -->
+  <svg class="arr" style="left:1514px;top:204px;" width="46" height="30" viewBox="0 0 46 30">
+    <line x1="44" y1="15" x2="13" y2="15" stroke="#f0952e" stroke-width="3.4" stroke-dasharray="7 6" stroke-linecap="round"/>
+    <path d="M13 6 L0 15 L13 24 Z" fill="#f0952e"/>
+  </svg>
+
+  <!-- ============ 图例 ============ -->
+  <div class="legend">
+    <span class="lg-label">图例</span>
+    <span class="lg-item"><span class="lg-sq" style="background:#f0a24a"></span>输入层</span>
+    <span class="lg-item"><span class="lg-sq" style="background:#7db4e6"></span>应用功能层</span>
+    <span class="lg-item"><span class="lg-sq" style="background:#153f8b"></span>区块链层</span>
+    <span class="lg-item"><span class="lg-sq" style="background:#2e8ba3"></span>存储层</span>
+    <span class="lg-item"><span class="lg-sq" style="background:#8a6fd0"></span>数据分析层</span>
+    <span class="lg-item"><span class="lg-sq" style="background:#79b356"></span>输出层</span>
+    <span class="lg-sep"></span>
+    <span class="lg-arrow">
+      <svg width="34" height="14" viewBox="0 0 34 14"><rect x="0" y="4" width="21" height="6" rx="3" fill="url(#gH)"/><path d="M20 1.5 L33 7 L20 12.5 Z" fill="#2e6fd2"/></svg>
+      信息流
+    </span>
+    <span class="lg-arrow">
+      <svg width="34" height="14" viewBox="0 0 34 14"><line x1="33" y1="7" x2="10" y2="7" stroke="#f0952e" stroke-width="3" stroke-dasharray="5.5 4.5" stroke-linecap="round"/><path d="M10 1.5 L0 7 L10 12.5 Z" fill="#f0952e"/></svg>
+      反馈流
+    </span>
+    <span class="lg-arrow">
+      <svg width="34" height="14" viewBox="0 0 34 14"><path d="M10 1.5 L1 7 L10 12.5 Z" fill="#4a8fe8"/><rect x="9" y="4.5" width="16" height="5" rx="2.5" fill="url(#gH)"/><path d="M24 1.5 L33 7 L24 12.5 Z" fill="#2e6fd2"/></svg>
+      双向交互
+    </span>
+  </div>
+</div>
+</body>
+</html>

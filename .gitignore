@@ -1,0 +1,57 @@
+# ---- Java / Maven ----
+target/
+*.class
+*.jar
+*.war
+!.mvn/wrapper/maven-wrapper.jar
+.mvn/timing.properties
+
+# ---- Node / 前端 ----
+node_modules/
+dist/
+dist-ssr/
+.vite/
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ---- IDE ----
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+*.swp
+
+# ---- 系统 ----
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# ---- 密钥与证书（严禁入库）----
+# FISCO BCOS 节点证书、SDK 证书
+*.crt
+*.key
+*.pem
+*.p12
+*.jks
+# 本地私有配置（数据库口令、大模型 API Key）
+application-local.yml
+application-local.yaml
+.env
+.env.local
+*.local.properties
+
+# ---- 运行期产物 ----
+logs/
+*.log
+temp/
+tmp/
+# 数据库导出与备份
+*.sql.gz
+*.dump
+
+# ---- 大文件（截图进库，但 >5MB 的录屏不进）----
+*.mp4
+*.mov
+*.avi

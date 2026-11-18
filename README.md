@@ -1,0 +1,230 @@
+<div align="center">
+
+# 高校食堂肉类供应链溯源系统
+
+**用「批次」串起从采购到餐桌的业务链，用「联盟链存证」给关键事件盖一个改不了的章**
+
+![Java](https://img.shields.io/badge/Java-21-ED8B00?logo=openjdk&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.3-6DB33F?logo=springboot&logoColor=white)
+![Vue](https://img.shields.io/badge/Vue-3.5-4FC08D?logo=vuedotjs&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?logo=mysql&logoColor=white)
+![FISCO BCOS](https://img.shields.io/badge/FISCO%20BCOS-2.9-1E6FBA)
+![Solidity](https://img.shields.io/badge/Solidity-0.4.25-363636?logo=solidity&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-green)
+
+</div>
+
+---
+
+## 这个项目在解决什么问题
+
+高校食堂的肉来自多个供应商、多个批次。一批餐食可能对应好几张检疫合格证。现在的做法是纸质台账或电子表格——
+
+- **能记录，但没法核对**：谁都能改，改完看不出来
+- **有追溯码，但没有链路**：扫码只跳到一张静态图片，看不出上下游批次关系
+- **出了问题说不清**：`用了猪肉 80 斤`，但这 80 斤是哪批的？
+
+本系统做三件事：
+
+1. **建链路**：一个加工批次可以消耗多个采购批次，每个来源投了多少都记下来，且总量受可用量约束
+2. **留指纹**：关键事件规范化后算 SHA-256，摘要上链。任何人可随时重算比对
+3. **说清楚结论**：公开页把「**记录核验状态**」和「**检验结论**」分成两块展示，绝不合并
+
+> 技术上能证明的是「这条记录写入后没被改过」，不是「这批肉合格」。把两者混为一谈，才是真的不专业。
+
+---
+
+## 系统架构
+
+![系统架构](docs/assets/architecture.png)
+
+六层：输入层 → 应用功能层 → 区块链层 → 存储层 / 数据分析层 → 输出层。详见 [`docs/tech/01-架构总览.md`](docs/tech/01-架构总览.md)。
+
+---
+
+## 核心设计
+
+### 链上只存三要素
+
+```
+eventId (bytes32) + batchId (string) + dataDigest (bytes32)
+```
+
+业务明细留在 MySQL。原因是成本与隐私：全量上链五年要 GB 级空间，换来的只是省一次数据库查询。**存证要的是防篡改，不是异地备份。**
+
+### 摘要规范化
+
+固定 8 行、字段顺序不可变、数量定点 3 位小数、时间 ISO-8601 带时区、JSON 键名升序无空格：
+
+```
+v1
+eventId:6f1c2b9a…0718
+batchId:PB20261118001
+eventType:ACCEPT_RESULT
+bizTime:2026-11-18T09:30:00+08:00
+quantity:120.000
+unit:kg
+payload:{"acceptNo":"AC20261118001","certComplete":true,…}
+```
+
+→ `SHA-256` → `16decfa5e4ccb17cc948c8d3b44c59439fcd7244e2280a0a6cf5a5f86bc770bf`
+
+这条基准向量写死在单元测试里。规范化逻辑一改，测试就红。详见 [`docs/tech/04-合约设计.md`](docs/tech/04-合约设计.md) 第 5 节。
+
+### 四类核验状态
+
+| 状态 | 判定 | 页面表达 |
+|---|---|---|
+| `MATCHED` | 链上摘要 == 本地重算 | 绿色「记录已核验」 |
+| `MISMATCHED` | 链上有记录但摘要不同 | 红色「记录不一致，请谨慎采信」 |
+| `UNCONFIRMED` | 有快照，链上无记录 | 灰色「存证确认中」 |
+| `UNREACHABLE` | 查询超时 | 黄色「暂无法核验」 |
+
+第四类必须单独分出来——否则链挂了会被误读成"数据造假"。
+
+### 幂等的两个层次
+
+| 层次 | 手段 | 解决什么 |
+|---|---|---|
+| 业务层 | `X-Request-Id` + 24h 去重 | 前端重试不产生脏数据 |
+| 存证层 | 合约内 `eventId + digest` 判重 | 网络重试不重复上链 |
+
+同内容返回 `1`（幂等），异内容返回 `2`（冲突）并**保留原记录**——允许覆盖就等于给篡改开门。
+
+---
+
+## 功能
+
+| 模块 | 能力 | 状态 |
+|---|---|---|
+| 供应商管理 | 备案、资质、状态（正常/暂停/黑名单） | 设计完成 |
+| 采购批次 | 一批一档，检疫证、屠宰批次、到货温度 | 设计完成 |
+| 入库验收 | 感官 / 票证 / 温度 / 留样，判定合格与否 | 设计完成 |
+| 冷链登记 | 运输温控，超阈值触发异常事件 | 设计完成 |
+| 加工投料 | **多来源投料**，数量约束与并发安全 | 设计完成 |
+| 销售登记 | 按加工批次销售，累计受产出约束 | 设计完成 |
+| 异常处置 / 召回 | 召回后销售记录批量置 `RECALLED` | 设计完成 |
+| 存证管理 | 任务状态、手动重试（先查链再决定） | 设计完成 |
+| 公开溯源 | 扫码 / 输码，时间线 + 四类核验 | 设计完成 |
+| 溯源问答 | RAG，答案强制回引事件 ID | 设计完成 |
+
+---
+
+## 技术栈
+
+**前端**：Vue 3 · Vite · Element Plus · Pinia · Axios
+**后端**：Java 21 · Spring Boot 3.3 · MyBatis-Plus · HikariCP · Flyway
+**存储**：MySQL 8.0 ·（文件凭证存本地磁盘）
+**区块链**：FISCO BCOS 2.9（Air 四节点）· Solidity 0.4.25 · WeBASE-Front（HTTP `/trans/handle`）· WeBASE-Sign
+**AI**：RAG（embedding + 内存余弦检索 + 引用回链），可一键关闭
+
+> 为什么不用 `fisco-bcos-java-sdk`：它和 Druid 有版本冲突历史，且升级会牵动整棵依赖树。走 HTTP 前置服务，后端只依赖一个 HTTP 客户端。
+
+---
+
+## 快速开始
+
+```bash
+# 1. 启动联盟链（虚拟机内，四节点）
+bash nodes/127.0.0.1/start_all.sh
+docker start webase-front
+
+# 2. 建库
+mysql -u root -p -e "CREATE DATABASE meat_trace DEFAULT CHARSET utf8mb4;"
+
+# 3. 后端（Flyway 自动建表 + 导入演示数据）
+cd backend && mvn spring-boot:run -Dspring-boot.run.profiles=dev
+
+# 4. 前端
+cd frontend && npm install && npm run dev
+```
+
+打开 `http://localhost:5173`，账号 `admin / Admin@123`。公开溯源页免登录：`/trace/PR20261118001`。
+
+完整步骤与排障见 [`docs/product/03-部署演示指南.md`](docs/product/03-部署演示指南.md)。
+
+---
+
+## 目录结构
+
+```
+├─ backend/          Spring Boot 服务（module / chain / assistant 三层分包）
+├─ frontend/         Vue 3 管理端 + 公开溯源页
+├─ contract/         TraceRegistry.sol + ABI/BIN 产物
+├─ db/migration/     Flyway：V1 建表 / V2 演示数据 / V3 AI 扩展
+├─ data/knowledge/   问答知识库原文与评测集
+├─ docs/             产品文档 + 技术文档（详见下方索引）
+├─ scripts/          链检查、合约部署、演示数据重置
+└─ screenshots/      运行截图（论文与 README 取材）
+```
+
+---
+
+## 文档索引
+
+### 产品文档
+
+| 文档 | 内容 |
+|---|---|
+| [需求规格说明书](docs/product/01-需求规格说明书.md) | 痛点、角色权限、12 个功能模块、15 条业务规则、12 项验收标准 |
+| [用例说明](docs/product/02-用例说明.md) | 12 个核心用例（前置/主流程/异常/后置）+ 用例-测试映射 |
+| [部署演示指南](docs/product/03-部署演示指南.md) | 从零到可演示，含 8 条 FAQ |
+| [答辩操作手册](docs/product/04-答辩操作手册.md) | 15 分钟逐分钟脚本、关键话术、12 个高频问答 |
+| [快速开始](docs/product/05-快速开始.md) | 10 分钟跑通 |
+| [AI 问答功能说明](docs/product/06-AI问答功能说明.md) | 能力边界、三种兜底、评测指标 |
+
+### 技术文档
+
+| 文档 | 内容 |
+|---|---|
+| [架构总览](docs/tech/01-架构总览.md) | 六层架构、选型理由、三条数据流、5 条设计取舍 |
+| [数据库设计](docs/tech/02-数据库设计.md) | 10 张表完整 DDL、ER 图、状态字典、事务边界、15 条业务规则 |
+| [接口文档](docs/tech/03-接口文档.md) | 统一返回体、14 个错误码、28 个接口 |
+| [合约设计](docs/tech/04-合约设计.md) | 合约源码、摘要规范、幂等与冲突、基准向量 |
+| [环境版本清单](docs/tech/05-环境版本清单.md) | 组件、版本、校验命令 |
+| [配置说明](docs/tech/06-配置说明.md) | 配置项表、密钥与证书管理 |
+| [测试用例表](docs/tech/07-测试用例表.md) | 30 项用例（正常/边界/异常/核验/幂等） |
+| [测试记录](docs/tech/08-测试记录.md) | 执行环境、结果汇总、20 次耗时采样 |
+| [AI 模块设计](docs/tech/09-AI模块设计.md) | 知识库构建、检索、Prompt、引用回链、评测 |
+
+---
+
+## 测试
+
+30 项功能用例，覆盖正常链路、多来源、数量不足、重复请求、验收不合格、未到货销售、超量、冷链异常、召回、四类核验与幂等。
+
+性能采样：公开查询与批次详情各 20 次，报告均值与最大值，并注明是否包含链上查询。原始数据见 [`docs/tech/08-测试记录.md`](docs/tech/08-测试记录.md)。
+
+---
+
+## 关于 AI 模块
+
+问答模块是**主线之外的扩展**，可通过配置一键关闭，不影响溯源主流程复现。
+
+它只做一件事：把「已经上链且核验一致」的事件变成可问的知识库，答案强制回引事件 ID。
+
+> 核验不一致或链不可达的批次**不进入知识库**。我只回答我能证明的部分。
+
+---
+
+## 路线图
+
+- [x] 设计基线冻结（数据库 / 接口 / 合约 / 状态机）
+- [ ] P0 链环境打通（四节点 + WeBASE-Front）
+- [ ] P1 存证闭环（真实 txHash 落库、幂等验证）
+- [ ] P2 业务域完整（15 条业务规则）
+- [ ] P3 前后端页面 + 公开溯源页
+- [ ] P3.5 问答模块
+- [ ] P4 30 项测试 + 性能采样
+- [ ] P5 论文初稿
+
+---
+
+## 作者
+
+**张育茂** · 江西工程学院 · 智慧产业学院 · 区块链工程 2023 级（2027 届）
+毕业设计《高校食堂肉类供应链溯源系统设计与实现》· 指导教师：何云松
+
+## 许可
+
+[MIT](LICENSE)
