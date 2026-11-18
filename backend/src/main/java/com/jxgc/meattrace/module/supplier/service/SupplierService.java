@@ -6,6 +6,7 @@ import com.jxgc.meattrace.common.BizException;
 import com.jxgc.meattrace.common.ErrorCode;
 import com.jxgc.meattrace.common.PageResult;
 import com.jxgc.meattrace.common.Payloads;
+import com.jxgc.meattrace.module.sequence.service.SequenceService;
 import com.jxgc.meattrace.module.evidence.entity.EventSnapshot;
 import com.jxgc.meattrace.module.evidence.mapper.EventSnapshotMapper;
 import com.jxgc.meattrace.module.evidence.service.SnapshotFactory;
@@ -34,15 +35,18 @@ public class SupplierService {
     private final EventSnapshotMapper snapshotMapper;
     private final SnapshotFactory snapshotFactory;
     private final IdempotencyService idempotencyService;
+    private final SequenceService sequences;
 
     public SupplierService(SupplierMapper supplierMapper,
                            EventSnapshotMapper snapshotMapper,
                            SnapshotFactory snapshotFactory,
-                           IdempotencyService idempotencyService) {
+                           IdempotencyService idempotencyService,
+                           SequenceService sequences) {
         this.supplierMapper = supplierMapper;
         this.snapshotMapper = snapshotMapper;
         this.snapshotFactory = snapshotFactory;
         this.idempotencyService = idempotencyService;
+        this.sequences = sequences;
     }
 
     @Transactional
@@ -164,21 +168,27 @@ public class SupplierService {
     }
 
     /** 生成 SUP-0001 形式的编码：取当前最大编码 + 1。 */
+    /** SUP-0001 形式；无日期概念，全表一个序列。 */
     private String nextCode() {
+        return sequences.next("SUPPLIER", "SUP-", "", 4, this::currentSupplierSeq);
+    }
+
+    /** 种子：现有供应商编码里的最大数字（发号器首次创建时用）。 */
+    private long currentSupplierSeq() {
         Supplier last = supplierMapper.selectOne(Wrappers.<Supplier>lambdaQuery()
                 .orderByDesc(Supplier::getSupplierCode)
                 .last("LIMIT 1"));
-        int next = 1;
-        if (last != null && last.getSupplierCode() != null) {
-            String digits = last.getSupplierCode().replaceAll("\\D", "");
-            if (!digits.isEmpty()) {
-                try {
-                    next = Integer.parseInt(digits) + 1;
-                } catch (NumberFormatException ignored) {
-                    next = 1;
-                }
-            }
+        if (last == null || last.getSupplierCode() == null) {
+            return 0L;
         }
-        return String.format("SUP-%04d", next);
+        String digits = last.getSupplierCode().replaceAll("\\D", "");
+        if (digits.isEmpty()) {
+            return 0L;
+        }
+        try {
+            return Long.parseLong(digits);
+        } catch (NumberFormatException e) {
+            return 0L;
+        }
     }
 }

@@ -8,6 +8,7 @@ import com.jxgc.meattrace.common.ErrorCode;
 import com.jxgc.meattrace.common.PageResult;
 import com.jxgc.meattrace.common.Payloads;
 import com.jxgc.meattrace.common.TimeFormats;
+import com.jxgc.meattrace.module.sequence.service.SequenceService;
 import com.jxgc.meattrace.module.evidence.entity.EvidenceTask;
 import com.jxgc.meattrace.module.evidence.service.SnapshotFactory;
 import com.jxgc.meattrace.module.idempotency.entity.RequestIdempotency;
@@ -46,17 +47,20 @@ public class PurchaseService {
     private final SupplierService supplierService;
     private final SnapshotFactory snapshotFactory;
     private final IdempotencyService idempotencyService;
+    private final SequenceService sequences;
 
     public PurchaseService(PurchaseBatchMapper purchaseMapper,
                            SupplierMapper supplierMapper,
                            SupplierService supplierService,
                            SnapshotFactory snapshotFactory,
-                           IdempotencyService idempotencyService) {
+                           IdempotencyService idempotencyService,
+                           SequenceService sequences) {
         this.purchaseMapper = purchaseMapper;
         this.supplierMapper = supplierMapper;
         this.supplierService = supplierService;
         this.snapshotFactory = snapshotFactory;
         this.idempotencyService = idempotencyService;
+        this.sequences = sequences;
     }
 
     @Transactional
@@ -164,20 +168,24 @@ public class PurchaseService {
 
     /** PB + yyyyMMdd + 3 位当日序号。 */
     private String nextBatchNo() {
+        String day = LocalDate.now().format(DAY);
+        return sequences.next("PURCHASE_NO:" + day, "PB", day, 3, this::currentBatchSeq);
+    }
+
+    /** 种子：业务表里当日已有最大序号（发号器首次创建时用）。 */
+    private long currentBatchSeq() {
         String prefix = "PB" + LocalDate.now().format(DAY);
         PurchaseBatch last = purchaseMapper.selectOne(Wrappers.<PurchaseBatch>lambdaQuery()
                 .likeRight(PurchaseBatch::getBatchNo, prefix)
                 .orderByDesc(PurchaseBatch::getBatchNo)
                 .last("LIMIT 1"));
-        int seq = 1;
-        if (last != null && last.getBatchNo() != null) {
-            String tail = last.getBatchNo().substring(prefix.length());
-            try {
-                seq = Integer.parseInt(tail) + 1;
-            } catch (NumberFormatException ignored) {
-                seq = 1;
-            }
+        if (last == null || last.getBatchNo() == null) {
+            return 0L;
         }
-        return prefix + String.format("%03d", seq);
+        try {
+            return Long.parseLong(last.getBatchNo().substring(prefix.length()));
+        } catch (NumberFormatException e) {
+            return 0L;
+        }
     }
 }

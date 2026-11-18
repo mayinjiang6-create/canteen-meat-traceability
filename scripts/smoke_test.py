@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""全链路回归：登录 → 建供应商 → 建采购批次 → 自动上链 → 验收 → 自动上链 → 公开溯源核验。
+"""全链路回归：登录 → 建供应商 → 建采购批次 → 自动上链 → 验收 → 自动上链 → 公开溯源核验
+→ 加工投料（单来源 / 多来源 / 四类拒绝）→ 上架 → PR 追溯码回溯上游。
 
 用法：
     python scripts/smoke_test.py                 # 自己起一个实例（18099 端口），跑完自动关
@@ -9,7 +10,7 @@
 退出码：0 全部通过 / 1 有失败。
 
 这是答辩前的"一键自检"：它跑通，说明业务链路、摘要规范、上链、幂等、
-四类核验状态这几件事同时都是好的。任何一处坏了都会红。
+多来源投料的数量约束、四类核验状态这几件事同时都是好的。任何一处坏了都会红。
 """
 from __future__ import annotations
 
@@ -94,6 +95,38 @@ def wait_confirmed(client: Client, event_id: str, timeout: int = 40) -> str | No
                 return status
         time.sleep(2)
     return last
+
+
+def create_purchase(client: Client, supplier_id, quantity: str, tag: str) -> dict:
+    """建一个采购批次（状态 PENDING_ACCEPT），返回 data。"""
+    _, resp = client.call("POST", "/api/purchases", {
+        "supplierId": supplier_id,
+        "meatType": "冷鲜猪肉",
+        "origin": "江西省南昌市",
+        "slaughterNo": f"SL-{tag}",
+        "quarantineNo": f"JX-JY-2026-{tag}-{int(time.time()) % 100000}",
+        "quantity": quantity,
+        "unit": "kg",
+        "unitPrice": "25.50",
+        "arriveTime": time.strftime("%Y-%m-%d %H:%M:%S"),
+        "coldChainTemp": "3.10",
+    }, request_id=str(uuid.uuid4()))
+    return resp.get("data") or {}
+
+
+def accept_pass(client: Client, batch_id) -> dict:
+    """验收合格，返回 data。"""
+    _, resp = client.call("POST", "/api/acceptances", {
+        "batchId": batch_id,
+        "acceptTime": time.strftime("%Y-%m-%d %H:%M:%S"),
+        "inspector": "自检员",
+        "temperature": "3.10",
+        "appearanceOk": True,
+        "certComplete": True,
+        "sampleRetained": True,
+        "result": "PASS",
+    })
+    return resp.get("data") or {}
 
 
 def run(client: Client, skip_chain: bool) -> None:
@@ -237,6 +270,142 @@ def run(client: Client, skip_chain: bool) -> None:
     print("\n[13] 不存在的批次返回 40401")
     status, resp = anon.call("GET", "/api/public/trace/PB00000000000")
     check("不存在批次返回 40401", resp.get("code") == 40401, f"code={resp.get('code')}")
+
+    # ============================================================== 阶段 B：加工投料
+    print("\n[14] 加工投料：单来源（TC-12）")
+    status, resp = client.call("POST", "/api/process-batches", {
+        "meatType": "冷鲜猪肉",
+        "processTime": time.strftime("%Y-%m-%d %H:%M:%S"),
+        "workshop": "自检后厨",
+        "operator": "自检员",
+        "retainSampleNo": "LY-SMOKE-001",
+        "outputQty": "28.000",
+        "sources": [{"purchaseBatchNo": batch_no, "usedQty": "30.000"}],
+    }, request_id=str(uuid.uuid4()))
+    single = resp.get("data") or {}
+    check("单来源投料成功", resp.get("code") == 0,
+          f"code={resp.get('code')} {resp.get('message', '')}")
+    check("生成 PR 追溯码", (single.get("processNo") or "").startswith("PR"),
+          single.get("processNo", ""))
+    check("加工批次初始状态 CREATED", single.get("status") == "CREATED", single.get("status", ""))
+    check("投入量由来源汇总得出", single.get("inputQty") == "30.000", single.get("inputQty", ""))
+    single_sources = single.get("sources") or [{}]
+    check("来源扣减后余量 58.000", single_sources[0].get("remainQty") == "58.000",
+          str(single.get("sources")))
+    single_id = single.get("id")
+
+    print("\n[15] 上架（幂等）")
+    status, resp = client.call("POST", f"/api/process-batches/{single_id}/onsale")
+    check("上架后状态 ON_SALE", (resp.get("data") or {}).get("status") == "ON_SALE",
+          str((resp.get("data") or {}).get("status")))
+    status, resp = client.call("POST", f"/api/process-batches/{single_id}/onsale")
+    check("重复上架按幂等处理",
+          resp.get("code") == 0 and (resp.get("data") or {}).get("status") == "ON_SALE",
+          f"code={resp.get('code')}")
+
+    print("\n[16] 多来源投料（TC-13，关键用例）")
+    second = create_purchase(client, supplier_id, "50.000", "SMOKE2")
+    check("第二批次创建成功", bool(second.get("batchNo")), str(second.get("batchNo")))
+    accept_pass(client, second.get("id"))
+    second_no = second.get("batchNo")
+
+    status, resp = client.call("POST", "/api/process-batches", {
+        "meatType": "冷鲜猪肉",
+        "processTime": time.strftime("%Y-%m-%d %H:%M:%S"),
+        "workshop": "自检后厨",
+        "operator": "自检员",
+        "retainSampleNo": "LY-SMOKE-002",
+        "outputQty": "40.000",
+        "sources": [
+            {"purchaseBatchNo": batch_no, "usedQty": "20.000"},
+            {"purchaseBatchNo": second_no, "usedQty": "20.000"},
+        ],
+    }, request_id=str(uuid.uuid4()))
+    multi = resp.get("data") or {}
+    check("多来源投料成功", resp.get("code") == 0,
+          f"code={resp.get('code')} {resp.get('message', '')}")
+    check("来源关系落 2 条", len(multi.get("sources") or []) == 2, str(len(multi.get("sources") or [])))
+    check("投入合计 40.000", multi.get("inputQty") == "40.000", multi.get("inputQty", ""))
+    remain = {s["purchaseBatchNo"]: s["remainQty"] for s in (multi.get("sources") or [])}
+    check("两个批次余量分别扣到 38.000 / 30.000",
+          remain.get(batch_no) == "38.000" and remain.get(second_no) == "30.000", str(remain))
+    multi_no = multi.get("processNo")
+    multi_event = (multi.get("evidence") or {}).get("eventId")
+
+    status, resp = client.call("GET", "/api/process-batches?page=1&size=100")
+    total_before = (resp.get("data") or {}).get("total")
+
+    print("\n[17] 来源批次未验收（TC-14）")
+    pending = create_purchase(client, supplier_id, "40.000", "SMOKE3")
+    status, resp = client.call("POST", "/api/process-batches", {
+        "meatType": "冷鲜猪肉",
+        "outputQty": "10.000",
+        "sources": [{"purchaseBatchNo": pending.get("batchNo"), "usedQty": "10.000"}],
+    })
+    check("未验收来源返回 40902", resp.get("code") == 40902,
+          f"code={resp.get('code')} {resp.get('message', '')}")
+
+    print("\n[18] 投入超可用量（TC-15）")
+    status, resp = client.call("POST", "/api/process-batches", {
+        "meatType": "冷鲜猪肉",
+        "outputQty": "100.000",
+        "sources": [{"purchaseBatchNo": batch_no, "usedQty": "999.000"}],
+    })
+    check("超量投入返回 40901", resp.get("code") == 40901,
+          f"code={resp.get('code')} {resp.get('message', '')}")
+    check("提示带当前剩余量", "38.000" in (resp.get("message") or ""), resp.get("message", ""))
+
+    print("\n[19] 重复引用同一来源（TC-16）")
+    status, resp = client.call("POST", "/api/process-batches", {
+        "meatType": "冷鲜猪肉",
+        "outputQty": "10.000",
+        "sources": [
+            {"purchaseBatchNo": batch_no, "usedQty": "5.000"},
+            {"purchaseBatchNo": batch_no, "usedQty": "5.000"},
+        ],
+    })
+    check("重复引用返回 40904", resp.get("code") == 40904,
+          f"code={resp.get('code')} {resp.get('message', '')}")
+
+    print("\n[20] 产出大于投入（TC-17）")
+    status, resp = client.call("POST", "/api/process-batches", {
+        "meatType": "冷鲜猪肉",
+        "outputQty": "999.000",
+        "sources": [{"purchaseBatchNo": second_no, "usedQty": "10.000"}],
+    })
+    check("产出超投入返回 40001", resp.get("code") == 40001,
+          f"code={resp.get('code')} {resp.get('message', '')}")
+
+    status, resp = client.call("GET", "/api/process-batches?page=1&size=100")
+    total_after = (resp.get("data") or {}).get("total")
+    check("四次失败请求全部回滚，无脏数据", total_before == total_after,
+          f"{total_before} → {total_after}")
+
+    print("\n[21] 等加工事件上链 + PR 公开溯源回溯")
+    state = wait_confirmed(client, multi_event)
+    check("加工事件已确认（链上真实交易）", state == "CONFIRMED", f"最终状态={state}")
+    status, resp = anon.call("GET", f"/api/public/trace/{multi_no}")
+    pr = resp.get("data") or {}
+    check("追溯码免登录可查", resp.get("code") == 0, f"code={resp.get('code')}")
+    check("识别为加工批次", pr.get("batchType") == "PROCESS", str(pr.get("batchType")))
+    pr_summary = pr.get("summary") or {}
+    check("公开页来源数 2、投入 40.000",
+          pr_summary.get("sourceCount") == 2 and pr_summary.get("totalInputQty") == "40.000",
+          str(pr_summary))
+    timeline = pr.get("timeline") or []
+    types = [t.get("eventType") for t in timeline]
+    check("时间线沿来源回溯到上游采购批次",
+          types.count("PURCHASE_CREATE") >= 2 and types.count("ACCEPT_RESULT") >= 2, str(types))
+    check("时间线含加工投料事件", "PROCESS_CREATE" in types, str(types))
+    check("上游批次号出现在时间线里",
+          {batch_no, second_no}.issubset({t.get("batchNo") for t in timeline}),
+          str(sorted({t.get("batchNo") for t in timeline})))
+    check("PR 溯源全部 MATCHED",
+          bool(timeline) and all(t.get("verifyStatus") == "MATCHED" for t in timeline),
+          str([t.get("verifyStatus") for t in timeline]))
+    check("PR 核验 overall=PASS",
+          (pr.get("verifySummary") or {}).get("overall") == "PASS",
+          str(pr.get("verifySummary")))
 
 
 def main() -> int:

@@ -6,11 +6,38 @@
 ## [Unreleased]
 
 ### 计划中
-- 加工投料（多来源）、销售、召回、冷链、异常处置的接口
+- 销售、召回、冷链、异常处置的接口
 - 前端：Vue3 管理端 + 公开溯源页面
 - 溯源问答模块（RAG）
 - 30 项测试用例逐条执行、`TECH-08` 测试记录回填
 - `TECH-10` §6 列出的 7 处文档同步
+
+## [0.4.0] - 2026-11-18
+
+**多来源投料打通**：一个加工批次可以消耗多个采购批次，数量在并发下也扣得准。
+
+### 新增
+
+- **`POST /api/process-batches`** 加工投料：`sources[]` 多来源、`inputQty` 由来源汇总、同事务生成 `PROCESS_CREATE` 存证事件
+- **`GET /api/process-batches`** 分页（带 `inputQty` / `sourceCount` 汇总）、**`GET /{id}`** 详情（含来源与供应商名）、**`POST /{id}/onsale`** 上架（`CREATED → ON_SALE`，重复调用幂等）
+- `ProcessRules`：把「重复引用 / 投入总量 / 产出≤投入 / 单来源余量」四条规则抽成纯函数，配 9 项单测
+- `PurchaseBatchMapper`：条件扣减 `deductAvailable`（`WHERE available_qty >= ?`）、扣完结案 `closeIfEmpty`、失败路径当前读 `lockAvailable`
+- `SourceRelationMapper.summariseByProcessIds`：一次 GROUP BY 拿全页汇总，避免 N+1
+- **`V6__biz_sequence.sql` + `SequenceService`**：业务编号发号器，供应商 / 采购 / 验收 / 加工四类编号统一改走它
+- `scripts/concurrency_check.py`：并发扣减验证，12 项断言
+
+### 修复
+
+- **业务编号并发撞唯一键**：原「查当日最大号 + 1」在 4 并发下算出同一个 `PR20261118006`，3 个请求撞 `uk_process_no` 返回 500 → 改用 `biz_sequence` 发号器
+- **发号器初版死锁**：先 `SELECT` 判断再 `INSERT` 时，撞重复键会让 InnoDB 给已存在的行加 **S 锁并持有到事务结束**，两个事务各持 S 锁又都要升级 X 锁 → 死锁。改为 `INSERT … ON DUPLICATE KEY UPDATE` 直接拿 X 锁
+- **失败提示的余量是过期值**：并发下快照读会提示"剩余 60.000 kg"而实际已是 0 → 失败路径改用 `SELECT … FOR UPDATE` 当前读
+
+### 说明
+
+- 实测：库存 60 kg、4 请求同时各申请 20 kg → 返回码 `[0, 0, 0, 40901]`，余量精确 `0.000`，批次自动 `CLOSED`，三个成功请求拿到三个不同 PR 号
+- 链上：`PR20261118024`（2 个来源）已上链，txHash `0x18a24d56…bf63`，block 79；PR 公开溯源 5 条事件全部 `MATCHED`
+- 回归：`smoke_test.py` 扩到 **54 项断言**（新增 TC-12~TC-17、上架、PR 回溯），单测 29 项
+- 论文可写的实现难点：三条并发坑（撞号 / S 锁死锁 / 快照读旧值），都是"代码看着对、压测就露"的类型
 
 ## [0.3.0] - 2026-11-18
 

@@ -8,6 +8,7 @@ import com.jxgc.meattrace.common.ErrorCode;
 import com.jxgc.meattrace.common.PageResult;
 import com.jxgc.meattrace.common.Payloads;
 import com.jxgc.meattrace.common.TimeFormats;
+import com.jxgc.meattrace.module.sequence.service.SequenceService;
 import com.jxgc.meattrace.module.acceptance.dto.AcceptanceCreateRequest;
 import com.jxgc.meattrace.module.acceptance.dto.AcceptanceQuery;
 import com.jxgc.meattrace.module.acceptance.dto.AcceptanceVO;
@@ -55,17 +56,20 @@ public class AcceptanceService {
     private final PurchaseService purchaseService;
     private final SnapshotFactory snapshotFactory;
     private final IdempotencyService idempotencyService;
+    private final SequenceService sequences;
 
     public AcceptanceService(AcceptanceRecordMapper acceptanceMapper,
                              PurchaseBatchMapper purchaseMapper,
                              PurchaseService purchaseService,
                              SnapshotFactory snapshotFactory,
-                             IdempotencyService idempotencyService) {
+                             IdempotencyService idempotencyService,
+                             SequenceService sequences) {
         this.acceptanceMapper = acceptanceMapper;
         this.purchaseMapper = purchaseMapper;
         this.purchaseService = purchaseService;
         this.snapshotFactory = snapshotFactory;
         this.idempotencyService = idempotencyService;
+        this.sequences = sequences;
     }
 
     @Transactional
@@ -190,20 +194,24 @@ public class AcceptanceService {
 
     /** AC + yyyyMMdd + 3 位当日序号。 */
     private String nextAcceptNo() {
+        String day = LocalDate.now().format(DAY);
+        return sequences.next("ACCEPT_NO:" + day, "AC", day, 3, this::currentAcceptSeq);
+    }
+
+    /** 种子：业务表里当日已有最大序号（发号器首次创建时用）。 */
+    private long currentAcceptSeq() {
         String prefix = "AC" + LocalDate.now().format(DAY);
         AcceptanceRecord last = acceptanceMapper.selectOne(Wrappers.<AcceptanceRecord>lambdaQuery()
                 .likeRight(AcceptanceRecord::getAcceptNo, prefix)
                 .orderByDesc(AcceptanceRecord::getAcceptNo)
                 .last("LIMIT 1"));
-        int seq = 1;
-        if (last != null && last.getAcceptNo() != null) {
-            String tail = last.getAcceptNo().substring(prefix.length());
-            try {
-                seq = Integer.parseInt(tail) + 1;
-            } catch (NumberFormatException ignored) {
-                seq = 1;
-            }
+        if (last == null || last.getAcceptNo() == null) {
+            return 0L;
         }
-        return prefix + String.format("%03d", seq);
+        try {
+            return Long.parseLong(last.getAcceptNo().substring(prefix.length()));
+        } catch (NumberFormatException e) {
+            return 0L;
+        }
     }
 }
