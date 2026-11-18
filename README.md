@@ -102,11 +102,12 @@ payload:{"acceptNo":"AC20261118001","certComplete":true,…}
 | 入库验收 | 感官 / 票证 / 温度 / 留样，判定合格与否 | ✅ 已实现 |
 | 存证管理 | 任务状态、手动重试（先查链再决定） | ✅ 已实现 |
 | 公开溯源 | 扫码 / 输码，时间线 + 四类核验 | ✅ 接口就绪，页面待做 |
-| 冷链登记 | 运输温控，超阈值触发异常事件 | ⬜ 表已建，接口待做 |
+| 冷链登记 | 运输温控，按品类阈值判定，超限自动开异常工单 | ✅ 已实现 |
 | 加工投料 | **多来源投料**：来源可多批、数量乐观扣减、并发安全 | ✅ 已实现 |
 | 上架 | 加工批次 `CREATED → ON_SALE`，重复上架幂等 | ✅ 已实现 |
-| 销售登记 | 按加工批次销售，累计受产出约束 | ⬜ 表已建，接口待做 |
-| 异常处置 / 召回 | 召回后销售记录批量置 `RECALLED` | ⬜ 表已建，接口待做 |
+| 销售登记 | 按加工批次销售，条件扣减余量，卖完自动 `SOLD_OUT` | ✅ 已实现 |
+| 异常处置 | 登记即冻结在售批次，处置可恢复；两次 `DISPOSAL` 事件留痕 | ✅ 已实现 |
+| 召回 | 批次 `RECALLED` + 全部销售记录联动标记 + `RECALL` 事件 | ✅ 已实现 |
 | 溯源问答 | RAG，答案强制回引事件 ID | ⬜ 表已建，待做 |
 
 ---
@@ -172,7 +173,7 @@ curl -s "http://localhost:8080/api/public/trace/PR20261118001" | python -m json.
 python scripts/smoke_test.py
 ```
 
-它会自己起一个实例（18099 端口），跑完 54 项断言后关掉，约 35 秒。覆盖：
+它会自己起一个实例（18099 端口），跑完 107 项断言后关掉，约 60 秒。覆盖：
 
 ```
 登录 → 错误口令被拒 → 建供应商 → 建采购批次 → 同 requestId 重放（幂等）
@@ -181,6 +182,11 @@ python scripts/smoke_test.py
 → 加工投料（单来源 TC-12 / 多来源 TC-13）→ 上架（幂等）
 → 四类拒绝：来源未验收 40902 / 超量 40901 / 重复引用 40904 / 产出>投入 40001
 → 失败请求全部回滚（批次总数不变）→ PR 追溯码回溯上游 5 条事件全部 MATCHED
+→ 销售登记（TC-18）→ 同 requestId 重放不重复卖 → 未上架 40902 / 超量 40901
+→ 卖完自动 SOLD_OUT（TC-21）→ 召回联动 3 笔销售全置 RECALLED（TC-24）→ 召回后禁售 40902
+→ 冷链 3.00℃ 不超限 / 6.50℃ 超限自动开异常单（TC-10/11）
+→ 异常登记冻结 ABNORMAL → 冻结期禁售 → 处置恢复 ON_SALE（TC-22/23）
+→ 新事件全部上链 → 公开页时间线含销售与召回且全部 MATCHED
 ```
 
 链没开时加 `--skip-chain` 只验业务；已有实例在跑时用 `--base-url http://127.0.0.1:8080` 复用。
@@ -208,8 +214,11 @@ cd backend && mvn test -DforkCount=0
 必须加 `-DforkCount=0`：仓库路径含中文时 surefire 的 fork 进程起不来
 （`The forked VM terminated without properly saying goodbye`）。
 
-当前 20 项：`VerifyStatusResolverTest`（四类状态判定，7）、`ChainCodecTest`（ABI 编码，5）、
-`DigestUtilTest`（含金标准向量与 eventId 格式，5）、`RpcReadClientChainTest`（连真链，3）。
+当前 49 项：`VerifyStatusResolverTest`（四类状态判定，7）、`ChainCodecTest`（ABI 编码，5）、
+`DigestUtilTest`（含金标准向量与 eventId 格式，5）、`RpcReadClientChainTest`（连真链，3）、
+`ProcessRulesTest`（投料校验，9）、`SaleRulesTest`（销售状态与余量，9）、
+`AbnormalRulesTest`（异常冻结与处置，4）、`ColdChainRulesTest`（品类阈值与分级，4）、
+`RecallRulesTest`（可召回状态，3）。
 
 完整步骤与排障见 [`docs/product/03-部署演示指南.md`](docs/product/03-部署演示指南.md)。
 
@@ -263,8 +272,9 @@ cd backend && mvn test -DforkCount=0
 
 ## 测试
 
-**已有**：29 项单元测试（四类状态判定 7 项、ABI 编码 5 项、摘要金标准 5 项、投料校验 9 项、连真链读路径 3 项）
-+ 54 项全链路回归断言（`scripts/smoke_test.py`）+ 12 项并发扣减验证（`scripts/concurrency_check.py`）。
+**已有**：49 项单元测试（四类状态判定 7 项、ABI 编码 5 项、摘要金标准 5 项、投料校验 9 项、
+销售规则 9 项、异常规则 4 项、冷链阈值 4 项、召回规则 3 项、连真链读路径 3 项）
++ 107 项全链路回归断言（`scripts/smoke_test.py`）+ 12 项并发扣减验证（`scripts/concurrency_check.py`）。
 
 **待做**：`TECH-07` 里的 30 条功能用例逐条执行并回填 `TECH-08`，以及公开查询与批次详情各 20 次的性能采样。
 后者要注明是否包含链上查询——不含链的毫秒级和不含链的几百毫秒是两个量级的结论。
@@ -288,10 +298,10 @@ cd backend && mvn test -DforkCount=0
 - [x] 设计基线冻结（数据库 / 接口 / 合约 / 状态机）
 - [x] P0 链环境打通（四节点 + WeBASE-Front）—— 实测记录见 [TECH-10](docs/tech/10-链环境实测记录.md)
 - [x] P1 存证闭环 —— 写入走 `ChainWriteClient` + `EvidenceWorker`，真实 txHash 落库；读走节点 `eth_call`
-- [ ] P2 业务域完整（15 条业务规则）—— 供应商 / 采购 / 验收已完成，加工投料、销售、召回、冷链待做
+- [x] P2 业务域完整（15 条业务规则）—— 供应商 / 采购 / 验收 / 加工 / 销售 / 冷链 / 异常 / 召回 全部完成
 - [ ] P3 前端页面 + 公开溯源页 —— **接口已就绪**（`/api/public/trace/{batchNo}` 四类核验可用），页面待做
 - [ ] P3.5 问答模块
-- [ ] P4 30 项测试 + 性能采样 —— 已有 20 项单测 + 27 项全链路回归
+- [ ] P4 30 项测试 + 性能采样 —— 已有 49 项单测 + 107 项全链路回归；TC-10/11、TC-18~25 已回填通过
 - [ ] P5 论文初稿
 
 ---

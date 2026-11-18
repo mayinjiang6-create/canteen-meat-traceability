@@ -406,6 +406,236 @@ def run(client: Client, skip_chain: bool) -> None:
     check("PR 核验 overall=PASS",
           (pr.get("verifySummary") or {}).get("overall") == "PASS",
           str(pr.get("verifySummary")))
+    # ============================================================== 阶段 B 第 2 周：销售 / 召回 / 冷链 / 异常
+    print("\n[22] 销售登记（TC-18）")
+    single_no = single.get("processNo")
+    status, resp = client.call("POST", "/api/sales", {
+        "processBatchNo": single_no,
+        "channel": "一食堂 3 号窗口",
+        "quantity": "10.000",
+        "unitPrice": "38.00",
+        "saleTime": time.strftime("%Y-%m-%d %H:%M:%S"),
+        "operator": "自检员",
+    }, request_id=str(uuid.uuid4()))
+    sale1 = resp.get("data") or {}
+    check("销售登记成功", resp.get("code") == 0,
+          f"code={resp.get('code')} {resp.get('message', '')}")
+    check("销售单号 SL+日期", (sale1.get("saleNo") or "").startswith("SL"), sale1.get("saleNo", ""))
+    check("金额由服务端算好 380.00", sale1.get("amount") == "380.00", str(sale1.get("amount")))
+    check("销售后余量 18.000", sale1.get("availableQty") == "18.000", str(sale1.get("availableQty")))
+    check("批次仍在售 ON_SALE", sale1.get("processStatus") == "ON_SALE",
+          str(sale1.get("processStatus")))
+    sale_event = (sale1.get("evidence") or {}).get("eventId")
+
+    print("\n[23] 同一 X-Request-Id 重放销售（BR-10）")
+    replay_rid = str(uuid.uuid4())
+    replay_body = {
+        "processBatchNo": single_no,
+        "channel": "一食堂 3 号窗口",
+        "quantity": "1.000",
+        "unitPrice": "38.00",
+    }
+    status, resp = client.call("POST", "/api/sales", replay_body, request_id=replay_rid)
+    first_no = (resp.get("data") or {}).get("saleNo")
+    status, resp = client.call("POST", "/api/sales", replay_body, request_id=replay_rid)
+    replay = resp.get("data") or {}
+    check("重放返回 replayed=true", replay.get("replayed") is True, str(replay.get("replayed")))
+    check("重放返回同一销售单号", replay.get("saleNo") == first_no,
+          f"{replay.get('saleNo')} vs {first_no}")
+    status, resp = client.call("GET", f"/api/sales?processBatchNo={single_no}&page=1&size=100")
+    sale_total = (resp.get("data") or {}).get("total")
+    check("重放没有多出一条销售记录", sale_total == 2, f"实际 {sale_total} 条")
+
+    print("\n[24] 未上架批次销售（TC-19）")
+    status, resp = client.call("POST", "/api/sales", {
+        "processBatchNo": multi_no, "quantity": "1.000", "channel": "一食堂 1 号窗口",
+    })
+    check("未上架返回 40902", resp.get("code") == 40902,
+          f"code={resp.get('code')} {resp.get('message', '')}")
+    check("提示「尚未上架」", "尚未上架" in (resp.get("message") or ""), resp.get("message", ""))
+
+    print("\n[25] 超量销售（TC-20）")
+    status, resp = client.call("POST", "/api/sales", {
+        "processBatchNo": single_no, "quantity": "999.000", "channel": "一食堂 3 号窗口",
+    })
+    check("超量返回 40901", resp.get("code") == 40901,
+          f"code={resp.get('code')} {resp.get('message', '')}")
+    check("提示带当前余量 17.000", "17.000" in (resp.get("message") or ""),
+          resp.get("message", ""))
+
+    print("\n[26] 售罄状态流转（TC-21）")
+    status, resp = client.call("POST", "/api/sales", {
+        "processBatchNo": single_no, "quantity": "17.000", "channel": "一食堂 3 号窗口",
+        "unitPrice": "38.00",
+    })
+    sold = resp.get("data") or {}
+    check("恰好卖完余量成功", resp.get("code") == 0,
+          f"code={resp.get('code')} {resp.get('message', '')}")
+    check("余量归零 0.000", sold.get("availableQty") == "0.000", str(sold.get("availableQty")))
+    check("批次状态 ON_SALE → SOLD_OUT", sold.get("processStatus") == "SOLD_OUT",
+          str(sold.get("processStatus")))
+    status, resp = client.call("POST", "/api/sales", {
+        "processBatchNo": single_no, "quantity": "1.000",
+    })
+    check("售罄后再销售被拒 40902", resp.get("code") == 40902,
+          f"code={resp.get('code')} {resp.get('message', '')}")
+
+    print("\n[27] 批次召回（TC-24 / TC-25）")
+    status, resp = client.call("POST", "/api/recalls", {
+        "processBatchNo": single_no,
+        "reason": "同批次抽检发现兽药残留超标（自检模拟）",
+        "scope": "自检当日全部销售记录",
+        "operator": "自检员",
+        "recallTime": time.strftime("%Y-%m-%d %H:%M:%S"),
+    }, request_id=str(uuid.uuid4()))
+    recall = resp.get("data") or {}
+    check("召回成功", resp.get("code") == 0,
+          f"code={resp.get('code')} {resp.get('message', '')}")
+    check("召回单号 RC+日期", (recall.get("recallNo") or "").startswith("RC"),
+          recall.get("recallNo", ""))
+    check("波及销售 3 笔", recall.get("affectedSales") == 3, str(recall.get("affectedSales")))
+    check("需追回 28.000 kg", recall.get("recalledQty") == "28.000", str(recall.get("recalledQty")))
+    check("批次状态 → RECALLED", recall.get("processStatus") == "RECALLED",
+          str(recall.get("processStatus")))
+    recall_event = (recall.get("evidence") or {}).get("eventId")
+
+    status, resp = client.call("GET", f"/api/sales?processBatchNo={single_no}&page=1&size=100")
+    sale_status = [(r.get("status"), r.get("saleNo")) for r in ((resp.get("data") or {}).get("records") or [])]
+    check("全部销售记录置 RECALLED",
+          bool(sale_status) and all(s == "RECALLED" for s, _ in sale_status), str(sale_status))
+    status, resp = client.call("POST", "/api/sales", {
+        "processBatchNo": single_no, "quantity": "1.000",
+    })
+    check("TC-25 召回后销售被拒 40902", resp.get("code") == 40902,
+          f"code={resp.get('code')} {resp.get('message', '')}")
+    check("提示「已召回」", "已召回" in (resp.get("message") or ""), resp.get("message", ""))
+
+    print("\n[28] 冷链登记与阈值判定（TC-10 / TC-11）")
+    status, resp = client.call("POST", "/api/cold-chain-logs", {
+        "batchNo": batch_no,
+        "segment": "WAREHOUSE_TO_CANTEEN",
+        "transportNo": "TR-SMOKE-001",
+        "temperature": "3.00",
+        "recordedAt": time.strftime("%Y-%m-%d %H:%M:%S"),
+        "recorder": "自检司机",
+    }, request_id=str(uuid.uuid4()))
+    cold_ok = resp.get("data") or {}
+    check("冷链登记成功", resp.get("code") == 0,
+          f"code={resp.get('code')} {resp.get('message', '')}")
+    check("阈值按品类取 4.00℃", cold_ok.get("threshold") == "4.00", str(cold_ok.get("threshold")))
+    check("3.00℃ 未超限", cold_ok.get("exceeded") is False, str(cold_ok.get("exceeded")))
+    check("未超限不生成异常工单", cold_ok.get("abnormalNo") is None, str(cold_ok.get("abnormalNo")))
+
+    status, resp = client.call("POST", "/api/cold-chain-logs", {
+        "batchNo": batch_no,
+        "segment": "ORIGIN_TO_WAREHOUSE",
+        "transportNo": "TR-SMOKE-002",
+        "temperature": "6.50",
+        "recordedAt": time.strftime("%Y-%m-%d %H:%M:%S"),
+        "recorder": "自检司机",
+    }, request_id=str(uuid.uuid4()))
+    cold_bad = resp.get("data") or {}
+    check("超限登记成功", resp.get("code") == 0,
+          f"code={resp.get('code')} {resp.get('message', '')}")
+    check("6.50℃ 判定超限", cold_bad.get("exceeded") is True, str(cold_bad.get("exceeded")))
+    check("超限自动开异常工单（AB...）",
+          (cold_bad.get("abnormalNo") or "").startswith("AB"), str(cold_bad.get("abnormalNo")))
+    cold_event = (cold_bad.get("evidence") or {}).get("eventId")
+
+    status, resp = client.call("GET", f"/api/abnormal-events?batchNo={batch_no}&status=OPEN")
+    pending_abnormal = (resp.get("data") or {}).get("total")
+    check("异常列表能看到冷链自动工单", (pending_abnormal or 0) >= 1, str(pending_abnormal))
+
+    print("\n[29] 异常登记 → 冻结 → 处置恢复（TC-22 / TC-23）")
+    status, resp = client.call("POST", "/api/process-batches", {
+        "meatType": "冷鲜猪肉",
+        "processTime": time.strftime("%Y-%m-%d %H:%M:%S"),
+        "workshop": "自检后厨",
+        "operator": "自检员",
+        "outputQty": "4.000",
+        "sources": [{"purchaseBatchNo": second_no, "usedQty": "5.000"}],
+    }, request_id=str(uuid.uuid4()))
+    ab_process = resp.get("data") or {}
+    check("为异常用例新建加工批次", resp.get("code") == 0,
+          f"code={resp.get('code')} {resp.get('message', '')}")
+    ab_process_id = ab_process.get("id")
+    ab_process_no = ab_process.get("processNo")
+    client.call("POST", f"/api/process-batches/{ab_process_id}/onsale")
+
+    status, resp = client.call("POST", "/api/abnormal-events", {
+        "processBatchNo": ab_process_no,
+        "abnormalType": "SENSORY_ABNORMAL",
+        "level": "HIGH",
+        "description": "抽检发现色泽异常，暂停销售待复检",
+        "handler": "自检员",
+        "occurredAt": time.strftime("%Y-%m-%d %H:%M:%S"),
+    }, request_id=str(uuid.uuid4()))
+    abnormal = resp.get("data") or {}
+    check("异常登记成功", resp.get("code") == 0,
+          f"code={resp.get('code')} {resp.get('message', '')}")
+    check("异常编号 AB+日期", (abnormal.get("abnormalNo") or "").startswith("AB"),
+          abnormal.get("abnormalNo", ""))
+    check("异常状态 OPEN", abnormal.get("status") == "OPEN", str(abnormal.get("status")))
+    abnormal_id = abnormal.get("id")
+
+    status, resp = client.call("GET", f"/api/process-batches/{ab_process_id}")
+    check("TC-22 批次被冻结为 ABNORMAL",
+          (resp.get("data") or {}).get("status") == "ABNORMAL",
+          str((resp.get("data") or {}).get("status")))
+    status, resp = client.call("POST", "/api/sales", {
+        "processBatchNo": ab_process_no, "quantity": "1.000",
+    })
+    check("冻结期间销售被拒 40902", resp.get("code") == 40902,
+          f"code={resp.get('code')} {resp.get('message', '')}")
+
+    status, resp = client.call("POST", f"/api/abnormal-events/{abnormal_id}/dispose", {
+        "action": "暂停销售、封存留样并送第三方复检",
+        "handler": "自检员",
+        "conclusion": "复检合格，恢复销售",
+        "resumeSale": True,
+        "disposeTime": time.strftime("%Y-%m-%d %H:%M:%S"),
+    })
+    disposed = resp.get("data") or {}
+    check("TC-23 处置成功", resp.get("code") == 0,
+          f"code={resp.get('code')} {resp.get('message', '')}")
+    check("异常状态 CLOSED", disposed.get("status") == "CLOSED", str(disposed.get("status")))
+    check("结案时间已写入", bool(disposed.get("closedAt")), str(disposed.get("closedAt")))
+    dispose_event = (disposed.get("evidence") or {}).get("eventId")
+
+    status, resp = client.call("GET", f"/api/process-batches/{ab_process_id}")
+    check("恢复销售后状态 ON_SALE",
+          (resp.get("data") or {}).get("status") == "ON_SALE",
+          str((resp.get("data") or {}).get("status")))
+    status, resp = client.call("POST", "/api/sales", {
+        "processBatchNo": ab_process_no, "quantity": "1.000", "channel": "二食堂 1 号窗口",
+    })
+    check("恢复后可继续销售", resp.get("code") == 0,
+          f"code={resp.get('code')} {resp.get('message', '')}")
+    sale3_event = ((resp.get("data") or {}).get("evidence") or {}).get("eventId")
+
+    print("\n[30] 等新事件上链 + 公开页时间线核对")
+    for label, eid in (("销售", sale_event), ("召回", recall_event),
+                       ("冷链", cold_event), ("处置", dispose_event), ("恢复后销售", sale3_event)):
+        state = wait_confirmed(client, eid)
+        check(f"{label}事件已确认", state == "CONFIRMED", f"最终状态={state}")
+
+    status, resp = anon.call("GET", f"/api/public/trace/{single_no}")
+    pr = resp.get("data") or {}
+    timeline = pr.get("timeline") or []
+    types = [t.get("eventType") for t in timeline]
+    check("公开页出现销售登记事件", "SALE_CREATE" in types, str(types))
+    check("公开页出现召回事件", "RECALL" in types, str(types))
+    check("销售+召回事件全部 MATCHED",
+          all(t.get("verifyStatus") == "MATCHED" for t in timeline if t.get("eventType") in
+              ("SALE_CREATE", "RECALL")),
+          str([(t.get("eventType"), t.get("verifyStatus")) for t in timeline]))
+    check("召回后批次状态在公开页可读",
+          (pr.get("summary") or {}).get("soldQty") == "28.000",
+          str(pr.get("summary")))
+
+    status, resp = anon.call("GET", f"/api/public/trace/{batch_no}")
+    cold_types = [t.get("eventType") for t in ((resp.get("data") or {}).get("timeline") or [])]
+    check("采购批次时间线含冷链登记", cold_types.count("COLD_CHAIN") == 2, str(cold_types))
 
 
 def main() -> int:

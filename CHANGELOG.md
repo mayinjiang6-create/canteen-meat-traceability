@@ -6,11 +6,43 @@
 ## [Unreleased]
 
 ### 计划中
-- 销售、召回、冷链、异常处置的接口
-- 前端：Vue3 管理端 + 公开溯源页面
+- 前端：Vue3 管理端 + 公开溯源页面（阶段 C）
 - 溯源问答模块（RAG）
-- 30 项测试用例逐条执行、`TECH-08` 测试记录回填
+- 30 项测试用例逐条执行、`TECH-08` 测试记录回填（后端接口层已完成 TC-10/11、TC-18~25）
 - `TECH-10` §6 列出的 7 处文档同步
+
+## [0.5.0] - 2026-11-18
+
+**业务域收口**：销售、冷链、异常处置、召回四块补齐；`ON_SALE → SOLD_OUT` 与
+`ABNORMAL ↔ ON_SALE` 两条状态流转、以及「召回联动批量置 `RECALLED`」全部实测通过。
+
+### 新增
+
+- **`POST /api/sales`** 销售登记：条件扣减 `available_qty`（`WHERE status='ON_SALE' AND available_qty >= ?`）、
+  卖完自动 `SOLD_OUT`、服务端算金额、`SALE_CREATE` 事件；`GET /api/sales` 分页、`GET /{id}` 详情
+- **`POST /api/cold-chain-logs`** 冷链登记：阈值按品类从 `trace.cold-chain.*` 取（含「冻」→ −15℃、含「牛/猪」→ 4℃、兜底 4℃），
+  超限自动开 `TEMPERATURE_EXCEEDED` 异常工单并按超出度数分 `LOW/MEDIUM/HIGH`，`COLD_CHAIN` 事件留痕
+- **`POST /api/abnormal-events`** 异常登记：在售批次自动冻结为 `ABNORMAL`；**`POST /{id}/dispose`** 处置并可选恢复销售；
+  同一异常留下两条 `DISPOSAL` 事件（`stage=REPORTED` / `stage=CLOSED`）
+- **`POST /api/recalls`** 召回：批次 → `RECALLED` + 全部销售记录 → `RECALLED` + 召回单 + `RECALL` 事件，四件事同事务；
+  返回 `affectedSales` / `recalledQty`
+- `SaleRules` / `ColdChainRules` / `AbnormalRules` / `RecallRules`：四组纯规则，配 20 项单测
+- `ProcessBatchMapper`：`deductAvailable`（乐观扣减）、`soldOutIfEmpty`（售罄）、`lockAvailable`（失败路径当前读）
+- `ColdChainProperties`：`@ConfigurationProperties("trace.cold-chain")`，品类 → 阈值映射
+
+### 修复
+
+- **`GET /api/abnormal-events` 返回 500**：异常可以只挂加工批次（`batch_id` 为 null），而 `Map.of()` 生成的不可变集合
+  对 **null 键直接抛 NPE**（`ImmutableCollections$MapN.get`）。空表同样抛，与"表里有没有数据"无关 → 取值前判空
+
+### 说明
+
+- 回归：`smoke_test.py` 扩到 **107 项断言 / 60.0 s**，链上真实产生 8 笔交易；单测 49 项全绿
+- 实测数字：售罄后余量精确 `0.000` 且再卖 `40902`；召回 `affectedSales=3`、`recalledQty=28.000`；
+  冷链 6.50℃ 自动开 `AB2026...`（MEDIUM）；处置恢复后销售成功
+- 论文可写的实现难点：① 销售必须"先扣后判"，先查再改在中午高峰必然卖超；
+  ② 召回的加锁顺序必须与销售一致（先 `process_batch` 再 `sale_record`），否则交叉死锁；
+  ③ `Map.of()` 空表 `get(null)` 抛 NPE 这个坑与"空指针"三个字毫无提示性
 
 ## [0.4.0] - 2026-11-18
 

@@ -52,3 +52,5 @@ trace:
     pork-max-temp: 4.0
     beef-max-temp: 4.0
     frozen-max-temp: -15.0
+    # 未识别品类（如「白条鸡」）的兜底阈值，取冷鲜肉上限
+    default-max-temp: 4.0
