@@ -1,0 +1,4 @@
+
+时间: 2026-11-18T23:27:57
+请求: {"supplierId": 22, "meatType": "冷鲜猪肉", "origin": "江西省南昌市", "slaughterNo": "SL-TEST-612c7c", "quarantineNo": "JX-JY-2026-DDF5F183", "quantity": "120.000", "unit": "kg", "unitPrice": "25.50", "arriveTime": "2026-11-18 23:27:57", "coldChainTemp": "3.20"}
+响应: {"code": 0, "message": "ok", "data": {"id": 41, "batchNo": "PB20261118041", "status": "PENDING_ACCEPT", "availableQty": "120.000", "evidence": {"eventId": "dce243ca88d7b873ee47827000636b7b5ee78698754809041d9ac78846ccdd64", "status": "PENDING"}, "replayed": false}, "traceId": "bb3c97deffb9", "timestamp": "2026-11-18T23:27:57+08:00"}

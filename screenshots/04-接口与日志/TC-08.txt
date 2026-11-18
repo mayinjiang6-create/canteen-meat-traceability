@@ -1,0 +1,4 @@
+
+时间: 2026-11-18T23:27:57
+请求: {"batchId": 44, "result": "FAIL"}
+响应: {"code": 40001, "message": "验收不合格时 rejectReason 必填", "data": null, "traceId": "eea80eaf7b98", "timestamp": "2026-11-18T23:27:57+08:00"}

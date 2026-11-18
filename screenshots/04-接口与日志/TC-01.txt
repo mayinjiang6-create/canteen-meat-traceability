@@ -1,0 +1,4 @@
+
+时间: 2026-11-18T23:27:52
+请求: {"name": "验收测试-正常供应商"}
+响应: {"id": 22, "supplierCode": "SUP-0022", "name": "验收测试-正常供应商-20261118-232737", "status": "ACTIVE", "eventId": "bb52d5113685cf07678a30c6b355618fbdbaab3d54888363cabdcdea04a2676d", "replayed": false}

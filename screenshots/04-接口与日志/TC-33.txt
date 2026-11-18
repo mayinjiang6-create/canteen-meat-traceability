@@ -1,0 +1,4 @@
+
+时间: 2026-11-18T23:28:32
+请求: {"篡改": "独立测试批次的 canonical_text / payload_json"}
+响应: {"batchNo": "PB20261118046", "overall": "FAIL", "counts": {"matched": 0, "mismatched": 1, "unconfirmed": 1, "unreachable": 0}, "events": [{"eventId": "7eb438a7ec7fd7d2e3970a92cc7f54f2de28fd6fba2e7a71cae96c03149e3f64", "verifyStatus": "MISMATCHED"}, {"eventId": "353eeab042614c08d1b3b2d3a25ba184c1af5a616d400a15299ec033bf15b1af", "verifyStatus": "UNCONFIRMED"}]}

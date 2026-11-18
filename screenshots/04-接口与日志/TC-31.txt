@@ -1,0 +1,4 @@
+
+时间: 2026-11-18T23:28:27
+请求: {"eventId": "64e51cc7da361655da410cd1b1f37712bc9ae1fb063a73666e382f8b92adda4e", "模拟": "提交成功但状态未回写"}
+响应: {"code": 0, "message": "ok", "data": {"eventId": "64e51cc7da361655da410cd1b1f37712bc9ae1fb063a73666e382f8b92adda4e", "batchId": "PB20261118041", "eventType": "ACCEPT_RESULT", "status": "CONFIRMED", "retryCount": 1, "nextRetryAt": "2026-11-19T00:28:27+08:00", "lastError": null, "txHash": "0xb746ac5fe37c5390caedd00d6d07b8b28f8cd865d63f2292f2dc9ff592bc9427", "blockNumber": 153, "receiptTime": "2026-11-18T23:28:07+08:00"}, "traceId": "d3d887b10274", "timestamp": "2026-11-18T23:28:27+08:00"}

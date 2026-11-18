@@ -1,0 +1,4 @@
+
+时间: 2026-11-18T23:27:57
+请求: {"batchId": 41, "result": "PASS"}
+响应: {"code": 0, "message": "ok", "data": {"id": 29, "acceptNo": "AC20261118029", "batchNo": "PB20261118041", "batchStatus": "PASSED", "acceptTime": "2026-11-18T23:27:57+08:00", "inspector": "验收测试员", "temperature": "3.50", "appearanceOk": true, "certComplete": true, "sampleRetained": true, "result": "PASS", "rejectReason": null, "evidence": {"eventId": "64e51cc7da361655da410cd1b1f37712bc9ae1fb063a73666e382f8b92adda4e", "status": "PENDING"}, "replayed": false}, "traceId": "6afe153f4e9a", "timestamp": "2026-11-18T23:27:57+08:00"}

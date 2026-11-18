@@ -1,0 +1,4 @@
+
+时间: 2026-11-18T23:28:08
+请求: {"GET": "/api/public/trace/PB20261118041"}
+响应: {"verifySummary": {"matched": 2, "mismatched": 0, "unconfirmed": 0, "unreachable": 0, "overall": "PASS", "checkedAt": "2026-11-18T23:28:08+08:00"}, "conclusion": {"inspectionResult": "PASS", "inspectionNote": "检疫合格证齐全，感官正常，到货中心温度 3.50℃", "source": "入库验收记录 AC20261118029"}}

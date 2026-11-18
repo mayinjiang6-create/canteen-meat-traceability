@@ -1,0 +1,4 @@
+
+时间: 2026-11-18T23:27:57
+请求: {"X-Request-Id": "3d5b795f-2bae-409c-9f6c-d02f3d8ff551"}
+响应: {"code": 0, "message": "ok", "data": {"id": 42, "batchNo": "PB20261118042", "status": "PENDING_ACCEPT", "availableQty": "120.000", "evidence": null, "replayed": true}, "traceId": "673fff3fbd30", "timestamp": "2026-11-18T23:27:57+08:00"}

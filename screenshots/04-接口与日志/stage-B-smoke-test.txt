@@ -1,0 +1,173 @@
+启动实例：http://127.0.0.1:18099（日志 D:\食堂肉类溯源系统\backend\target\smoke-test.log）
+====================================================================
+
+[1] 登录
+  [PASS] admin 登录成功  code=0
+  [PASS] 返回体带 traceId  c5d53c975e9a
+  [PASS] 返回体带 timestamp  2026-11-18T23:36:04+08:00
+
+[2] 错误口令应被拒
+  [PASS] 错误口令返回 401/40101  HTTP 401 code=40101
+
+[3] 新建供应商
+  [PASS] 供应创建成功  code=0
+  [PASS] 自动生成供应商编码  SUP-0026
+  [PASS] 供应商事件 eventId 为 64 位  长度=64
+
+[4] 新建采购批次（带 X-Request-Id）
+  [PASS] 采购批次创建成功  code=0
+  [PASS] 批次号格式 PB+日期+序号  PB20261118069
+  [PASS] 返回存证状态 PENDING
+
+[5] 同一 X-Request-Id 重放（BR-10）
+  [PASS] 重放返回 replayed=true  replayed=True
+  [PASS] 重放返回同一批次号  PB20261118069 vs PB20261118069
+
+[6] 等采购事件上链
+  [PASS] 采购事件已确认  最终状态=CONFIRMED
+
+[7] 验收登记
+  [PASS] 验收登记成功  code=0
+  [PASS] 验收后批次状态 PASSED  PASSED
+
+[8] 等验收事件上链
+  [PASS] 验收事件已确认  最终状态=CONFIRMED
+
+[9] 重复验收应被拒（40902）
+  [PASS] 重复验收返回 40902  code=40902
+
+[10] 公开溯源（免登录）
+  [PASS] 公开接口免登录可访问  code=0
+  [PASS] 时间线含 2 条事件  实际 2 条
+  [PASS] 全部 MATCHED  ['MATCHED', 'MATCHED']
+  [PASS] overall=PASS  {'matched': 2, 'mismatched': 0, 'unconfirmed': 0, 'unreachable': 0, 'overall': 'PASS', 'checkedAt': '2026-11-18T23:36:15+08:00'}
+  [PASS] 检验结论与核验状态是两个独立字段
+  [PASS] 检验结论为 PASS
+  [PASS] 时间线带真实 txHash  ['0xf34cacf9a39f94034ac56d68637afce62f2f83b7fc4b84ded50697833998f1bd', '0xd425e2bdac6cc96c16d6bb0f4359500ed32e767e524b1f70d52222e23efccc7a']
+
+[11] 仅核验接口
+  [PASS] verify 返回 overall=PASS  PASS
+
+[12] 演示批次的链上真实记录
+  [PASS] PB20261118001 核验为 PASS/MATCHED  {'matched': 1, 'mismatched': 0, 'unconfirmed': 0, 'unreachable': 0}
+
+[13] 不存在的批次返回 40401
+  [PASS] 不存在批次返回 40401  code=40401
+
+[14] 加工投料：单来源（TC-12）
+  [PASS] 单来源投料成功  code=0 ok
+  [PASS] 生成 PR 追溯码  PR20261118039
+  [PASS] 加工批次初始状态 CREATED  CREATED
+  [PASS] 投入量由来源汇总得出  30.000
+  [PASS] 来源扣减后余量 58.000  [{'purchaseBatchNo': 'PB20261118069', 'usedQty': '30.000', 'remainQty': '58.000', 'supplierName': None}]
+
+[15] 上架（幂等）
+  [PASS] 上架后状态 ON_SALE  ON_SALE
+  [PASS] 重复上架按幂等处理  code=0
+
+[16] 多来源投料（TC-13，关键用例）
+  [PASS] 第二批次创建成功  PB20261118070
+  [PASS] 多来源投料成功  code=0 ok
+  [PASS] 来源关系落 2 条  2
+  [PASS] 投入合计 40.000  40.000
+  [PASS] 两个批次余量分别扣到 38.000 / 30.000  {'PB20261118069': '38.000', 'PB20261118070': '30.000'}
+
+[17] 来源批次未验收（TC-14）
+  [PASS] 未验收来源返回 40902  code=40902 来源批次 PB20261118071 当前状态为 PENDING_ACCEPT，未通过验收不可加工
+
+[18] 投入超可用量（TC-15）
+  [PASS] 超量投入返回 40901  code=40901 来源批次 PB20261118069 可用余量不足，当前剩余 38.000 kg
+  [PASS] 提示带当前剩余量  来源批次 PB20261118069 可用余量不足，当前剩余 38.000 kg
+
+[19] 重复引用同一来源（TC-16）
+  [PASS] 重复引用返回 40904  code=40904 同一来源批次不可重复引用：PB20261118069
+
+[20] 产出大于投入（TC-17）
+  [PASS] 产出超投入返回 40001  code=40001 产出量不得大于投入总量（投入 10.000 kg）
+  [PASS] 四次失败请求全部回滚，无脏数据  40 → 40
+
+[21] 等加工事件上链 + PR 公开溯源回溯
+  [PASS] 加工事件已确认（链上真实交易）  最终状态=CONFIRMED
+  [PASS] 追溯码免登录可查  code=0
+  [PASS] 识别为加工批次  PROCESS
+  [PASS] 公开页来源数 2、投入 40.000  {'sourceCount': 2, 'totalInputQty': '40.000', 'outputQty': '40.000', 'soldQty': '0.000', 'quarantineNos': ['JX-JY-2026-SMOKE6165', 'JX-JY-2026-SMOKE2-16175']}
+  [PASS] 时间线沿来源回溯到上游采购批次  ['PURCHASE_CREATE', 'ACCEPT_RESULT', 'PURCHASE_CREATE', 'ACCEPT_RESULT', 'PROCESS_CREATE']
+  [PASS] 时间线含加工投料事件  ['PURCHASE_CREATE', 'ACCEPT_RESULT', 'PURCHASE_CREATE', 'ACCEPT_RESULT', 'PROCESS_CREATE']
+  [PASS] 上游批次号出现在时间线里  ['PB20261118069', 'PB20261118070', 'PR20261118040']
+  [PASS] PR 溯源全部 MATCHED  ['MATCHED', 'MATCHED', 'MATCHED', 'MATCHED', 'MATCHED']
+  [PASS] PR 核验 overall=PASS  {'matched': 5, 'mismatched': 0, 'unconfirmed': 0, 'unreachable': 0, 'overall': 'PASS', 'checkedAt': '2026-11-18T23:36:26+08:00'}
+
+[22] 销售登记（TC-18）
+  [PASS] 销售登记成功  code=0 ok
+  [PASS] 销售单号 SL+日期  SL20261118013
+  [PASS] 金额由服务端算好 380.00  380.00
+  [PASS] 销售后余量 18.000  18.000
+  [PASS] 批次仍在售 ON_SALE  ON_SALE
+
+[23] 同一 X-Request-Id 重放销售（BR-10）
+  [PASS] 重放返回 replayed=true  True
+  [PASS] 重放返回同一销售单号  SL20261118014 vs SL20261118014
+  [PASS] 重放没有多出一条销售记录  实际 2 条
+
+[24] 未上架批次销售（TC-19）
+  [PASS] 未上架返回 40902  code=40902 该批次尚未上架，无法销售
+  [PASS] 提示「尚未上架」  该批次尚未上架，无法销售
+
+[25] 超量销售（TC-20）
+  [PASS] 超量返回 40901  code=40901 超出可售余量 17.000 kg
+  [PASS] 提示带当前余量 17.000  超出可售余量 17.000 kg
+
+[26] 售罄状态流转（TC-21）
+  [PASS] 恰好卖完余量成功  code=0 ok
+  [PASS] 余量归零 0.000  0.000
+  [PASS] 批次状态 ON_SALE → SOLD_OUT  SOLD_OUT
+  [PASS] 售罄后再销售被拒 40902  code=40902 该批次已售罄，无法继续销售
+
+[27] 批次召回（TC-24 / TC-25）
+  [PASS] 召回成功  code=0 ok
+  [PASS] 召回单号 RC+日期  RC20261118003
+  [PASS] 波及销售 3 笔  3
+  [PASS] 需追回 28.000 kg  28.000
+  [PASS] 批次状态 → RECALLED  RECALLED
+  [PASS] 全部销售记录置 RECALLED  [('RECALLED', 'SL20261118015'), ('RECALLED', 'SL20261118014'), ('RECALLED', 'SL20261118013')]
+  [PASS] TC-25 召回后销售被拒 40902  code=40902 该批次已召回，禁止销售
+  [PASS] 提示「已召回」  该批次已召回，禁止销售
+
+[28] 冷链登记与阈值判定（TC-10 / TC-11）
+  [PASS] 冷链登记成功  code=0 ok
+  [PASS] 阈值按品类取 4.00℃  4.00
+  [PASS] 3.00℃ 未超限  False
+  [PASS] 未超限不生成异常工单  None
+  [PASS] 超限登记成功  code=0 ok
+  [PASS] 6.50℃ 判定超限  True
+  [PASS] 超限自动开异常工单（AB...）  AB20261118006
+  [PASS] 异常列表能看到冷链自动工单  1
+
+[29] 异常登记 → 冻结 → 处置恢复（TC-22 / TC-23）
+  [PASS] 为异常用例新建加工批次  code=0 ok
+  [PASS] 异常登记成功  code=0 ok
+  [PASS] 异常编号 AB+日期  AB20261118007
+  [PASS] 异常状态 OPEN  OPEN
+  [PASS] TC-22 批次被冻结为 ABNORMAL  ABNORMAL
+  [PASS] 冻结期间销售被拒 40902  code=40902 该批次异常冻结中，暂停销售
+  [PASS] TC-23 处置成功  code=0 ok
+  [PASS] 异常状态 CLOSED  CLOSED
+  [PASS] 结案时间已写入  2026-11-18T23:36:27+08:00
+  [PASS] 恢复销售后状态 ON_SALE  ON_SALE
+  [PASS] 恢复后可继续销售  code=0 ok
+
+[30] 等新事件上链 + 公开页时间线核对
+  [PASS] 销售事件已确认  最终状态=CONFIRMED
+  [PASS] 召回事件已确认  最终状态=CONFIRMED
+  [PASS] 冷链事件已确认  最终状态=CONFIRMED
+  [PASS] 处置事件已确认  最终状态=CONFIRMED
+  [PASS] 恢复后销售事件已确认  最终状态=CONFIRMED
+  [PASS] 公开页出现销售登记事件  ['PURCHASE_CREATE', 'ACCEPT_RESULT', 'PROCESS_CREATE', 'SALE_CREATE', 'RECALL', 'SALE_CREATE', 'SALE_CREATE', 'COLD_CHAIN', 'COLD_CHAIN']
+  [PASS] 公开页出现召回事件  ['PURCHASE_CREATE', 'ACCEPT_RESULT', 'PROCESS_CREATE', 'SALE_CREATE', 'RECALL', 'SALE_CREATE', 'SALE_CREATE', 'COLD_CHAIN', 'COLD_CHAIN']
+  [PASS] 销售+召回事件全部 MATCHED  [('PURCHASE_CREATE', 'MATCHED'), ('ACCEPT_RESULT', 'MATCHED'), ('PROCESS_CREATE', 'MATCHED'), ('SALE_CREATE', 'MATCHED'), ('RECALL', 'MATCHED'), ('SALE_CREATE', 'MATCHED'), ('SALE_CREATE', 'MATCHED'), ('COLD_CHAIN', 'MATCHED'), ('COLD_CHAIN', 'MATCHED')]
+  [PASS] 召回后批次状态在公开页可读  {'sourceCount': 1, 'totalInputQty': '30.000', 'outputQty': '28.000', 'soldQty': '28.000', 'quarantineNos': ['JX-JY-2026-SMOKE6165']}
+  [PASS] 采购批次时间线含冷链登记  ['PURCHASE_CREATE', 'ACCEPT_RESULT', 'COLD_CHAIN', 'COLD_CHAIN']
+
+====================================================================
+通过 107 项，失败 0 项，耗时 59.6s
+全部通过 ✓

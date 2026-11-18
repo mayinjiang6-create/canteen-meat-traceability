@@ -1,0 +1,4 @@
+
+时间: 2026-11-18T23:27:57
+请求: {"batchId": 43, "result": "FAIL"}
+响应: {"code": 0, "message": "ok", "data": {"id": 30, "acceptNo": "AC20261118030", "batchNo": "PB20261118043", "batchStatus": "REJECTED", "acceptTime": "2026-11-18T23:27:57+08:00", "inspector": "验收测试员", "temperature": "3.20", "appearanceOk": false, "certComplete": false, "sampleRetained": true, "result": "FAIL", "rejectReason": "到货温度 9.80℃ 且色泽异常（测试数据）", "evidence": {"eventId": "5662931488d01bc65a598c877dd97f844455385a980033e65c49d164a6be2ac5", "status": "PENDING"}, "replayed": false}, "traceId": "4768198e514f", "timestamp": "2026-11-18T23:27:57+08:00"}

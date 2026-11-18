@@ -1,0 +1,4 @@
+
+时间: 2026-11-18T23:29:48
+请求: {"batchNo": "PB20261118067", "前置": "chain.evidence.worker-enabled=false"}
+响应: {"batchNo": "PB20261118067", "overall": "PARTIAL", "counts": {"matched": 0, "mismatched": 0, "unconfirmed": 1, "unreachable": 0}, "events": [{"eventId": "d0ebdc1d267ef50f15492109850c0b8b8d4c8381e8eab07c187193c5e803fed5", "verifyStatus": "UNCONFIRMED"}]}

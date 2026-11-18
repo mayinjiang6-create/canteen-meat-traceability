@@ -1,0 +1,4 @@
+
+时间: 2026-11-18T23:27:57
+请求: {"supplierId": 23}
+响应: {"code": 40902, "message": "供应商状态为 BLACKLISTED，不可新增采购", "data": null, "traceId": "a4c9fc91e1d2", "timestamp": "2026-11-18T23:27:57+08:00"}

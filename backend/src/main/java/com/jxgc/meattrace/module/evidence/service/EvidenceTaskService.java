@@ -58,11 +58,14 @@ public class EvidenceTaskService {
         this.readClient = readClient;
     }
 
-    /** 取出本轮可处理的 eventId（PENDING 且已到重试时间）。 */
+    /** 取出本轮可处理的 eventId（PENDING / UNREACHABLE 且已到重试时间）。 */
     public List<String> findClaimable() {
         LocalDateTime now = LocalDateTime.now();
+        // UNREACHABLE 和 PENDING 都属于"还能再试"：前者只是把"链暂时连不上"这个原因
+        // 显式写进状态。不能因为它不叫 PENDING 就让任务永远卡在队列里（TC-30 实测发现）。
         return taskMapper.selectList(Wrappers.<EvidenceTask>lambdaQuery()
-                        .eq(EvidenceTask::getStatus, EvidenceTask.PENDING)
+                        .in(EvidenceTask::getStatus,
+                                List.of(EvidenceTask.PENDING, EvidenceTask.UNREACHABLE))
                         .and(w -> w.isNull(EvidenceTask::getNextRetryAt)
                                 .or().le(EvidenceTask::getNextRetryAt, now))
                         .orderByAsc(EvidenceTask::getId)
@@ -91,7 +94,8 @@ public class EvidenceTaskService {
         LocalDateTime now = LocalDateTime.now();
         int rows = taskMapper.update(update, Wrappers.<EvidenceTask>lambdaUpdate()
                 .eq(EvidenceTask::getEventId, eventId)
-                .eq(EvidenceTask::getStatus, EvidenceTask.PENDING)
+                .in(EvidenceTask::getStatus,
+                        List.of(EvidenceTask.PENDING, EvidenceTask.UNREACHABLE))
                 .and(w -> w.isNull(EvidenceTask::getNextRetryAt)
                         .or().le(EvidenceTask::getNextRetryAt, now)));
         return rows == 1;
@@ -145,7 +149,16 @@ public class EvidenceTaskService {
         updateStatus(eventId, EvidenceTask.FAILED, message, null);
     }
 
-    /** 结果不可达：累加重试次数并排下次重试；超过上限置 FAILED。 */
+    /**
+     * 结果不可达：显式置 UNREACHABLE，累加重试次数并排下次重试；超过上限置 FAILED。
+     *
+     * <p>状态字面必须是 UNREACHABLE：TECH-02 状态字典、TECH-03 的
+     * {@code GET /evidence/tasks?status=UNREACHABLE}、TECH-07 的 TC-30 以及前端
+     * {@code dict.ts} 都按这个口径写。早先版本写回 PENDING，虽然靠
+     * {@code last_error} 也能看出原因，但列表筛选和页面提示都拿不到正确状态。
+     * 配套把 {@link #findClaimable()} 与 {@link #claim(String)} 放宽到同时认领
+     * PENDING / UNREACHABLE，保证置位后仍会被自动重试。
+     */
     @Transactional
     public void markUnreachable(String eventId, String message) {
         EvidenceTask task = findByEventId(eventId);
@@ -158,7 +171,7 @@ public class EvidenceTaskService {
         }
         LocalDateTime next =
                 LocalDateTime.now().plusNanos(properties.backoffFor(retry) * 1_000_000L);
-        updateStatus(eventId, EvidenceTask.PENDING, message, retry);
+        updateStatus(eventId, EvidenceTask.UNREACHABLE, message, retry);
         EvidenceTask update = new EvidenceTask();
         update.setNextRetryAt(next);
         taskMapper.update(update, Wrappers.<EvidenceTask>lambdaUpdate()

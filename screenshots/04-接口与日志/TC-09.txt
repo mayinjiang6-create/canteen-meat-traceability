@@ -1,0 +1,4 @@
+
+时间: 2026-11-18T23:27:57
+请求: {"batchId": 41}
+响应: {"code": 40902, "message": "批次当前状态为 PASSED，不能验收", "data": null, "traceId": "c47e220cbb24", "timestamp": "2026-11-18T23:27:57+08:00"}

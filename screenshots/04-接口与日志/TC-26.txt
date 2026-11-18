@@ -1,0 +1,4 @@
+
+时间: 2026-11-18T23:28:04
+请求: {"eventId": "dce243ca88d7b873ee47827000636b7b5ee78698754809041d9ac78846ccdd64"}
+响应: {"eventId": "dce243ca88d7b873ee47827000636b7b5ee78698754809041d9ac78846ccdd64", "batchId": "PB20261118041", "eventType": "PURCHASE_CREATE", "status": "CONFIRMED", "retryCount": 0, "nextRetryAt": null, "lastError": null, "txHash": "0x7ffdbd50c87f0f7a2c69d7c94952cb511e417cde0e77b659b9f3e8fbb4bd763f", "blockNumber": 151, "receiptTime": "2026-11-18T23:28:03+08:00"}

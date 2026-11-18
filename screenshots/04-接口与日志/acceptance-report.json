@@ -1,0 +1,263 @@
+{
+  "runId": "20261118-232737",
+  "results": [
+    {
+      "tc": "TC-01",
+      "name": "供应商备案成功",
+      "result": "通过",
+      "detail": "supplierCode=SUP-0022 eventId=bb52d5113685cf07…",
+      "at": "2026-11-18T23:27:52"
+    },
+    {
+      "tc": "TC-01",
+      "name": "SUPPLIER_REG 事件已上链",
+      "result": "通过",
+      "detail": "状态=CONFIRMED",
+      "at": "2026-11-18T23:27:56"
+    },
+    {
+      "tc": "TC-02",
+      "name": "黑名单供应商禁止建采购单",
+      "result": "通过",
+      "detail": "code=40902 msg=供应商状态为 BLACKLISTED，不可新增采购 采购批次总数 40→40",
+      "at": "2026-11-18T23:27:57"
+    },
+    {
+      "tc": "TC-03",
+      "name": "创建采购批次成功",
+      "result": "通过",
+      "detail": "batchNo=PB20261118041 status=PENDING_ACCEPT qty=120.000 evidence=PENDING",
+      "at": "2026-11-18T23:27:57"
+    },
+    {
+      "tc": "TC-04",
+      "name": "检疫证号缺失",
+      "result": "通过",
+      "detail": "code=40001 msg=quarantineNo 检疫合格证号不能为空",
+      "at": "2026-11-18T23:27:57"
+    },
+    {
+      "tc": "TC-05",
+      "name": "重复提交幂等",
+      "result": "通过",
+      "detail": "replayed=True batchNo=PB20261118042 同检疫证号的采购批次=1 条",
+      "at": "2026-11-18T23:27:57"
+    },
+    {
+      "tc": "TC-06",
+      "name": "验收合格",
+      "result": "通过",
+      "detail": "batchStatus=PASSED eventId=64e51cc7da361655…",
+      "at": "2026-11-18T23:27:57"
+    },
+    {
+      "tc": "TC-07",
+      "name": "验收不合格并禁止后续加工",
+      "result": "通过",
+      "detail": "batchStatus=REJECTED 加工返回=40902",
+      "at": "2026-11-18T23:27:57"
+    },
+    {
+      "tc": "TC-08",
+      "name": "不合格未填原因",
+      "result": "通过",
+      "detail": "code=40001 msg=验收不合格时 rejectReason 必填",
+      "at": "2026-11-18T23:27:57"
+    },
+    {
+      "tc": "TC-09",
+      "name": "重复验收",
+      "result": "通过",
+      "detail": "code=40902 msg=批次当前状态为 PASSED，不能验收",
+      "at": "2026-11-18T23:27:57"
+    },
+    {
+      "tc": "TC-26",
+      "name": "任务从待提交到已确认",
+      "result": "通过",
+      "detail": "任务=CONFIRMED txHash=0x7ffdbd50c87f0f7a2c… block=151 tx_status=0x1（节点回执口径 0x1）",
+      "at": "2026-11-18T23:28:04"
+    },
+    {
+      "tc": "TC-32",
+      "name": "记录一致 MATCHED",
+      "result": "通过",
+      "detail": "事件 2 条 / matched=2 / overall=PASS / 检验结论与核验状态分栏=True",
+      "at": "2026-11-18T23:28:08"
+    },
+    {
+      "tc": "TC-27",
+      "name": "同内容重复上链幂等",
+      "result": "通过",
+      "detail": "[补测] 队列 drained=True / {'CONFIRMED': 168}；返回码=1（1=幂等） totalEvents 168→168；链上摘要=d8863c300c9814c9… 未变；exists=True；回执数=1；结论=通过",
+      "at": "2026-11-18T23:28:19",
+      "retest": "队列排空后补测，见 TC-27.txt"
+    },
+    {
+      "tc": "TC-29",
+      "name": "摘要冲突且链上保留原记录",
+      "result": "通过",
+      "detail": "返回码=2（2=冲突） 链上摘要仍为 b76ceb6ec7182b52… 任务状态=CONFLICT",
+      "at": "2026-11-18T23:28:26"
+    },
+    {
+      "tc": "TC-31",
+      "name": "超时后重试先查链",
+      "result": "通过",
+      "detail": "模拟状态=SUBMITTED → 重试后=CONFIRMED totalEvents 142→142（链上未新增）",
+      "at": "2026-11-18T23:28:27"
+    },
+    {
+      "tc": "TC-33",
+      "name": "记录不一致 MISMATCHED",
+      "result": "通过",
+      "detail": "counts={'matched': 0, 'mismatched': 1, 'unconfirmed': 1, 'unreachable': 0} overall=FAIL 页面顶部警示条=True",
+      "at": "2026-11-18T23:28:32"
+    },
+    {
+      "tc": "TC-28",
+      "name": "连续 20 次新建 + 查询稳定",
+      "result": "通过",
+      "detail": "成功 20/20，最慢 82.3 ms，无 5xx、无超时",
+      "at": "2026-11-18T23:28:40"
+    },
+    {
+      "tc": "TC-34",
+      "name": "尚未确认 UNCONFIRMED",
+      "result": "通过",
+      "detail": "counts={'matched': 0, 'mismatched': 0, 'unconfirmed': 1, 'unreachable': 0} overall=PARTIAL 业务数据照常可读=True",
+      "at": "2026-11-18T23:29:48"
+    },
+    {
+      "tc": "TC-30",
+      "name": "链不可达时业务落库、任务置 UNREACHABLE",
+      "result": "通过",
+      "detail": "业务 code=0 batchNo=PB20261118068 任务=UNREACHABLE last_error=链不可达：链上查询不可达: null",
+      "at": "2026-11-18T23:30:10"
+    },
+    {
+      "tc": "TC-35",
+      "name": "链上不可达 UNREACHABLE（不得显示为通过）",
+      "result": "通过",
+      "detail": "counts={'matched': 0, 'mismatched': 0, 'unconfirmed': 0, 'unreachable': 1} overall=PARTIAL 时间线状态=['UNREACHABLE'] 业务数据可读=True 熔断后耗时=57.9 ms",
+      "at": "2026-11-18T23:30:10"
+    },
+    {
+      "tc": "TC-30",
+      "name": "故障恢复后任务自动重试成功",
+      "result": "通过",
+      "detail": "重试前 {'UNREACHABLE': 4} → 最终 {'CONFIRMED': 168}",
+      "at": "2026-11-18T23:30:56"
+    }
+  ],
+  "performance": {
+    "public_trace": {
+      "url": "/api/public/trace/PR20261118001",
+      "samples": [
+        24.1,
+        23.8,
+        23.6,
+        23.0,
+        22.3,
+        23.6,
+        23.5,
+        26.5,
+        22.9,
+        20.3,
+        20.5,
+        37.0,
+        33.3,
+        44.5,
+        21.6,
+        28.5,
+        43.3,
+        20.4,
+        19.1,
+        37.5
+      ],
+      "mean": 27.0,
+      "max": 44.5,
+      "min": 19.1,
+      "p95": 43.3,
+      "median": 23.6,
+      "chainQueries": 1,
+      "note": "含链上 eth_call 核验，事件数见 chainQueries"
+    },
+    "purchase_detail": {
+      "samples": [
+        7.8,
+        27.2,
+        13.1,
+        8.8,
+        8.6,
+        8.6,
+        18.6,
+        8.4,
+        8.7,
+        10.7,
+        10.3,
+        8.9,
+        7.8,
+        9.5,
+        10.1,
+        10.0,
+        7.6,
+        7.9,
+        8.2,
+        7.2
+      ],
+      "mean": 10.4,
+      "max": 27.2,
+      "min": 7.2,
+      "p95": 18.6,
+      "median": 8.8,
+      "note": "纯数据库查询，不含链上交互"
+    },
+    "unreachable_verify_ms": 57.9,
+    "public_trace_9events": {
+      "url": "/api/public/trace/PR20261118036",
+      "samples": [
+        161.4,
+        94.2,
+        115.1,
+        118.7,
+        90.1,
+        105.9,
+        117.4,
+        107.1,
+        92.4,
+        128.1,
+        99.1,
+        115.3,
+        98.8,
+        91.7,
+        72.0,
+        106.2,
+        78.9,
+        100.8,
+        94.9,
+        113.4
+      ],
+      "mean": 105.1,
+      "max": 161.4,
+      "min": 72.0,
+      "median": 103.3,
+      "p95": 128.1,
+      "chainQueries": 9,
+      "note": "含链上 eth_call 核验；PR 公开页会沿 source_relation 上溯上游采购批次，因此时间线为 9 条事件（9 次链查询），不是快照表里该批次的 5 条"
+    }
+  },
+  "observations": [
+    "TC-33 测试数据已复原，复原后 overall=PASS，正式演示记录未被修改。",
+    "S1 结束时存证队列状态：{'CONFIRMED': 164}；drained=True",
+    "TC-34 测试批次 PB20261118067 的任务停留在 PENDING（链上无记录），S4 恢复实例会自动补上链。",
+    "S4 恢复正常配置后自动重试：重试前={'UNREACHABLE': 4}，drained=True，最终={'CONFIRMED': 168}。这条验证 UNREACHABLE 状态改动后任务不会被卡死。",
+    "TC-27 首次不通过是测量方法问题：totalEvents 为合约全局计数器，S1 期间 EvidenceWorker 并发写入其它事件导致计数 +1；在队列排空、无实例写链的条件下补测 n0==n1，返回码 1、链上摘要未变、回执仍 1 条，判定通过。脚本已加入测量前 wait_queue_drained()。",
+    "补充采样：PR20261118036 公开页沿 source_relation 上溯上游采购批次，时间线共 9 条事件 / 9 次 eth_call，20 次均值 105.1 ms；对照 1 条事件的 PR20261118001 均值 27.0 ms、纯数据库接口 10.4 ms。链查询次数与端到端耗时近似线性，是主要耗时来源。"
+  ],
+  "summary": {
+    "通过": 21,
+    "不通过": 0,
+    "阻塞": 0
+  }
+}

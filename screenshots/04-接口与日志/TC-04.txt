@@ -1,0 +1,4 @@
+
+时间: 2026-11-18T23:27:57
+请求: {"supplierId": 22, "meatType": "冷鲜猪肉", "origin": "江西省南昌市", "slaughterNo": "SL-TEST-612c7c", "quantity": "120.000", "unit": "kg", "unitPrice": "25.50", "arriveTime": "2026-11-18 23:27:57", "coldChainTemp": "3.20"}
+响应: {"code": 40001, "message": "quarantineNo 检疫合格证号不能为空", "data": null, "traceId": "b2274e8be754", "timestamp": "2026-11-18T23:27:57+08:00"}
