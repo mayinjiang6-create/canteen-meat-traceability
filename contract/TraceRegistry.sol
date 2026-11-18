@@ -1,11 +1,13 @@
-pragma solidity ^0.4.25;
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.11;
 
 /**
  * @title  TraceRegistry
  * @notice 高校食堂肉类供应链溯源系统 · 事件存证合约
  *         链上仅保存 事件标识 / 批次标识 / 事件类型 / 业务时间 / 数据摘要
  *         业务明细留在链下数据库，核验时比对摘要
- * @dev    设计说明见 docs/tech/04-合约设计.md
+ * @dev    目标链 FISCO BCOS 3.17（EVM），编译器 solc 0.8.11
+ *         设计说明见 docs/tech/04-合约设计.md
  */
 contract TraceRegistry {
 
@@ -45,7 +47,7 @@ contract TraceRegistry {
         address submitter
     );
 
-    constructor() public {
+    constructor() {
         owner = msg.sender;
     }
 
@@ -60,11 +62,11 @@ contract TraceRegistry {
      */
     function append(
         bytes32 eventId,
-        string  batchId,
-        string  eventType,
+        string calldata batchId,
+        string calldata eventType,
         uint256 bizTime,
         bytes32 dataDigest
-    ) public returns (uint8) {
+    ) external returns (uint8) {
         require(eventId != bytes32(0),          "eventId required");
         require(dataDigest != bytes32(0),       "dataDigest required");
         require(bytes(batchId).length > 0,      "batchId required");
@@ -99,9 +101,9 @@ contract TraceRegistry {
     /**
      * @notice 按事件标识查询
      */
-    function query(bytes32 eventId) public view returns (
-        string  batchId,
-        string  eventType,
+    function query(bytes32 eventId) external view returns (
+        string memory batchId,
+        string memory eventType,
         uint256 bizTime,
         bytes32 dataDigest,
         address submitter,
@@ -123,14 +125,14 @@ contract TraceRegistry {
     /**
      * @notice 某批次的事件数量
      */
-    function batchEventCount(string batchId) public view returns (uint256) {
+    function batchEventCount(string calldata batchId) external view returns (uint256) {
         return _batchIndex[keccak256(abi.encodePacked(batchId))].length;
     }
 
     /**
      * @notice 按索引取批次下的事件标识
      */
-    function batchEventAt(string batchId, uint256 index) public view returns (bytes32) {
+    function batchEventAt(string calldata batchId, uint256 index) external view returns (bytes32) {
         bytes32[] storage list = _batchIndex[keccak256(abi.encodePacked(batchId))];
         require(index < list.length, "index out of range");
         return list[index];
@@ -139,7 +141,7 @@ contract TraceRegistry {
     /**
      * @notice 事件是否存在
      */
-    function exists(bytes32 eventId) public view returns (bool) {
+    function exists(bytes32 eventId) external view returns (bool) {
         return _records[eventId].exists;
     }
 }

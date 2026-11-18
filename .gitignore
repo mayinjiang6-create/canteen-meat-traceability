@@ -28,6 +28,9 @@ Thumbs.db
 Desktop.ini
 .DS_Store
 
+# ---- 工作区私有数据（项目记忆、临时脚本，不入公开仓库）----
+.workbuddy/
+
 # ---- 密钥与证书（严禁入库）----
 # FISCO BCOS 节点证书、SDK 证书
 *.crt

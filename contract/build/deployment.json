@@ -1,0 +1,10 @@
+{
+  "contractName": "TraceRegistry",
+  "contractAddress": "0xd24180cc0fef2f3e545de4f9aafc09345cd08903",
+  "groupId": "group0",
+  "deployer": "meattraceadmin",
+  "deployerAddress": "0x0bd53242ca7ee7fb0ce57a3cb296b6d4b237dbe8",
+  "compiler": "solc 0.8.11",
+  "chain": "FISCO BCOS 3.17.0",
+  "deployedAt": "2026-11-18"
+}

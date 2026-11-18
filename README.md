@@ -8,8 +8,8 @@
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.3-6DB33F?logo=springboot&logoColor=white)
 ![Vue](https://img.shields.io/badge/Vue-3.5-4FC08D?logo=vuedotjs&logoColor=white)
 ![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?logo=mysql&logoColor=white)
-![FISCO BCOS](https://img.shields.io/badge/FISCO%20BCOS-2.9-1E6FBA)
-![Solidity](https://img.shields.io/badge/Solidity-0.4.25-363636?logo=solidity&logoColor=white)
+![FISCO BCOS](https://img.shields.io/badge/FISCO%20BCOS-3.17-1E6FBA)
+![Solidity](https://img.shields.io/badge/Solidity-0.8.11-363636?logo=solidity&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
 </div>
@@ -115,7 +115,7 @@ payload:{"acceptNo":"AC20261118001","certComplete":true,…}
 **前端**：Vue 3 · Vite · Element Plus · Pinia · Axios
 **后端**：Java 21 · Spring Boot 3.3 · MyBatis-Plus · HikariCP · Flyway
 **存储**：MySQL 8.0 ·（文件凭证存本地磁盘）
-**区块链**：FISCO BCOS 2.9（Air 四节点）· Solidity 0.4.25 · WeBASE-Front（HTTP `/trans/handle`）· WeBASE-Sign
+**区块链**：FISCO BCOS 3.17（Air 四节点，`group0`）· Solidity 0.8.11 · WeBASE 3.1.1（Front `/trans/handleWithSign` + Sign 外部签名）
 **AI**：RAG（embedding + 内存余弦检索 + 引用回链），可一键关闭
 
 > 为什么不用 `fisco-bcos-java-sdk`：它和 Druid 有版本冲突历史，且升级会牵动整棵依赖树。走 HTTP 前置服务，后端只依赖一个 HTTP 客户端。
@@ -186,6 +186,7 @@ cd frontend && npm install && npm run dev
 | [测试用例表](docs/tech/07-测试用例表.md) | 30 项用例（正常/边界/异常/核验/幂等） |
 | [测试记录](docs/tech/08-测试记录.md) | 执行环境、结果汇总、20 次耗时采样 |
 | [AI 模块设计](docs/tech/09-AI模块设计.md) | 知识库构建、检索、Prompt、引用回链、评测 |
+| [链环境实测记录](docs/tech/10-链环境实测记录.md) | P0 环境体检、真实上链证据、已发现的接口缺陷 |
 
 ---
 
