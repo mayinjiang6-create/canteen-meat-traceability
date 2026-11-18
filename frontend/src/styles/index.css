@@ -1,0 +1,221 @@
+/* =============================================================================
+ * 全局样式
+ * 主色：深青绿 #137a5f —— 比默认蓝更贴合「食品安全 / 检验合格」的语义，
+ * 也避免和 Element Plus 默认蓝的通用后台观感撞车。
+ * Element Plus 的所有浅色变体都由 --el-color-primary-light-N 推导，这里逐个补齐。
+ * ========================================================================== */
+
+:root {
+  --el-color-primary: #137a5f;
+  --el-color-primary-light-3: #5aa28f;
+  --el-color-primary-light-5: #89bdaf;
+  --el-color-primary-light-7: #b8d7cf;
+  --el-color-primary-light-8: #d0e4df;
+  --el-color-primary-light-9: #e7f2ef;
+  --el-color-primary-dark-2: #0f624c;
+
+  --el-font-family: 'Microsoft YaHei', 'PingFang SC', 'Hiragino Sans GB', system-ui, sans-serif;
+
+  /* 四类核验状态配色（对外统一，任何页面不许换色） */
+  --vc-matched: #1a9c5b;
+  --vc-mismatched: #d92d20;
+  --vc-unconfirmed: #8a94a6;
+  --vc-unreachable: #d99000;
+
+  --app-sidebar-bg: #0e2a23;
+  --app-sidebar-bg-2: #123c31;
+  --app-content-bg: #f4f6f8;
+  --app-border: #e4e8ee;
+  --app-text-main: #1f2d3d;
+  --app-text-sub: #6b7785;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--el-font-family);
+  color: var(--app-text-main);
+  background: var(--app-content-bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 数字用等宽，数量与摘要列对得齐，答辩投影时一眼能看出位数 */
+.mono {
+  font-family: 'Cascadia Mono', 'Consolas', 'SF Mono', monospace;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.2px;
+}
+
+.text-sub {
+  color: var(--app-text-sub);
+}
+
+/* ---------------------------------------------------------------------------
+ * 通用页容器
+ * ------------------------------------------------------------------------- */
+.page {
+  padding: 18px 22px 28px;
+}
+
+.page-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.page-head h2 {
+  margin: 0 0 6px;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.page-head .desc {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--app-text-sub);
+  max-width: 760px;
+}
+
+.panel {
+  background: #fff;
+  border: 1px solid var(--app-border);
+  border-radius: 10px;
+  padding: 16px 18px;
+}
+
+.panel + .panel {
+  margin-top: 14px;
+}
+
+.panel-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 14px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.panel-title::before {
+  content: '';
+  width: 3px;
+  height: 14px;
+  border-radius: 2px;
+  background: var(--el-color-primary);
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.toolbar .grow {
+  flex: 1;
+}
+
+.pager {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 14px;
+}
+
+/* 表格里数量列右对齐，视觉上成列 */
+.qty-cell {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------------------------------------------------------------------------
+ * 核验状态徽标
+ * ------------------------------------------------------------------------- */
+.vc-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 1px 8px;
+  border-radius: 10px;
+  font-size: 12px;
+  line-height: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+  border: 1px solid transparent;
+}
+
+.vc-badge .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.vc-MATCHED {
+  color: var(--vc-matched);
+  background: #e8f6ee;
+  border-color: #bfe5cf;
+}
+
+.vc-MISMATCHED {
+  color: var(--vc-mismatched);
+  background: #fdecea;
+  border-color: #f6c9c4;
+}
+
+.vc-UNCONFIRMED {
+  color: var(--vc-unconfirmed);
+  background: #f1f3f6;
+  border-color: #dfe3e9;
+}
+
+.vc-UNREACHABLE {
+  color: var(--vc-unreachable);
+  background: #fdf4e3;
+  border-color: #f3ddab;
+}
+
+/* ---------------------------------------------------------------------------
+ * Element Plus 局部微调
+ * ------------------------------------------------------------------------- */
+.el-table th.el-table__cell {
+  background: #f7f9fb !important;
+  color: #48576a;
+  font-weight: 600;
+}
+
+.el-descriptions__label {
+  width: 130px;
+  color: var(--app-text-sub) !important;
+}
+
+.el-dialog__body {
+  padding-top: 8px;
+}
+
+.el-form-item__label {
+  color: #48576a;
+}
+
+/* 摘要串较长，允许在提示框里折行 */
+.digest-tip {
+  max-width: 460px;
+  word-break: break-all;
+  font-family: 'Cascadia Mono', Consolas, monospace;
+  font-size: 12px;
+  line-height: 1.6;
+}

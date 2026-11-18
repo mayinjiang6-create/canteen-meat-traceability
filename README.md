@@ -101,7 +101,8 @@ payload:{"acceptNo":"AC20261118001","certComplete":true,…}
 | 采购批次 | 一批一档，检疫证、屠宰批次、到货温度 | ✅ 已实现 |
 | 入库验收 | 感官 / 票证 / 温度 / 留样，判定合格与否 | ✅ 已实现 |
 | 存证管理 | 任务状态、手动重试（先查链再决定） | ✅ 已实现 |
-| 公开溯源 | 扫码 / 输码，时间线 + 四类核验 | ✅ 接口就绪，页面待做 |
+| 公开溯源 | 扫码 / 输码，时间线 + 四类核验 + 检验结论分栏 | ✅ 已实现（免登录独立页面） |
+| 管理端前端 | 登录 + 布局壳 + 8 个业务页面 | ✅ 已实现（Vue 3 + Element Plus） |
 | 冷链登记 | 运输温控，按品类阈值判定，超限自动开异常工单 | ✅ 已实现 |
 | 加工投料 | **多来源投料**：来源可多批、数量乐观扣减、并发安全 | ✅ 已实现 |
 | 上架 | 加工批次 `CREATED → ON_SALE`，重复上架幂等 | ✅ 已实现 |
@@ -145,22 +146,25 @@ mysql -u root -p --default-character-set=utf8mb4 \
 cd backend && mvn package -DskipTests
 java -jar target/meat-trace-0.1.0.jar --spring.profiles.active=dev
 
-# 5. 前端（阶段 C 待做）
+# 5. 前端（另开一个终端）
+cd frontend
+npm install --registry=https://registry.npmmirror.com
+npm run dev
 ```
 
-后端起来后是 `http://localhost:8080`，账号 `admin / Admin@123`。
-
-**前端页面还没做**，现在可以直接用接口验证：
+后端 `http://localhost:8080`，前端 `http://localhost:5173`，账号 `admin / Admin@123`。
+登录页可以直接点演示账号卡片一键填充；**公开溯源页免登录**，直接访问
+`http://localhost:5173/trace/PB20261118001`，或用管理员账号 `admin / Admin@123`。
 
 ```bash
-TOKEN=$(curl -s -X POST http://localhost:8080/api/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{"username":"admin","password":"Admin@123"}' | python -c "import sys,json;print(json.load(sys.stdin)['data']['token'])")
-
 # 公开溯源（免登录，扫码看到的就是这个）
 curl -s "http://localhost:8080/api/public/trace/PB20261118001" | python -m json.tool
 curl -s "http://localhost:8080/api/public/trace/PR20261118001" | python -m json.tool
 ```
+
+> 前端开发期用 Vite 把 `/api` 反代到 8080，不需要配 CORS；后端另有一份 `CorsConfig`
+> 兜底，供打包后分离部署或局域网 IP 直连演示。前端完整使用说明见
+> [`docs/product/07-前端使用与演示指南.md`](docs/product/07-前端使用与演示指南.md)。
 
 > **不要用 `mvn spring-boot:run`**：仓库路径含中文时 classpath 解析会抛 `ClassNotFoundException`，一律用 `mvn package` + `java -jar`。
 > 演示数据已内置：3 家供应商、4 个采购批次、3 个加工批次（含一条多来源投料）、4 笔销售、1 条冷链超限拒收闭环。其中 `PB20261118001` 的验收事件**链上真实存在**，导入后公开溯源直接返回 `MATCHED`。
@@ -251,6 +255,7 @@ cd backend && mvn test -DforkCount=0
 | [答辩操作手册](docs/product/04-答辩操作手册.md) | 15 分钟逐分钟脚本、关键话术、12 个高频问答 |
 | [快速开始](docs/product/05-快速开始.md) | 10 分钟跑通 |
 | [AI 问答功能说明](docs/product/06-AI问答功能说明.md) | 能力边界、三种兜底、评测指标 |
+| [前端使用与演示指南](docs/product/07-前端使用与演示指南.md) | 启动命令、页面与接口对照、15 分钟答辩演示脚本、四类状态演示方法、FAQ |
 
 ### 技术文档
 
@@ -299,7 +304,7 @@ cd backend && mvn test -DforkCount=0
 - [x] P0 链环境打通（四节点 + WeBASE-Front）—— 实测记录见 [TECH-10](docs/tech/10-链环境实测记录.md)
 - [x] P1 存证闭环 —— 写入走 `ChainWriteClient` + `EvidenceWorker`，真实 txHash 落库；读走节点 `eth_call`
 - [x] P2 业务域完整（15 条业务规则）—— 供应商 / 采购 / 验收 / 加工 / 销售 / 冷链 / 异常 / 召回 全部完成
-- [ ] P3 前端页面 + 公开溯源页 —— **接口已就绪**（`/api/public/trace/{batchNo}` 四类核验可用），页面待做
+- [x] P3 前端页面 + 公开溯源页 —— 登录 / 布局壳 / 8 个业务页面 / 免登录溯源页全部完成，2026-11-18 实机联调通过
 - [ ] P3.5 问答模块
 - [ ] P4 30 项测试 + 性能采样 —— 已有 49 项单测 + 107 项全链路回归；TC-10/11、TC-18~25 已回填通过
 - [ ] P5 论文初稿
