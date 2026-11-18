@@ -1,0 +1,3279 @@
+{
+  "meta": {
+    "generatedAt": "2026-11-18T23:53:21",
+    "source": "meat_trace.event_snapshot（真实运行数据）",
+    "chainVerified": true,
+    "rule": "链上摘要 == 本地 data_digest 才收录；链不可达时降级为 CONFIRMED 任务并标注",
+    "totalSnapshots": 186,
+    "included": 186,
+    "excluded": 0,
+    "matched": 186
+  },
+  "events": [
+    {
+      "eventId": "6f1c2b9a4e7d5083c1a2b3d4e5f60718293a4b5c6d7e8f90a1b2c3d4e5f60718",
+      "batchId": "PB20261118001",
+      "eventType": "ACCEPT_RESULT",
+      "bizTime": "2026-11-18 09:30:00",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "16decfa5e4ccb17cc948c8d3b44c59439fcd7244e2280a0a6cf5a5f86bc770bf",
+      "text": "2026-11-18 09:30，采购批次 PB20261118001（120.000 kg）完成入库验收。验收人 李四，到货中心温度 3.500 ℃，索证索票齐全，检验结论：合格（PASS）。验收单号 AC20261118001。",
+      "payload": {
+        "result": "PASS",
+        "acceptNo": "AC20261118001",
+        "inspector": "李四",
+        "temperature": 3.5,
+        "certComplete": true
+      }
+    },
+    {
+      "eventId": "f02faacb34d09e9ee18cf7d57df5d47b42465c959e391d6e3e8d91d80fa36923",
+      "batchId": "SUP-0004",
+      "eventType": "SUPPLIER_REG",
+      "bizTime": "2026-11-18 21:02:04",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "0743fcda502708d82eea483302113e80dfea1ea0d9289b0ce69a3017fae13847",
+      "text": "2026-11-18 21:02，供应商 SUP-0004「南昌鑫旺肉业有限公司」完成备案。许可证号 JX20260099，状态 ACTIVE。",
+      "payload": {
+        "name": "南昌鑫旺肉业有限公司",
+        "status": "ACTIVE",
+        "licenseNo": "JX20260099",
+        "supplierCode": "SUP-0004"
+      }
+    },
+    {
+      "eventId": "8bd5e5d444810de56b12e657b6b47b90fc2744338f51409305be82c88b13cf09",
+      "batchId": "SUP-0005",
+      "eventType": "SUPPLIER_REG",
+      "bizTime": "2026-11-18 21:02:43",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "f9fe6a894c5ecdd7dd2ed31bf34333e0d7b06d72c23176634edd52320742a3b5",
+      "text": "2026-11-18 21:02，供应商 SUP-0005「南昌鑫旺肉业有限公司」完成备案。许可证号 JX20260099，状态 ACTIVE。",
+      "payload": {
+        "name": "南昌鑫旺肉业有限公司",
+        "status": "ACTIVE",
+        "licenseNo": "JX20260099",
+        "supplierCode": "SUP-0005"
+      }
+    },
+    {
+      "eventId": "1483909b018b46b53f4deb169fc57df0141abda91e03270ab3b243eb1422e8ce",
+      "batchId": "PB20261118005",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 20:30:00",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "4e1a82af4341eec8f5df6a963d3795518ee654621dd703e8731dd5f99596ab6e",
+      "text": "2026-11-18 20:30，采购批次 PB20261118005（冷鲜猪肉，150.000 kg）建单。供应商编码 SUP-0005，检疫合格证号 JX-JY-2026-111888。",
+      "payload": {
+        "batchNo": "PB20261118005",
+        "meatType": "冷鲜猪肉",
+        "quantity": 150.0,
+        "quarantineNo": "JX-JY-2026-111888",
+        "supplierCode": "SUP-0005"
+      }
+    },
+    {
+      "eventId": "b76da9e191048f13bea8f68c7f8c51e2895150c4fb261e1e9f7b986102bd5eec",
+      "batchId": "PB20261118006",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 21:15:00",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "f3d7cc8547310f3f5b0887a8deb332a0f1650a64d247033a45a1da659fc2436d",
+      "text": "2026-11-18 21:15，采购批次 PB20261118006（冷鲜猪肉，66.000 kg）建单。供应商编码 SUP-0001，检疫合格证号 JX-JY-2026-999001。",
+      "payload": {
+        "batchNo": "PB20261118006",
+        "meatType": "冷鲜猪肉",
+        "quantity": 66.0,
+        "quarantineNo": "JX-JY-2026-999001",
+        "supplierCode": "SUP-0001"
+      }
+    },
+    {
+      "eventId": "011e2c67d1bd37b4b55c8c8fa6349eeed0ab0d04350d311b68385b508fb7713c",
+      "batchId": "SUP-0006",
+      "eventType": "SUPPLIER_REG",
+      "bizTime": "2026-11-18 21:15:09",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "98cd1d21d7a549690d55ff512713d9de049ec269ab189ae9d5c1b0d0547d3a97",
+      "text": "2026-11-18 21:15，供应商 SUP-0006「自检供应商-1795007709」完成备案。许可证号 JX2026SMOKE，状态 ACTIVE。",
+      "payload": {
+        "name": "自检供应商-1795007709",
+        "status": "ACTIVE",
+        "licenseNo": "JX2026SMOKE",
+        "supplierCode": "SUP-0006"
+      }
+    },
+    {
+      "eventId": "af1a3108b2f3cfc68458cf17088170e53fe82a0f8828d76e550ee774f0113f54",
+      "batchId": "PB20261118007",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 21:15:09",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "5b6991aa5f9a1d1f631f471221be126b809b388580e515082a9b5cc9ab6fe2ff",
+      "text": "2026-11-18 21:15，采购批次 PB20261118007（冷鲜猪肉，88.000 kg）建单。供应商编码 SUP-0006，检疫合格证号 JX-JY-2026-SMOKE7709。",
+      "payload": {
+        "batchNo": "PB20261118007",
+        "meatType": "冷鲜猪肉",
+        "quantity": 88.0,
+        "quarantineNo": "JX-JY-2026-SMOKE7709",
+        "supplierCode": "SUP-0006"
+      }
+    },
+    {
+      "eventId": "02393d8289b8e13318277c8cbbe34c3b3e91f6f744d7e3f30ec39db0089fb6ab",
+      "batchId": "PB20261118007",
+      "eventType": "ACCEPT_RESULT",
+      "bizTime": "2026-11-18 21:15:17",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "4d69e23bf9de855ca6745d7d8d7627c85e7350c406030b049333120ebebc22bb",
+      "text": "2026-11-18 21:15，采购批次 PB20261118007（88.000 kg）完成入库验收。验收人 自检员，到货中心温度 3.100 ℃，索证索票齐全，检验结论：合格（PASS）。验收单号 AC20261118004。",
+      "payload": {
+        "result": "PASS",
+        "acceptNo": "AC20261118004",
+        "inspector": "自检员",
+        "temperature": 3.1,
+        "certComplete": true
+      }
+    },
+    {
+      "eventId": "99fb0454cd3ede2f8938e3e7bd0aa9839cef5d8af26b1306a1e5abc984d4de7d",
+      "batchId": "SUP-0007",
+      "eventType": "SUPPLIER_REG",
+      "bizTime": "2026-11-18 21:42:08",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "859f0650998642bdf1cc10aa9bd69b9f46a0dd99ff81187f385515465573a9e3",
+      "text": "2026-11-18 21:42，供应商 SUP-0007「自检供应商-1795009327」完成备案。许可证号 JX2026SMOKE，状态 ACTIVE。",
+      "payload": {
+        "name": "自检供应商-1795009327",
+        "status": "ACTIVE",
+        "licenseNo": "JX2026SMOKE",
+        "supplierCode": "SUP-0007"
+      }
+    },
+    {
+      "eventId": "69af0fbf2ecf597f25a6ec916ede333d41f659d86517a3cbcccd09f3a2763bee",
+      "batchId": "PB20261118008",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 21:42:08",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "bea7a29b2a259b6ab508efd51ab21d2920b703f45b93dfe9c6ead0b81daf7878",
+      "text": "2026-11-18 21:42，采购批次 PB20261118008（冷鲜猪肉，88.000 kg）建单。供应商编码 SUP-0007，检疫合格证号 JX-JY-2026-SMOKE9328。",
+      "payload": {
+        "batchNo": "PB20261118008",
+        "meatType": "冷鲜猪肉",
+        "quantity": 88.0,
+        "quarantineNo": "JX-JY-2026-SMOKE9328",
+        "supplierCode": "SUP-0007"
+      }
+    },
+    {
+      "eventId": "a384e4473363aa77b768c4c1ccfe6f2cbf3e9d10f9e25d402bce52f5ee0dbfc2",
+      "batchId": "PB20261118008",
+      "eventType": "ACCEPT_RESULT",
+      "bizTime": "2026-11-18 21:42:14",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "de885770b1ac156c43bae8dd113559b0aa1cf56cbe692dafd9dab76c9800290a",
+      "text": "2026-11-18 21:42，采购批次 PB20261118008（88.000 kg）完成入库验收。验收人 自检员，到货中心温度 3.100 ℃，索证索票齐全，检验结论：合格（PASS）。验收单号 AC20261118005。",
+      "payload": {
+        "result": "PASS",
+        "acceptNo": "AC20261118005",
+        "inspector": "自检员",
+        "temperature": 3.1,
+        "certComplete": true
+      }
+    },
+    {
+      "eventId": "09ef4a284a63084fa85e11d774ce5fb106d723befb28d8c22b45bfd15ce6de89",
+      "batchId": "PR20261118004",
+      "eventType": "PROCESS_CREATE",
+      "bizTime": "2026-11-18 21:42:18",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "45fd1090426f2312f27ba79d020df4d20b730f392c01d37de16115542ddd8945",
+      "text": "2026-11-18 21:42，加工批次 PR20261118004 完成投料，共 1 个来源：PB20261118008 投入 30.000 kg。投入合计 30.000 kg，产出 28.000 kg，留样号 LY-SMOKE-001，车间 自检后厨，操作人 自检员。",
+      "payload": {
+        "sources": [
+          {
+            "usedQty": 30.0,
+            "purchaseBatchNo": "PB20261118008"
+          }
+        ],
+        "meatType": "冷鲜猪肉",
+        "operator": "自检员",
+        "workshop": "自检后厨",
+        "outputQty": 28.0,
+        "processNo": "PR20261118004",
+        "retainSampleNo": "LY-SMOKE-001"
+      }
+    },
+    {
+      "eventId": "c10b966a7b454ec33f827b8762860bcb5689055a4856a6e5e0afe95a85f695b1",
+      "batchId": "PB20261118009",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 21:42:19",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "df0e93ac5c0204668341ee375b63e469046ecf5e82ef5a0ad4b6bb99f5617a58",
+      "text": "2026-11-18 21:42，采购批次 PB20261118009（冷鲜猪肉，50.000 kg）建单。供应商编码 SUP-0007，检疫合格证号 JX-JY-2026-SMOKE2-9339。",
+      "payload": {
+        "batchNo": "PB20261118009",
+        "meatType": "冷鲜猪肉",
+        "quantity": 50.0,
+        "quarantineNo": "JX-JY-2026-SMOKE2-9339",
+        "supplierCode": "SUP-0007"
+      }
+    },
+    {
+      "eventId": "9a72437b639c2780a683d900791751d573ff8acc4655bbcd6b712afe326049b8",
+      "batchId": "PB20261118009",
+      "eventType": "ACCEPT_RESULT",
+      "bizTime": "2026-11-18 21:42:19",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "2f7f4a6a905e25b1e2c6606b85474333a3a1539da9f6934bdf10d1a7619c49b9",
+      "text": "2026-11-18 21:42，采购批次 PB20261118009（50.000 kg）完成入库验收。验收人 自检员，到货中心温度 3.100 ℃，索证索票齐全，检验结论：合格（PASS）。验收单号 AC20261118006。",
+      "payload": {
+        "result": "PASS",
+        "acceptNo": "AC20261118006",
+        "inspector": "自检员",
+        "temperature": 3.1,
+        "certComplete": true
+      }
+    },
+    {
+      "eventId": "7fd2391f904d960325ba2301cc0e5dc6400e26b2c90445cf1a950033667ccc4c",
+      "batchId": "PR20261118005",
+      "eventType": "PROCESS_CREATE",
+      "bizTime": "2026-11-18 21:42:19",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "000742b504f5ebb7263dfa6da239677f785c6daaf2603736447d5b7c1bef543c",
+      "text": "2026-11-18 21:42，加工批次 PR20261118005 完成投料，共 2 个来源：PB20261118008 投入 20.000 kg；PB20261118009 投入 20.000 kg。投入合计 40.000 kg，产出 40.000 kg，留样号 LY-SMOKE-002，车间 自检后厨，操作人 自检员。",
+      "payload": {
+        "sources": [
+          {
+            "usedQty": 20.0,
+            "purchaseBatchNo": "PB20261118008"
+          },
+          {
+            "usedQty": 20.0,
+            "purchaseBatchNo": "PB20261118009"
+          }
+        ],
+        "meatType": "冷鲜猪肉",
+        "operator": "自检员",
+        "workshop": "自检后厨",
+        "outputQty": 40.0,
+        "processNo": "PR20261118005",
+        "retainSampleNo": "LY-SMOKE-002"
+      }
+    },
+    {
+      "eventId": "965e138adbf7acbcc0f71e74d887014513211563982207d46c6e17d7e6ff7801",
+      "batchId": "PB20261118010",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 21:42:19",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "ce1afd8f8ee756da16c150de000b9737fb8092b7d63521459636073eb481c937",
+      "text": "2026-11-18 21:42，采购批次 PB20261118010（冷鲜猪肉，40.000 kg）建单。供应商编码 SUP-0007，检疫合格证号 JX-JY-2026-SMOKE3-9339。",
+      "payload": {
+        "batchNo": "PB20261118010",
+        "meatType": "冷鲜猪肉",
+        "quantity": 40.0,
+        "quarantineNo": "JX-JY-2026-SMOKE3-9339",
+        "supplierCode": "SUP-0007"
+      }
+    },
+    {
+      "eventId": "4b36127e72a5c8a9011aab51819b415a118030e1690c29bfb75414b47ecc173b",
+      "batchId": "SUP-0008",
+      "eventType": "SUPPLIER_REG",
+      "bizTime": "2026-11-18 21:43:52",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "72f884401aad719e239f79182b75359cbdd05891d28b3e9dd892b0323b6f2569",
+      "text": "2026-11-18 21:43，供应商 SUP-0008「并发验证供应商-1795009431」完成备案。许可证号 JX2026CONCUR，状态 ACTIVE。",
+      "payload": {
+        "name": "并发验证供应商-1795009431",
+        "status": "ACTIVE",
+        "licenseNo": "JX2026CONCUR",
+        "supplierCode": "SUP-0008"
+      }
+    },
+    {
+      "eventId": "1d6e5d1fdb9d80e99f7f637edbe991ad7bd54f1f8a7e52e077c517719205f7a7",
+      "batchId": "PB20261118011",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 21:43:51",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "b171af1161e962f59a3ef4e42b13bb6a514e1d7defc636b7a23c45d67158df7b",
+      "text": "2026-11-18 21:43，采购批次 PB20261118011（冷鲜猪肉，60.000 kg）建单。供应商编码 SUP-0008，检疫合格证号 JX-JY-2026-CONCUR9431。",
+      "payload": {
+        "batchNo": "PB20261118011",
+        "meatType": "冷鲜猪肉",
+        "quantity": 60.0,
+        "quarantineNo": "JX-JY-2026-CONCUR9431",
+        "supplierCode": "SUP-0008"
+      }
+    },
+    {
+      "eventId": "5fc3c3e54ea13cdbf1ba022d804b9723dd491a5079c4bbf2dd601388c27cb017",
+      "batchId": "PB20261118011",
+      "eventType": "ACCEPT_RESULT",
+      "bizTime": "2026-11-18 21:43:51",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "babf597351e5906cc5b6735a80bc2de1888724d50d3d74e0298266dc07913724",
+      "text": "2026-11-18 21:43，采购批次 PB20261118011（60.000 kg）完成入库验收。验收人 并发验证，到货中心温度 3.100 ℃，索证索票齐全，检验结论：合格（PASS）。验收单号 AC20261118007。",
+      "payload": {
+        "result": "PASS",
+        "acceptNo": "AC20261118007",
+        "inspector": "并发验证",
+        "temperature": 3.1,
+        "certComplete": true
+      }
+    },
+    {
+      "eventId": "488912579d8cf3697754d20a4eca64808b91ba7f85db920de82a2e75952b0faf",
+      "batchId": "PR20261118006",
+      "eventType": "PROCESS_CREATE",
+      "bizTime": "2026-11-18 21:43:52",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "e04ca315b2cc4672c1520e6c7fabc6592aaa4efa86c1d194a7bb9fa6e9423e3d",
+      "text": "2026-11-18 21:43，加工批次 PR20261118006 完成投料，共 1 个来源：PB20261118011 投入 20.000 kg。投入合计 20.000 kg，产出 20.000 kg，留样号 未记录，车间 并发验证后厨，操作人 并发线程-276。",
+      "payload": {
+        "sources": [
+          {
+            "usedQty": 20.0,
+            "purchaseBatchNo": "PB20261118011"
+          }
+        ],
+        "meatType": "冷鲜猪肉",
+        "operator": "并发线程-276",
+        "workshop": "并发验证后厨",
+        "outputQty": 20.0,
+        "processNo": "PR20261118006"
+      }
+    },
+    {
+      "eventId": "2fb6ab6a436d128d37cd27ed2c150ba62ac14e18fb40bb043cf1783d04eb9480",
+      "batchId": "SUP-0009",
+      "eventType": "SUPPLIER_REG",
+      "bizTime": "2026-11-18 21:50:54",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "d18d05108f39d7cefe5134d77f1cab426b62a76b1fee0051597ea9f10be53d97",
+      "text": "2026-11-18 21:50，供应商 SUP-0009「并发验证供应商-1795009853」完成备案。许可证号 JX2026CONCUR，状态 ACTIVE。",
+      "payload": {
+        "name": "并发验证供应商-1795009853",
+        "status": "ACTIVE",
+        "licenseNo": "JX2026CONCUR",
+        "supplierCode": "SUP-0009"
+      }
+    },
+    {
+      "eventId": "0e0956a9f4d2deaec96b2a64c1d5fe71685edf46de0a6df8a40bb0a041d687ac",
+      "batchId": "PB20261118012",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 21:50:53",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "9d8fb7a7ef489ee00b8189908ee5f334e96007c3dd54750f2b754ebf27b3d256",
+      "text": "2026-11-18 21:50，采购批次 PB20261118012（冷鲜猪肉，60.000 kg）建单。供应商编码 SUP-0009，检疫合格证号 JX-JY-2026-CONCUR9853。",
+      "payload": {
+        "batchNo": "PB20261118012",
+        "meatType": "冷鲜猪肉",
+        "quantity": 60.0,
+        "quarantineNo": "JX-JY-2026-CONCUR9853",
+        "supplierCode": "SUP-0009"
+      }
+    },
+    {
+      "eventId": "cb8ef3b0a5d04f0af25e9d4af10850fe618db7313387cd2ca3a5d8615e06e686",
+      "batchId": "PB20261118012",
+      "eventType": "ACCEPT_RESULT",
+      "bizTime": "2026-11-18 21:50:54",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "fc483550daa0ef235c2c19dd2f887be546dcc0e7b0d8d85669d33e07accf8abf",
+      "text": "2026-11-18 21:50，采购批次 PB20261118012（60.000 kg）完成入库验收。验收人 并发验证，到货中心温度 3.100 ℃，索证索票齐全，检验结论：合格（PASS）。验收单号 AC20261118008。",
+      "payload": {
+        "result": "PASS",
+        "acceptNo": "AC20261118008",
+        "inspector": "并发验证",
+        "temperature": 3.1,
+        "certComplete": true
+      }
+    },
+    {
+      "eventId": "f9f036bc946543014b29ac67faf5a2ca5615e3de33971b23c4402be530fc7beb",
+      "batchId": "PR20261118007",
+      "eventType": "PROCESS_CREATE",
+      "bizTime": "2026-11-18 21:50:54",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "dea6401c4e1522bfb9b0b4a3cbb6b089958fdd0ddc18956e8bcb218993cc8f64",
+      "text": "2026-11-18 21:50，加工批次 PR20261118007 完成投料，共 1 个来源：PB20261118012 投入 20.000 kg。投入合计 20.000 kg，产出 20.000 kg，留样号 未记录，车间 并发验证后厨，操作人 并发线程-468。",
+      "payload": {
+        "sources": [
+          {
+            "usedQty": 20.0,
+            "purchaseBatchNo": "PB20261118012"
+          }
+        ],
+        "meatType": "冷鲜猪肉",
+        "operator": "并发线程-468",
+        "workshop": "并发验证后厨",
+        "outputQty": 20.0,
+        "processNo": "PR20261118007"
+      }
+    },
+    {
+      "eventId": "38641ae9bc04251e8b0af1d32e5120a47bb7948243aea61b25f506e2d90da608",
+      "batchId": "PR20261118008",
+      "eventType": "PROCESS_CREATE",
+      "bizTime": "2026-11-18 21:50:54",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "103479406da40692e522a095f8cc903cc5d86a601c5495397c89b6f8a5284025",
+      "text": "2026-11-18 21:50，加工批次 PR20261118008 完成投料，共 1 个来源：PB20261118012 投入 20.000 kg。投入合计 20.000 kg，产出 20.000 kg，留样号 未记录，车间 并发验证后厨，操作人 并发线程-688。",
+      "payload": {
+        "sources": [
+          {
+            "usedQty": 20.0,
+            "purchaseBatchNo": "PB20261118012"
+          }
+        ],
+        "meatType": "冷鲜猪肉",
+        "operator": "并发线程-688",
+        "workshop": "并发验证后厨",
+        "outputQty": 20.0,
+        "processNo": "PR20261118008"
+      }
+    },
+    {
+      "eventId": "778508a188ad3f665116b9cc84a6aca45fdfb8eef2479c724ef0ba81976adc26",
+      "batchId": "SUP-0010",
+      "eventType": "SUPPLIER_REG",
+      "bizTime": "2026-11-18 21:53:04",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "a9cc2e95702939ec04ac39e31903b92ad9c2a24f14481c0174d19726b1d4bf40",
+      "text": "2026-11-18 21:53，供应商 SUP-0010「并发验证供应商-1795009983」完成备案。许可证号 JX2026CONCUR，状态 ACTIVE。",
+      "payload": {
+        "name": "并发验证供应商-1795009983",
+        "status": "ACTIVE",
+        "licenseNo": "JX2026CONCUR",
+        "supplierCode": "SUP-0010"
+      }
+    },
+    {
+      "eventId": "85eb92db9d7c9310a6e1b3ce0b0389e43c132c2af6de4f88bee9b2a006e0ca51",
+      "batchId": "PB20261118013",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 21:53:04",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "9a06daf6285c72ed884c6617bb8f459844072c3ff2439d6efa37d9d3573b1ea4",
+      "text": "2026-11-18 21:53，采购批次 PB20261118013（冷鲜猪肉，60.000 kg）建单。供应商编码 SUP-0010，检疫合格证号 JX-JY-2026-CONCUR9984。",
+      "payload": {
+        "batchNo": "PB20261118013",
+        "meatType": "冷鲜猪肉",
+        "quantity": 60.0,
+        "quarantineNo": "JX-JY-2026-CONCUR9984",
+        "supplierCode": "SUP-0010"
+      }
+    },
+    {
+      "eventId": "958312977988eb1ac07de36d7565b5dfa60e6d68f393daa53a9f5615e5a9b089",
+      "batchId": "PB20261118013",
+      "eventType": "ACCEPT_RESULT",
+      "bizTime": "2026-11-18 21:53:04",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "cadc7057ede9488d6ce1c0636e2df91f05e1bca35306792838faf0f0a1129f45",
+      "text": "2026-11-18 21:53，采购批次 PB20261118013（60.000 kg）完成入库验收。验收人 并发验证，到货中心温度 3.100 ℃，索证索票齐全，检验结论：合格（PASS）。验收单号 AC20261118009。",
+      "payload": {
+        "result": "PASS",
+        "acceptNo": "AC20261118009",
+        "inspector": "并发验证",
+        "temperature": 3.1,
+        "certComplete": true
+      }
+    },
+    {
+      "eventId": "7db8f35aa22bf0d2269f29ca1a04dc77b2595d3214bfd1d0020822704677a54a",
+      "batchId": "PR20261118009",
+      "eventType": "PROCESS_CREATE",
+      "bizTime": "2026-11-18 21:53:04",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "6a0293b5461f59f98853c01fd19b249e13bf0883a856619f0d8a24442cbff1f1",
+      "text": "2026-11-18 21:53，加工批次 PR20261118009 完成投料，共 1 个来源：PB20261118013 投入 20.000 kg。投入合计 20.000 kg，产出 20.000 kg，留样号 未记录，车间 并发验证后厨，操作人 并发线程-236。",
+      "payload": {
+        "sources": [
+          {
+            "usedQty": 20.0,
+            "purchaseBatchNo": "PB20261118013"
+          }
+        ],
+        "meatType": "冷鲜猪肉",
+        "operator": "并发线程-236",
+        "workshop": "并发验证后厨",
+        "outputQty": 20.0,
+        "processNo": "PR20261118009"
+      }
+    },
+    {
+      "eventId": "bf04a8cbb14db7c999a32d196d86dd9c847425f99f86b1091de2331ce3556cb6",
+      "batchId": "PR20261118010",
+      "eventType": "PROCESS_CREATE",
+      "bizTime": "2026-11-18 21:53:04",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "5cb360fb6fc6de73b4b60b5645efee1a014918ae741066ca66133cf7610fdc15",
+      "text": "2026-11-18 21:53，加工批次 PR20261118010 完成投料，共 1 个来源：PB20261118013 投入 20.000 kg。投入合计 20.000 kg，产出 20.000 kg，留样号 未记录，车间 并发验证后厨，操作人 并发线程-72。",
+      "payload": {
+        "sources": [
+          {
+            "usedQty": 20.0,
+            "purchaseBatchNo": "PB20261118013"
+          }
+        ],
+        "meatType": "冷鲜猪肉",
+        "operator": "并发线程-72",
+        "workshop": "并发验证后厨",
+        "outputQty": 20.0,
+        "processNo": "PR20261118010"
+      }
+    },
+    {
+      "eventId": "7881ae14e9f753fc4e9f659983747bfad78b1c441e39a2c0c598dd367295a4a7",
+      "batchId": "PR20261118011",
+      "eventType": "PROCESS_CREATE",
+      "bizTime": "2026-11-18 21:53:04",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "04a8e093c7c0058c16df8daf4e74342d23314e63e0a3063b16c23fadd993f8ce",
+      "text": "2026-11-18 21:53，加工批次 PR20261118011 完成投料，共 1 个来源：PB20261118013 投入 20.000 kg。投入合计 20.000 kg，产出 20.000 kg，留样号 未记录，车间 并发验证后厨，操作人 并发线程-376。",
+      "payload": {
+        "sources": [
+          {
+            "usedQty": 20.0,
+            "purchaseBatchNo": "PB20261118013"
+          }
+        ],
+        "meatType": "冷鲜猪肉",
+        "operator": "并发线程-376",
+        "workshop": "并发验证后厨",
+        "outputQty": 20.0,
+        "processNo": "PR20261118011"
+      }
+    },
+    {
+      "eventId": "b2fc7601f1bddda4757c33b1f464144ea316f17617b4d82c6c9f15dbbd6e9af8",
+      "batchId": "SUP-0011",
+      "eventType": "SUPPLIER_REG",
+      "bizTime": "2026-11-18 21:53:30",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "ff7fa641ce5b96ab9a57fbae4f817f870a458596d2a79fa8370431fffa4ec52a",
+      "text": "2026-11-18 21:53，供应商 SUP-0011「并发验证供应商-1795010010」完成备案。许可证号 JX2026CONCUR，状态 ACTIVE。",
+      "payload": {
+        "name": "并发验证供应商-1795010010",
+        "status": "ACTIVE",
+        "licenseNo": "JX2026CONCUR",
+        "supplierCode": "SUP-0011"
+      }
+    },
+    {
+      "eventId": "b2c51297e324606c91a2d5327e7d3e84bb64ffddb6de0cd632af988080044a44",
+      "batchId": "PB20261118014",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 21:53:30",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "66972dc425a49491d75d77813b3dc7325697db0b713f2e57435e31810c1723d3",
+      "text": "2026-11-18 21:53，采购批次 PB20261118014（冷鲜猪肉，60.000 kg）建单。供应商编码 SUP-0011，检疫合格证号 JX-JY-2026-CONCUR10010。",
+      "payload": {
+        "batchNo": "PB20261118014",
+        "meatType": "冷鲜猪肉",
+        "quantity": 60.0,
+        "quarantineNo": "JX-JY-2026-CONCUR10010",
+        "supplierCode": "SUP-0011"
+      }
+    },
+    {
+      "eventId": "d8558924a055499e9725c9ef64e23423365a7024ef25fec96184da97df6fbbff",
+      "batchId": "PB20261118014",
+      "eventType": "ACCEPT_RESULT",
+      "bizTime": "2026-11-18 21:53:30",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "f5086eb4746483e15db55dfd11b31ac14010592e9d4705a410b506cd26cfd3cb",
+      "text": "2026-11-18 21:53，采购批次 PB20261118014（60.000 kg）完成入库验收。验收人 并发验证，到货中心温度 3.100 ℃，索证索票齐全，检验结论：合格（PASS）。验收单号 AC20261118010。",
+      "payload": {
+        "result": "PASS",
+        "acceptNo": "AC20261118010",
+        "inspector": "并发验证",
+        "temperature": 3.1,
+        "certComplete": true
+      }
+    },
+    {
+      "eventId": "5cef1791181c63de1cd1f82f59aaef4c76638c957113eb928d0f617265eb5d90",
+      "batchId": "PR20261118012",
+      "eventType": "PROCESS_CREATE",
+      "bizTime": "2026-11-18 21:53:31",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "483a32ca981e8a966381beb7bf891dca45a125b7fc812abeefecd80c949531dc",
+      "text": "2026-11-18 21:53，加工批次 PR20261118012 完成投料，共 1 个来源：PB20261118014 投入 20.000 kg。投入合计 20.000 kg，产出 20.000 kg，留样号 未记录，车间 并发验证后厨，操作人 并发线程-380。",
+      "payload": {
+        "sources": [
+          {
+            "usedQty": 20.0,
+            "purchaseBatchNo": "PB20261118014"
+          }
+        ],
+        "meatType": "冷鲜猪肉",
+        "operator": "并发线程-380",
+        "workshop": "并发验证后厨",
+        "outputQty": 20.0,
+        "processNo": "PR20261118012"
+      }
+    },
+    {
+      "eventId": "168d98fd32e11d92c62583d50f5c1b5778428d623d59fa05ab6ade75a5bdecea",
+      "batchId": "PR20261118013",
+      "eventType": "PROCESS_CREATE",
+      "bizTime": "2026-11-18 21:53:31",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "44e59031c92f935b5faf07f17da342025262276cb1c2470ec05bd005e37f51a8",
+      "text": "2026-11-18 21:53，加工批次 PR20261118013 完成投料，共 1 个来源：PB20261118014 投入 20.000 kg。投入合计 20.000 kg，产出 20.000 kg，留样号 未记录，车间 并发验证后厨，操作人 并发线程-748。",
+      "payload": {
+        "sources": [
+          {
+            "usedQty": 20.0,
+            "purchaseBatchNo": "PB20261118014"
+          }
+        ],
+        "meatType": "冷鲜猪肉",
+        "operator": "并发线程-748",
+        "workshop": "并发验证后厨",
+        "outputQty": 20.0,
+        "processNo": "PR20261118013"
+      }
+    },
+    {
+      "eventId": "e8c973f04bafda9895674d4322ae02a2edc1ef8fdf03ee14fef456b2c25b7cdc",
+      "batchId": "PR20261118014",
+      "eventType": "PROCESS_CREATE",
+      "bizTime": "2026-11-18 21:53:31",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "ed299c3f4474c87a692ed1d8690132e48fe24e86b42480222a8a10cb467b1cf3",
+      "text": "2026-11-18 21:53，加工批次 PR20261118014 完成投料，共 1 个来源：PB20261118014 投入 20.000 kg。投入合计 20.000 kg，产出 20.000 kg，留样号 未记录，车间 并发验证后厨，操作人 并发线程-460。",
+      "payload": {
+        "sources": [
+          {
+            "usedQty": 20.0,
+            "purchaseBatchNo": "PB20261118014"
+          }
+        ],
+        "meatType": "冷鲜猪肉",
+        "operator": "并发线程-460",
+        "workshop": "并发验证后厨",
+        "outputQty": 20.0,
+        "processNo": "PR20261118014"
+      }
+    },
+    {
+      "eventId": "57299bbed978c295f9eec227aafbdea6070fc9c28427d0546f7c52babf42e192",
+      "batchId": "SUP-0012",
+      "eventType": "SUPPLIER_REG",
+      "bizTime": "2026-11-18 21:53:52",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "6dcc6a048e038c9a6ae41e5bdf95a07d0acb55eadfe95c5001bde010fb8fc26f",
+      "text": "2026-11-18 21:53，供应商 SUP-0012「并发验证供应商-1795010032」完成备案。许可证号 JX2026CONCUR，状态 ACTIVE。",
+      "payload": {
+        "name": "并发验证供应商-1795010032",
+        "status": "ACTIVE",
+        "licenseNo": "JX2026CONCUR",
+        "supplierCode": "SUP-0012"
+      }
+    },
+    {
+      "eventId": "edd41b893a251be7fef4867dce38b92f15d869664fc6ee0cf6e2c9a52853b85b",
+      "batchId": "PB20261118015",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 21:53:52",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "f9f24b48cd8d6a15e3a86b010f721296abf0f920f8e62e3a1c24be6ab2dc713a",
+      "text": "2026-11-18 21:53，采购批次 PB20261118015（冷鲜猪肉，60.000 kg）建单。供应商编码 SUP-0012，检疫合格证号 JX-JY-2026-CONCUR10032。",
+      "payload": {
+        "batchNo": "PB20261118015",
+        "meatType": "冷鲜猪肉",
+        "quantity": 60.0,
+        "quarantineNo": "JX-JY-2026-CONCUR10032",
+        "supplierCode": "SUP-0012"
+      }
+    },
+    {
+      "eventId": "424e1edf248763b0a0762d49c9264b31b7b1e38bffae9d519848958c3521b4f8",
+      "batchId": "PB20261118015",
+      "eventType": "ACCEPT_RESULT",
+      "bizTime": "2026-11-18 21:53:52",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "5d339dbcbae4aeb228e3e6f7749991d1ad448082720677fc5cd6166da861f423",
+      "text": "2026-11-18 21:53，采购批次 PB20261118015（60.000 kg）完成入库验收。验收人 并发验证，到货中心温度 3.100 ℃，索证索票齐全，检验结论：合格（PASS）。验收单号 AC20261118011。",
+      "payload": {
+        "result": "PASS",
+        "acceptNo": "AC20261118011",
+        "inspector": "并发验证",
+        "temperature": 3.1,
+        "certComplete": true
+      }
+    },
+    {
+      "eventId": "0c3e97163f058c0cd9fea794fd579f8b4b7c5f72d840ccbc8552461c4888eca5",
+      "batchId": "PR20261118015",
+      "eventType": "PROCESS_CREATE",
+      "bizTime": "2026-11-18 21:53:53",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "a066205fb70370565cf5b48f824109c986846ecea7a2ec9c5dbd23e563d66cd9",
+      "text": "2026-11-18 21:53，加工批次 PR20261118015 完成投料，共 1 个来源：PB20261118015 投入 20.000 kg。投入合计 20.000 kg，产出 20.000 kg，留样号 未记录，车间 并发验证后厨，操作人 并发线程-472。",
+      "payload": {
+        "sources": [
+          {
+            "usedQty": 20.0,
+            "purchaseBatchNo": "PB20261118015"
+          }
+        ],
+        "meatType": "冷鲜猪肉",
+        "operator": "并发线程-472",
+        "workshop": "并发验证后厨",
+        "outputQty": 20.0,
+        "processNo": "PR20261118015"
+      }
+    },
+    {
+      "eventId": "cd0739c24a33e049ff219aca2ade8b824a1c3a51660271c16b918e6e44a6edf6",
+      "batchId": "PR20261118016",
+      "eventType": "PROCESS_CREATE",
+      "bizTime": "2026-11-18 21:53:53",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "c4c43fd166496eaad01e1aa5372e4134a57b34b2e23ff7af57c04675f8384278",
+      "text": "2026-11-18 21:53，加工批次 PR20261118016 完成投料，共 1 个来源：PB20261118015 投入 20.000 kg。投入合计 20.000 kg，产出 20.000 kg，留样号 未记录，车间 并发验证后厨，操作人 并发线程-616。",
+      "payload": {
+        "sources": [
+          {
+            "usedQty": 20.0,
+            "purchaseBatchNo": "PB20261118015"
+          }
+        ],
+        "meatType": "冷鲜猪肉",
+        "operator": "并发线程-616",
+        "workshop": "并发验证后厨",
+        "outputQty": 20.0,
+        "processNo": "PR20261118016"
+      }
+    },
+    {
+      "eventId": "a66c3488a16e4cd8f4e298d5e67bdef9b33ca5d50852a245ce4a6793a66249f8",
+      "batchId": "PR20261118017",
+      "eventType": "PROCESS_CREATE",
+      "bizTime": "2026-11-18 21:53:53",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "d9bd0a03f743f7b907f13e81d5e791ae9ca5b52bd55c447f5c6db109f82e1023",
+      "text": "2026-11-18 21:53，加工批次 PR20261118017 完成投料，共 1 个来源：PB20261118015 投入 20.000 kg。投入合计 20.000 kg，产出 20.000 kg，留样号 未记录，车间 并发验证后厨，操作人 并发线程-48。",
+      "payload": {
+        "sources": [
+          {
+            "usedQty": 20.0,
+            "purchaseBatchNo": "PB20261118015"
+          }
+        ],
+        "meatType": "冷鲜猪肉",
+        "operator": "并发线程-48",
+        "workshop": "并发验证后厨",
+        "outputQty": 20.0,
+        "processNo": "PR20261118017"
+      }
+    },
+    {
+      "eventId": "2709ef84440d58990d5fd67919f587df21312799213c3cb648c50e0f20bfdb20",
+      "batchId": "SUP-0013",
+      "eventType": "SUPPLIER_REG",
+      "bizTime": "2026-11-18 21:56:05",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "45fb359fb6ae74aa6ca2a966749918346e71285f19b775cfdba2d2a834c1e3db",
+      "text": "2026-11-18 21:56，供应商 SUP-0013「并发验证供应商-1795010165」完成备案。许可证号 JX2026CONCUR，状态 ACTIVE。",
+      "payload": {
+        "name": "并发验证供应商-1795010165",
+        "status": "ACTIVE",
+        "licenseNo": "JX2026CONCUR",
+        "supplierCode": "SUP-0013"
+      }
+    },
+    {
+      "eventId": "e1cf1331a3f51d2f98cee83d79adf3410679f4f9c806640f98c84490dae63acf",
+      "batchId": "PB20261118016",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 21:56:05",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "59e6e2a51726b89af84c57ec87b916aef64331cc383a15a6f09dda0f868a97ec",
+      "text": "2026-11-18 21:56，采购批次 PB20261118016（冷鲜猪肉，60.000 kg）建单。供应商编码 SUP-0013，检疫合格证号 JX-JY-2026-CONCUR10165。",
+      "payload": {
+        "batchNo": "PB20261118016",
+        "meatType": "冷鲜猪肉",
+        "quantity": 60.0,
+        "quarantineNo": "JX-JY-2026-CONCUR10165",
+        "supplierCode": "SUP-0013"
+      }
+    },
+    {
+      "eventId": "5252ab20dc16b5fd0a01c88cb92d9132fcfc7d889065346d0ddf5f5df4bfceed",
+      "batchId": "PB20261118016",
+      "eventType": "ACCEPT_RESULT",
+      "bizTime": "2026-11-18 21:56:05",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "fb2bb9c4f6e4ecaaf967c415ad04a8da8f534911a25305b4dc2ccf29007d41df",
+      "text": "2026-11-18 21:56，采购批次 PB20261118016（60.000 kg）完成入库验收。验收人 并发验证，到货中心温度 3.100 ℃，索证索票齐全，检验结论：合格（PASS）。验收单号 AC20261118012。",
+      "payload": {
+        "result": "PASS",
+        "acceptNo": "AC20261118012",
+        "inspector": "并发验证",
+        "temperature": 3.1,
+        "certComplete": true
+      }
+    },
+    {
+      "eventId": "23e5c739979c498d1d3e525bff68666424254e3e80e429c966b61d2afb487f6c",
+      "batchId": "PR20261118018",
+      "eventType": "PROCESS_CREATE",
+      "bizTime": "2026-11-18 21:56:06",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "5521a33614214bcfef1ac2d4d96de25fd9bdb90c3661317767fb63e62b2bf16f",
+      "text": "2026-11-18 21:56，加工批次 PR20261118018 完成投料，共 1 个来源：PB20261118016 投入 20.000 kg。投入合计 20.000 kg，产出 20.000 kg，留样号 未记录，车间 并发验证后厨，操作人 并发线程-40。",
+      "payload": {
+        "sources": [
+          {
+            "usedQty": 20.0,
+            "purchaseBatchNo": "PB20261118016"
+          }
+        ],
+        "meatType": "冷鲜猪肉",
+        "operator": "并发线程-40",
+        "workshop": "并发验证后厨",
+        "outputQty": 20.0,
+        "processNo": "PR20261118018"
+      }
+    },
+    {
+      "eventId": "24cb6d881b708e58bb5125c083f32628ae4786f86b5db689980d60ac44e3a070",
+      "batchId": "PR20261118019",
+      "eventType": "PROCESS_CREATE",
+      "bizTime": "2026-11-18 21:56:06",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "ebbc838763e3cd04adeef837759c9f613772396cec635ca17ac7f96f1c2b410d",
+      "text": "2026-11-18 21:56，加工批次 PR20261118019 完成投料，共 1 个来源：PB20261118016 投入 20.000 kg。投入合计 20.000 kg，产出 20.000 kg，留样号 未记录，车间 并发验证后厨，操作人 并发线程-980。",
+      "payload": {
+        "sources": [
+          {
+            "usedQty": 20.0,
+            "purchaseBatchNo": "PB20261118016"
+          }
+        ],
+        "meatType": "冷鲜猪肉",
+        "operator": "并发线程-980",
+        "workshop": "并发验证后厨",
+        "outputQty": 20.0,
+        "processNo": "PR20261118019"
+      }
+    },
+    {
+      "eventId": "efe04b013092f6e46ac0bc455017cc528f5003c314c34c0872bc03b3a49ad720",
+      "batchId": "PR20261118020",
+      "eventType": "PROCESS_CREATE",
+      "bizTime": "2026-11-18 21:56:06",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "a66464fe233457bec47513c47db6f94935485e5d0bc64115c86b4bac90b89f03",
+      "text": "2026-11-18 21:56，加工批次 PR20261118020 完成投料，共 1 个来源：PB20261118016 投入 20.000 kg。投入合计 20.000 kg，产出 20.000 kg，留样号 未记录，车间 并发验证后厨，操作人 并发线程-176。",
+      "payload": {
+        "sources": [
+          {
+            "usedQty": 20.0,
+            "purchaseBatchNo": "PB20261118016"
+          }
+        ],
+        "meatType": "冷鲜猪肉",
+        "operator": "并发线程-176",
+        "workshop": "并发验证后厨",
+        "outputQty": 20.0,
+        "processNo": "PR20261118020"
+      }
+    },
+    {
+      "eventId": "5dd1ca27ee82e9f0a10b891f7e9d5cfbbf835bad3e886cf0f1a0bbfc959874d8",
+      "batchId": "SUP-0014",
+      "eventType": "SUPPLIER_REG",
+      "bizTime": "2026-11-18 21:56:22",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "5b22e97ac9332df26f9c2be5b1ec6f6d2c8620653161cdf4d22da7be8b1774d5",
+      "text": "2026-11-18 21:56，供应商 SUP-0014「自检供应商-1795010181」完成备案。许可证号 JX2026SMOKE，状态 ACTIVE。",
+      "payload": {
+        "name": "自检供应商-1795010181",
+        "status": "ACTIVE",
+        "licenseNo": "JX2026SMOKE",
+        "supplierCode": "SUP-0014"
+      }
+    },
+    {
+      "eventId": "49b826e82ceb7d342fec5c78593a67ddb0f1fd4a3c13631f1adb7c79de2b4c63",
+      "batchId": "PB20261118017",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 21:56:21",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "418b5f36e3e95890c453918923c20560865da6b232e5cb7fd79302a1204ac789",
+      "text": "2026-11-18 21:56，采购批次 PB20261118017（冷鲜猪肉，88.000 kg）建单。供应商编码 SUP-0014，检疫合格证号 JX-JY-2026-SMOKE181。",
+      "payload": {
+        "batchNo": "PB20261118017",
+        "meatType": "冷鲜猪肉",
+        "quantity": 88.0,
+        "quarantineNo": "JX-JY-2026-SMOKE181",
+        "supplierCode": "SUP-0014"
+      }
+    },
+    {
+      "eventId": "0057bff908f50047ee6cb3a373a903f7d4932e4b6e1dc45b335b41027f48abba",
+      "batchId": "PB20261118017",
+      "eventType": "ACCEPT_RESULT",
+      "bizTime": "2026-11-18 21:57:02",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "8f1d16d721721098070b59d2bf45b2d410347095235f971f35bea5276b50bb72",
+      "text": "2026-11-18 21:57，采购批次 PB20261118017（88.000 kg）完成入库验收。验收人 自检员，到货中心温度 3.100 ℃，索证索票齐全，检验结论：合格（PASS）。验收单号 AC20261118013。",
+      "payload": {
+        "result": "PASS",
+        "acceptNo": "AC20261118013",
+        "inspector": "自检员",
+        "temperature": 3.1,
+        "certComplete": true
+      }
+    },
+    {
+      "eventId": "8434d8af5787c1badda8d942fbb9194e9174f2db426b72aa751545f34e712cba",
+      "batchId": "PR20261118021",
+      "eventType": "PROCESS_CREATE",
+      "bizTime": "2026-11-18 21:57:43",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "ed0a437dfb5d52b32ebba4b9ed64b4500a92f64548c175d4d19e36d83d376366",
+      "text": "2026-11-18 21:57，加工批次 PR20261118021 完成投料，共 1 个来源：PB20261118017 投入 30.000 kg。投入合计 30.000 kg，产出 28.000 kg，留样号 LY-SMOKE-001，车间 自检后厨，操作人 自检员。",
+      "payload": {
+        "sources": [
+          {
+            "usedQty": 30.0,
+            "purchaseBatchNo": "PB20261118017"
+          }
+        ],
+        "meatType": "冷鲜猪肉",
+        "operator": "自检员",
+        "workshop": "自检后厨",
+        "outputQty": 28.0,
+        "processNo": "PR20261118021",
+        "retainSampleNo": "LY-SMOKE-001"
+      }
+    },
+    {
+      "eventId": "694d5daf43e1f772d2a82bbd4f08346d51fd55057ef2e5bbaa81b9a7f5e8aaf7",
+      "batchId": "PB20261118018",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 21:57:43",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "0e735f503f2c9c9da617331f9e8e8ee2b5af0dca2690ef92028c57faa60b2996",
+      "text": "2026-11-18 21:57，采购批次 PB20261118018（冷鲜猪肉，50.000 kg）建单。供应商编码 SUP-0014，检疫合格证号 JX-JY-2026-SMOKE2-10263。",
+      "payload": {
+        "batchNo": "PB20261118018",
+        "meatType": "冷鲜猪肉",
+        "quantity": 50.0,
+        "quarantineNo": "JX-JY-2026-SMOKE2-10263",
+        "supplierCode": "SUP-0014"
+      }
+    },
+    {
+      "eventId": "0fed24a58856223223b5e5548cf796c758285b9a4f7594e1188c8a4b1d52f8b3",
+      "batchId": "PB20261118018",
+      "eventType": "ACCEPT_RESULT",
+      "bizTime": "2026-11-18 21:57:43",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "50a80c8a2b7fcc934f113ab8d3345639e1cd05dfd857c8537bee88f0640bb1ab",
+      "text": "2026-11-18 21:57，采购批次 PB20261118018（50.000 kg）完成入库验收。验收人 自检员，到货中心温度 3.100 ℃，索证索票齐全，检验结论：合格（PASS）。验收单号 AC20261118014。",
+      "payload": {
+        "result": "PASS",
+        "acceptNo": "AC20261118014",
+        "inspector": "自检员",
+        "temperature": 3.1,
+        "certComplete": true
+      }
+    },
+    {
+      "eventId": "34f38a6905ffa9df2b5c13e7f514c18fcc2a175669e6b1fb75c9e22ec32559ae",
+      "batchId": "PR20261118022",
+      "eventType": "PROCESS_CREATE",
+      "bizTime": "2026-11-18 21:57:43",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "559b0f43fdcd408918b07ecade1b14cd4e9e5e2ec6730d9c467a73ac03a20127",
+      "text": "2026-11-18 21:57，加工批次 PR20261118022 完成投料，共 2 个来源：PB20261118017 投入 20.000 kg；PB20261118018 投入 20.000 kg。投入合计 40.000 kg，产出 40.000 kg，留样号 LY-SMOKE-002，车间 自检后厨，操作人 自检员。",
+      "payload": {
+        "sources": [
+          {
+            "usedQty": 20.0,
+            "purchaseBatchNo": "PB20261118017"
+          },
+          {
+            "usedQty": 20.0,
+            "purchaseBatchNo": "PB20261118018"
+          }
+        ],
+        "meatType": "冷鲜猪肉",
+        "operator": "自检员",
+        "workshop": "自检后厨",
+        "outputQty": 40.0,
+        "processNo": "PR20261118022",
+        "retainSampleNo": "LY-SMOKE-002"
+      }
+    },
+    {
+      "eventId": "9746f730931f70b60b0f4475c57ef5557f7af2d97b960b215e5584ed9f2e2d98",
+      "batchId": "PB20261118019",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 21:57:44",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "ad57eef44aeb6bfcb5f82164eb469b47987898c9979c8a0fdc74ccea0237ec01",
+      "text": "2026-11-18 21:57，采购批次 PB20261118019（冷鲜猪肉，40.000 kg）建单。供应商编码 SUP-0014，检疫合格证号 JX-JY-2026-SMOKE3-10264。",
+      "payload": {
+        "batchNo": "PB20261118019",
+        "meatType": "冷鲜猪肉",
+        "quantity": 40.0,
+        "quarantineNo": "JX-JY-2026-SMOKE3-10264",
+        "supplierCode": "SUP-0014"
+      }
+    },
+    {
+      "eventId": "cd94f82fc73b0eaebb0f04094ba141e9a9cc292a86d07b3e213cf9171935413f",
+      "batchId": "SUP-0015",
+      "eventType": "SUPPLIER_REG",
+      "bizTime": "2026-11-18 21:58:50",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "34e356a0856070a80a58f7e02b4190ad639efcedfcba5e5f8ecd14f2f3e9d132",
+      "text": "2026-11-18 21:58，供应商 SUP-0015「自检供应商-1795010329」完成备案。许可证号 JX2026SMOKE，状态 ACTIVE。",
+      "payload": {
+        "name": "自检供应商-1795010329",
+        "status": "ACTIVE",
+        "licenseNo": "JX2026SMOKE",
+        "supplierCode": "SUP-0015"
+      }
+    },
+    {
+      "eventId": "cee816d9ec13f472c8d63009db29c7f5dce829aef0607b6379224d898deb021f",
+      "batchId": "PB20261118020",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 21:58:49",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "2ee13ec335cbafe8c55ab4ec072eba61a60905127ec3bca273003e758f840d7a",
+      "text": "2026-11-18 21:58，采购批次 PB20261118020（冷鲜猪肉，88.000 kg）建单。供应商编码 SUP-0015，检疫合格证号 JX-JY-2026-SMOKE329。",
+      "payload": {
+        "batchNo": "PB20261118020",
+        "meatType": "冷鲜猪肉",
+        "quantity": 88.0,
+        "quarantineNo": "JX-JY-2026-SMOKE329",
+        "supplierCode": "SUP-0015"
+      }
+    },
+    {
+      "eventId": "799bbb13d28f9430238ace63e293c4b8bacdb07094af7c62e3a312421ca4ce9f",
+      "batchId": "PB20261118020",
+      "eventType": "ACCEPT_RESULT",
+      "bizTime": "2026-11-18 21:58:58",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "387d43b0234913cf91fd190d027a1cca3eba343af4fd398b2b3243866945af41",
+      "text": "2026-11-18 21:58，采购批次 PB20261118020（88.000 kg）完成入库验收。验收人 自检员，到货中心温度 3.100 ℃，索证索票齐全，检验结论：合格（PASS）。验收单号 AC20261118015。",
+      "payload": {
+        "result": "PASS",
+        "acceptNo": "AC20261118015",
+        "inspector": "自检员",
+        "temperature": 3.1,
+        "certComplete": true
+      }
+    },
+    {
+      "eventId": "b60c37193f8c63083a6377126f4b5581eca0a27fdf686b78e7aab17602b8de16",
+      "batchId": "PR20261118023",
+      "eventType": "PROCESS_CREATE",
+      "bizTime": "2026-11-18 21:59:02",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "66892ae796cb6e04afae1b3ff06530365217f0232444957e7f87c67ec24b34ab",
+      "text": "2026-11-18 21:59，加工批次 PR20261118023 完成投料，共 1 个来源：PB20261118020 投入 30.000 kg。投入合计 30.000 kg，产出 28.000 kg，留样号 LY-SMOKE-001，车间 自检后厨，操作人 自检员。",
+      "payload": {
+        "sources": [
+          {
+            "usedQty": 30.0,
+            "purchaseBatchNo": "PB20261118020"
+          }
+        ],
+        "meatType": "冷鲜猪肉",
+        "operator": "自检员",
+        "workshop": "自检后厨",
+        "outputQty": 28.0,
+        "processNo": "PR20261118023",
+        "retainSampleNo": "LY-SMOKE-001"
+      }
+    },
+    {
+      "eventId": "47c67224ab74ad2e9455805c90a8bc05e0dc77a0301fd85dbfaab3db73dcba95",
+      "batchId": "PB20261118021",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 21:59:03",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "c7b34bf052a0ca5dc0e2a178919718da18b9d058edd2d3d6d1ad1540edb389f8",
+      "text": "2026-11-18 21:59，采购批次 PB20261118021（冷鲜猪肉，50.000 kg）建单。供应商编码 SUP-0015，检疫合格证号 JX-JY-2026-SMOKE2-10343。",
+      "payload": {
+        "batchNo": "PB20261118021",
+        "meatType": "冷鲜猪肉",
+        "quantity": 50.0,
+        "quarantineNo": "JX-JY-2026-SMOKE2-10343",
+        "supplierCode": "SUP-0015"
+      }
+    },
+    {
+      "eventId": "9d86f15649d0f10251e31b0de199bb14020824238281ce77a9a488faca925977",
+      "batchId": "PB20261118021",
+      "eventType": "ACCEPT_RESULT",
+      "bizTime": "2026-11-18 21:59:03",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "6321e0ad10632de9a2dbfab56b79b58deabeac9bbc0a7ce1857f5f82869ea454",
+      "text": "2026-11-18 21:59，采购批次 PB20261118021（50.000 kg）完成入库验收。验收人 自检员，到货中心温度 3.100 ℃，索证索票齐全，检验结论：合格（PASS）。验收单号 AC20261118016。",
+      "payload": {
+        "result": "PASS",
+        "acceptNo": "AC20261118016",
+        "inspector": "自检员",
+        "temperature": 3.1,
+        "certComplete": true
+      }
+    },
+    {
+      "eventId": "5012a2d48babcfba6d175d17d6702089114af3f89b739bdc78bbb20493e825fb",
+      "batchId": "PR20261118024",
+      "eventType": "PROCESS_CREATE",
+      "bizTime": "2026-11-18 21:59:03",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "b3bf63afc4355ed5876e6a7d6f63416636789943b12bde00b3ed59c298bc8d6d",
+      "text": "2026-11-18 21:59，加工批次 PR20261118024 完成投料，共 2 个来源：PB20261118020 投入 20.000 kg；PB20261118021 投入 20.000 kg。投入合计 40.000 kg，产出 40.000 kg，留样号 LY-SMOKE-002，车间 自检后厨，操作人 自检员。",
+      "payload": {
+        "sources": [
+          {
+            "usedQty": 20.0,
+            "purchaseBatchNo": "PB20261118020"
+          },
+          {
+            "usedQty": 20.0,
+            "purchaseBatchNo": "PB20261118021"
+          }
+        ],
+        "meatType": "冷鲜猪肉",
+        "operator": "自检员",
+        "workshop": "自检后厨",
+        "outputQty": 40.0,
+        "processNo": "PR20261118024",
+        "retainSampleNo": "LY-SMOKE-002"
+      }
+    },
+    {
+      "eventId": "ea9c38554727f10b827f1ccced44edf46bb3353d38de6b2833fe34c5e3f7d0b5",
+      "batchId": "PB20261118022",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 21:59:03",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "6b1f3686721d99fd2877fb5565a79830f32715953cbb7437c2ff29e2b0438de7",
+      "text": "2026-11-18 21:59，采购批次 PB20261118022（冷鲜猪肉，40.000 kg）建单。供应商编码 SUP-0015，检疫合格证号 JX-JY-2026-SMOKE3-10343。",
+      "payload": {
+        "batchNo": "PB20261118022",
+        "meatType": "冷鲜猪肉",
+        "quantity": 40.0,
+        "quarantineNo": "JX-JY-2026-SMOKE3-10343",
+        "supplierCode": "SUP-0015"
+      }
+    },
+    {
+      "eventId": "e74c8c56e8fdabdebc34e09bda6f3c4a6f8436f2d204cc6ed72ec15000f6b69c",
+      "batchId": "SUP-0016",
+      "eventType": "SUPPLIER_REG",
+      "bizTime": "2026-11-18 22:02:07",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "6c9c31f89df76b03cead78b27e1dc6e88f7569e30d94498039a7f1292616c01a",
+      "text": "2026-11-18 22:02，供应商 SUP-0016「自检供应商-1795010526」完成备案。许可证号 JX2026SMOKE，状态 ACTIVE。",
+      "payload": {
+        "name": "自检供应商-1795010526",
+        "status": "ACTIVE",
+        "licenseNo": "JX2026SMOKE",
+        "supplierCode": "SUP-0016"
+      }
+    },
+    {
+      "eventId": "9bec80ba9d9cc3890ebda6a53ba72fd1d24f1c71bc6d3dbbf1ccab475dc642d2",
+      "batchId": "PB20261118023",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 22:02:06",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "b982286ad76cea938e553e8646e577527e36f6cd071ef965d653d711ec52b3fb",
+      "text": "2026-11-18 22:02，采购批次 PB20261118023（冷鲜猪肉，88.000 kg）建单。供应商编码 SUP-0016，检疫合格证号 JX-JY-2026-SMOKE526。",
+      "payload": {
+        "batchNo": "PB20261118023",
+        "meatType": "冷鲜猪肉",
+        "quantity": 88.0,
+        "quarantineNo": "JX-JY-2026-SMOKE526",
+        "supplierCode": "SUP-0016"
+      }
+    },
+    {
+      "eventId": "0e7e81ea7d17e2a6998e2d195d1e5de6485720cb6ef13bc735cc1d20596210bb",
+      "batchId": "PB20261118023",
+      "eventType": "ACCEPT_RESULT",
+      "bizTime": "2026-11-18 22:02:15",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "6d8fb548ac64f12265fd273897d37ca509c55f839b743340833a4b665377b68a",
+      "text": "2026-11-18 22:02，采购批次 PB20261118023（88.000 kg）完成入库验收。验收人 自检员，到货中心温度 3.100 ℃，索证索票齐全，检验结论：合格（PASS）。验收单号 AC20261118017。",
+      "payload": {
+        "result": "PASS",
+        "acceptNo": "AC20261118017",
+        "inspector": "自检员",
+        "temperature": 3.1,
+        "certComplete": true
+      }
+    },
+    {
+      "eventId": "c65d12b4ad8b1022d848b17b135e88e8614b65a7c5bf7d9f2d1ef36978c01b33",
+      "batchId": "PR20261118025",
+      "eventType": "PROCESS_CREATE",
+      "bizTime": "2026-11-18 22:02:19",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "58e595a8d1b314db39d9d03b0c9ac517117b0bbefaed0cf025b8dc03c0f2b73e",
+      "text": "2026-11-18 22:02，加工批次 PR20261118025 完成投料，共 1 个来源：PB20261118023 投入 30.000 kg。投入合计 30.000 kg，产出 28.000 kg，留样号 LY-SMOKE-001，车间 自检后厨，操作人 自检员。",
+      "payload": {
+        "sources": [
+          {
+            "usedQty": 30.0,
+            "purchaseBatchNo": "PB20261118023"
+          }
+        ],
+        "meatType": "冷鲜猪肉",
+        "operator": "自检员",
+        "workshop": "自检后厨",
+        "outputQty": 28.0,
+        "processNo": "PR20261118025",
+        "retainSampleNo": "LY-SMOKE-001"
+      }
+    },
+    {
+      "eventId": "2aaae665a5907f9d4a0db6cf2c828a56a92ad100501ae79f4783f968f19f7462",
+      "batchId": "PB20261118024",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 22:02:19",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "a7c80246f4ff48c637058f2b20e2ce7cc6320a2ed6c63326ba6ebe116e202718",
+      "text": "2026-11-18 22:02，采购批次 PB20261118024（冷鲜猪肉，50.000 kg）建单。供应商编码 SUP-0016，检疫合格证号 JX-JY-2026-SMOKE2-10539。",
+      "payload": {
+        "batchNo": "PB20261118024",
+        "meatType": "冷鲜猪肉",
+        "quantity": 50.0,
+        "quarantineNo": "JX-JY-2026-SMOKE2-10539",
+        "supplierCode": "SUP-0016"
+      }
+    },
+    {
+      "eventId": "1b7f18631c6cc3cdf91d99d23da972570e30ed4b62645cdf2b7128a82650c0a3",
+      "batchId": "PB20261118024",
+      "eventType": "ACCEPT_RESULT",
+      "bizTime": "2026-11-18 22:02:19",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "d5f89c91bd43eca89b42eac956bd2acb089709c5ec90ac627b1576fd05f118d8",
+      "text": "2026-11-18 22:02，采购批次 PB20261118024（50.000 kg）完成入库验收。验收人 自检员，到货中心温度 3.100 ℃，索证索票齐全，检验结论：合格（PASS）。验收单号 AC20261118018。",
+      "payload": {
+        "result": "PASS",
+        "acceptNo": "AC20261118018",
+        "inspector": "自检员",
+        "temperature": 3.1,
+        "certComplete": true
+      }
+    },
+    {
+      "eventId": "2898cba956045d2e6434eb8b1e2620a2ffc3e6250efc4bb39d83d527f23da1d7",
+      "batchId": "PR20261118026",
+      "eventType": "PROCESS_CREATE",
+      "bizTime": "2026-11-18 22:02:19",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "a30ca06da6fb4b5d11aa263403c62a39fb82d954d30d5f8bdd0b9d05a3d3f160",
+      "text": "2026-11-18 22:02，加工批次 PR20261118026 完成投料，共 2 个来源：PB20261118023 投入 20.000 kg；PB20261118024 投入 20.000 kg。投入合计 40.000 kg，产出 40.000 kg，留样号 LY-SMOKE-002，车间 自检后厨，操作人 自检员。",
+      "payload": {
+        "sources": [
+          {
+            "usedQty": 20.0,
+            "purchaseBatchNo": "PB20261118023"
+          },
+          {
+            "usedQty": 20.0,
+            "purchaseBatchNo": "PB20261118024"
+          }
+        ],
+        "meatType": "冷鲜猪肉",
+        "operator": "自检员",
+        "workshop": "自检后厨",
+        "outputQty": 40.0,
+        "processNo": "PR20261118026",
+        "retainSampleNo": "LY-SMOKE-002"
+      }
+    },
+    {
+      "eventId": "0104659c7ed9a28039ab2aa1d5928123ef1d213a37efb0d3ab25e3b2e8b5b7bc",
+      "batchId": "PB20261118025",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 22:02:19",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "21288ada890988fd946a24905b95ca8e54e9c4f2cafec29c5da2d69e29ca6634",
+      "text": "2026-11-18 22:02，采购批次 PB20261118025（冷鲜猪肉，40.000 kg）建单。供应商编码 SUP-0016，检疫合格证号 JX-JY-2026-SMOKE3-10539。",
+      "payload": {
+        "batchNo": "PB20261118025",
+        "meatType": "冷鲜猪肉",
+        "quantity": 40.0,
+        "quarantineNo": "JX-JY-2026-SMOKE3-10539",
+        "supplierCode": "SUP-0016"
+      }
+    },
+    {
+      "eventId": "e67d5618bfb0218792750d4422c8c9760f0621a1e2bab1d1c8398ab8ac1835db",
+      "batchId": "SUP-0017",
+      "eventType": "SUPPLIER_REG",
+      "bizTime": "2026-11-18 22:02:40",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "bfe14ea4673999a39de6682503852ea370411c5e794e3346c719c6d04f2d76be",
+      "text": "2026-11-18 22:02，供应商 SUP-0017「自检供应商-1795010560」完成备案。许可证号 JX2026SMOKE，状态 ACTIVE。",
+      "payload": {
+        "name": "自检供应商-1795010560",
+        "status": "ACTIVE",
+        "licenseNo": "JX2026SMOKE",
+        "supplierCode": "SUP-0017"
+      }
+    },
+    {
+      "eventId": "1ccfd5640f717bc611c95f0a8abbe933e239ccd3d818dcfc3d903554f3c5f514",
+      "batchId": "PB20261118026",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 22:02:40",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "bba71cb4d84aac0228e2067b0eace661bfad59e92e0c70cf5db4ef0360483309",
+      "text": "2026-11-18 22:02，采购批次 PB20261118026（冷鲜猪肉，88.000 kg）建单。供应商编码 SUP-0017，检疫合格证号 JX-JY-2026-SMOKE560。",
+      "payload": {
+        "batchNo": "PB20261118026",
+        "meatType": "冷鲜猪肉",
+        "quantity": 88.0,
+        "quarantineNo": "JX-JY-2026-SMOKE560",
+        "supplierCode": "SUP-0017"
+      }
+    },
+    {
+      "eventId": "cccd7cd29ac303b383639f647525b1a012b9198dc26ea633ff27e9c94a4b9585",
+      "batchId": "PB20261118026",
+      "eventType": "ACCEPT_RESULT",
+      "bizTime": "2026-11-18 22:02:46",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "ea38ef9b671a95abe0f5046eb31cd91273cc519496e16df5daaf9cb2b284a0c6",
+      "text": "2026-11-18 22:02，采购批次 PB20261118026（88.000 kg）完成入库验收。验收人 自检员，到货中心温度 3.100 ℃，索证索票齐全，检验结论：合格（PASS）。验收单号 AC20261118019。",
+      "payload": {
+        "result": "PASS",
+        "acceptNo": "AC20261118019",
+        "inspector": "自检员",
+        "temperature": 3.1,
+        "certComplete": true
+      }
+    },
+    {
+      "eventId": "42f370a18eabff89e8a8c9f2279086b1384142f10c4f1e09a2e1794ff6c16f9e",
+      "batchId": "PR20261118027",
+      "eventType": "PROCESS_CREATE",
+      "bizTime": "2026-11-18 22:02:51",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "0a1235347ceb26d030f1458a941a4ceab3aa6150e5e1bc769081a38568022354",
+      "text": "2026-11-18 22:02，加工批次 PR20261118027 完成投料，共 1 个来源：PB20261118026 投入 30.000 kg。投入合计 30.000 kg，产出 28.000 kg，留样号 LY-SMOKE-001，车间 自检后厨，操作人 自检员。",
+      "payload": {
+        "sources": [
+          {
+            "usedQty": 30.0,
+            "purchaseBatchNo": "PB20261118026"
+          }
+        ],
+        "meatType": "冷鲜猪肉",
+        "operator": "自检员",
+        "workshop": "自检后厨",
+        "outputQty": 28.0,
+        "processNo": "PR20261118027",
+        "retainSampleNo": "LY-SMOKE-001"
+      }
+    },
+    {
+      "eventId": "428eeb5f3c08d2d1859446ed9ae329c8433be16a2262b1c22181a653ac3d28ee",
+      "batchId": "PB20261118027",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 22:02:51",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "30d3b5c6db4b637ee28ebcc1a69e4c4aa643d2e043b080a833253c50bcd158aa",
+      "text": "2026-11-18 22:02，采购批次 PB20261118027（冷鲜猪肉，50.000 kg）建单。供应商编码 SUP-0017，检疫合格证号 JX-JY-2026-SMOKE2-10571。",
+      "payload": {
+        "batchNo": "PB20261118027",
+        "meatType": "冷鲜猪肉",
+        "quantity": 50.0,
+        "quarantineNo": "JX-JY-2026-SMOKE2-10571",
+        "supplierCode": "SUP-0017"
+      }
+    },
+    {
+      "eventId": "7eb19c503ca775266e0b54c104f2bb0fae8a2eed6edf8a701f99406c86e50660",
+      "batchId": "PB20261118027",
+      "eventType": "ACCEPT_RESULT",
+      "bizTime": "2026-11-18 22:02:51",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "788199a81c20b69b7ca0aa21df2ec398dc505bbf98fc75c2127f4da930b213fb",
+      "text": "2026-11-18 22:02，采购批次 PB20261118027（50.000 kg）完成入库验收。验收人 自检员，到货中心温度 3.100 ℃，索证索票齐全，检验结论：合格（PASS）。验收单号 AC20261118020。",
+      "payload": {
+        "result": "PASS",
+        "acceptNo": "AC20261118020",
+        "inspector": "自检员",
+        "temperature": 3.1,
+        "certComplete": true
+      }
+    },
+    {
+      "eventId": "cd4958777a5a9983738166a3242eafd8f5ab2badf5450aca282300854e72ffb6",
+      "batchId": "PR20261118028",
+      "eventType": "PROCESS_CREATE",
+      "bizTime": "2026-11-18 22:02:51",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "de198ed852217a207157afe2b1c4b57eea429baaee9b5495a1c16733d7ea9d9f",
+      "text": "2026-11-18 22:02，加工批次 PR20261118028 完成投料，共 2 个来源：PB20261118026 投入 20.000 kg；PB20261118027 投入 20.000 kg。投入合计 40.000 kg，产出 40.000 kg，留样号 LY-SMOKE-002，车间 自检后厨，操作人 自检员。",
+      "payload": {
+        "sources": [
+          {
+            "usedQty": 20.0,
+            "purchaseBatchNo": "PB20261118026"
+          },
+          {
+            "usedQty": 20.0,
+            "purchaseBatchNo": "PB20261118027"
+          }
+        ],
+        "meatType": "冷鲜猪肉",
+        "operator": "自检员",
+        "workshop": "自检后厨",
+        "outputQty": 40.0,
+        "processNo": "PR20261118028",
+        "retainSampleNo": "LY-SMOKE-002"
+      }
+    },
+    {
+      "eventId": "838cfca065f7cd83767e8ec4b64a69df8516a36eb72aa42a10e8cc017b974554",
+      "batchId": "PB20261118028",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 22:02:51",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "8bb21241ca5c2a463646f398256b5dcb437bd0043d16a12b152dbf24a9fcf9f7",
+      "text": "2026-11-18 22:02，采购批次 PB20261118028（冷鲜猪肉，40.000 kg）建单。供应商编码 SUP-0017，检疫合格证号 JX-JY-2026-SMOKE3-10571。",
+      "payload": {
+        "batchNo": "PB20261118028",
+        "meatType": "冷鲜猪肉",
+        "quantity": 40.0,
+        "quarantineNo": "JX-JY-2026-SMOKE3-10571",
+        "supplierCode": "SUP-0017"
+      }
+    },
+    {
+      "eventId": "44c4e21161743fbeb83743a6994a3ba83faf43c31096be6c968297e9a89765c9",
+      "batchId": "SUP-0018",
+      "eventType": "SUPPLIER_REG",
+      "bizTime": "2026-11-18 22:03:12",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "9163848b8748f2a56b3ba06cfbfeed882686f0026e406f317d10e545abcd7d7a",
+      "text": "2026-11-18 22:03，供应商 SUP-0018「自检供应商-1795010592」完成备案。许可证号 JX2026SMOKE，状态 ACTIVE。",
+      "payload": {
+        "name": "自检供应商-1795010592",
+        "status": "ACTIVE",
+        "licenseNo": "JX2026SMOKE",
+        "supplierCode": "SUP-0018"
+      }
+    },
+    {
+      "eventId": "e26f5cb15252331d77b681be0034da76bddc287c14150fb9aba5e5e09bbed37f",
+      "batchId": "PB20261118029",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 22:03:12",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "ea0254cfd158736f4cbcb1f612a3db0afe69705e2420804ae9b761f8d81ca3b0",
+      "text": "2026-11-18 22:03，采购批次 PB20261118029（冷鲜猪肉，88.000 kg）建单。供应商编码 SUP-0018，检疫合格证号 JX-JY-2026-SMOKE592。",
+      "payload": {
+        "batchNo": "PB20261118029",
+        "meatType": "冷鲜猪肉",
+        "quantity": 88.0,
+        "quarantineNo": "JX-JY-2026-SMOKE592",
+        "supplierCode": "SUP-0018"
+      }
+    },
+    {
+      "eventId": "7405a3b6a7abdec4196ee6f2b62de3708715f74e9bcb4cf062a73d86caebee36",
+      "batchId": "PB20261118029",
+      "eventType": "ACCEPT_RESULT",
+      "bizTime": "2026-11-18 22:03:18",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "222873bd8506e4174c390a8716e5932a68ed74ea549a9b7fb32b9591b486835f",
+      "text": "2026-11-18 22:03，采购批次 PB20261118029（88.000 kg）完成入库验收。验收人 自检员，到货中心温度 3.100 ℃，索证索票齐全，检验结论：合格（PASS）。验收单号 AC20261118021。",
+      "payload": {
+        "result": "PASS",
+        "acceptNo": "AC20261118021",
+        "inspector": "自检员",
+        "temperature": 3.1,
+        "certComplete": true
+      }
+    },
+    {
+      "eventId": "6e8091eedae7f63a838f0c378405c11846703aab0848a125612a90f3b9c5c3d3",
+      "batchId": "PR20261118029",
+      "eventType": "PROCESS_CREATE",
+      "bizTime": "2026-11-18 22:03:23",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "eb5f73c736d335825f395bcfaeefdde43e409f8c22a3828db3e33f90280a8aae",
+      "text": "2026-11-18 22:03，加工批次 PR20261118029 完成投料，共 1 个来源：PB20261118029 投入 30.000 kg。投入合计 30.000 kg，产出 28.000 kg，留样号 LY-SMOKE-001，车间 自检后厨，操作人 自检员。",
+      "payload": {
+        "sources": [
+          {
+            "usedQty": 30.0,
+            "purchaseBatchNo": "PB20261118029"
+          }
+        ],
+        "meatType": "冷鲜猪肉",
+        "operator": "自检员",
+        "workshop": "自检后厨",
+        "outputQty": 28.0,
+        "processNo": "PR20261118029",
+        "retainSampleNo": "LY-SMOKE-001"
+      }
+    },
+    {
+      "eventId": "2487f84c707ade1a6ae66faa985d4fa6011c09b444ad94b838ecec1dcf24cbdd",
+      "batchId": "PB20261118030",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 22:03:23",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "f8abcb5cdc7336f59e878028cec0fc514bd311acd0e07eb0139fd2df58431dba",
+      "text": "2026-11-18 22:03，采购批次 PB20261118030（冷鲜猪肉，50.000 kg）建单。供应商编码 SUP-0018，检疫合格证号 JX-JY-2026-SMOKE2-10603。",
+      "payload": {
+        "batchNo": "PB20261118030",
+        "meatType": "冷鲜猪肉",
+        "quantity": 50.0,
+        "quarantineNo": "JX-JY-2026-SMOKE2-10603",
+        "supplierCode": "SUP-0018"
+      }
+    },
+    {
+      "eventId": "ffddee9aef382734d7931210958e9fc2e3180c17d61633da0c6ad2cd319ec6c8",
+      "batchId": "PB20261118030",
+      "eventType": "ACCEPT_RESULT",
+      "bizTime": "2026-11-18 22:03:23",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "95fb97506b26c489246c2c68826f3b431344242b9500e48e8c2053a7cb8a1d85",
+      "text": "2026-11-18 22:03，采购批次 PB20261118030（50.000 kg）完成入库验收。验收人 自检员，到货中心温度 3.100 ℃，索证索票齐全，检验结论：合格（PASS）。验收单号 AC20261118022。",
+      "payload": {
+        "result": "PASS",
+        "acceptNo": "AC20261118022",
+        "inspector": "自检员",
+        "temperature": 3.1,
+        "certComplete": true
+      }
+    },
+    {
+      "eventId": "b0bfad9b3aceaf03c0d07af5b7e5fbc9808d13a46b518c57d0be0d155f0d9c2c",
+      "batchId": "PR20261118030",
+      "eventType": "PROCESS_CREATE",
+      "bizTime": "2026-11-18 22:03:23",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "c1f97ce4aed7c0be8e71cd9090e3a377dc9628441b17018d5bca7cc006c50a3b",
+      "text": "2026-11-18 22:03，加工批次 PR20261118030 完成投料，共 2 个来源：PB20261118029 投入 20.000 kg；PB20261118030 投入 20.000 kg。投入合计 40.000 kg，产出 40.000 kg，留样号 LY-SMOKE-002，车间 自检后厨，操作人 自检员。",
+      "payload": {
+        "sources": [
+          {
+            "usedQty": 20.0,
+            "purchaseBatchNo": "PB20261118029"
+          },
+          {
+            "usedQty": 20.0,
+            "purchaseBatchNo": "PB20261118030"
+          }
+        ],
+        "meatType": "冷鲜猪肉",
+        "operator": "自检员",
+        "workshop": "自检后厨",
+        "outputQty": 40.0,
+        "processNo": "PR20261118030",
+        "retainSampleNo": "LY-SMOKE-002"
+      }
+    },
+    {
+      "eventId": "a7e26a95d6612a74741ff6dbe90b754b897f8a966cd58204d496c29afd33c5c5",
+      "batchId": "PB20261118031",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 22:03:23",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "bb134db04bec607bcb3fda530213d7916c9de3e7f3ae0e5cf9799b9b6db24a41",
+      "text": "2026-11-18 22:03，采购批次 PB20261118031（冷鲜猪肉，40.000 kg）建单。供应商编码 SUP-0018，检疫合格证号 JX-JY-2026-SMOKE3-10603。",
+      "payload": {
+        "batchNo": "PB20261118031",
+        "meatType": "冷鲜猪肉",
+        "quantity": 40.0,
+        "quarantineNo": "JX-JY-2026-SMOKE3-10603",
+        "supplierCode": "SUP-0018"
+      }
+    },
+    {
+      "eventId": "8e26b303dfe801dbf0b92a7ed00cb29d5e1ab838fc93c9ff0a7c48632ab04a3d",
+      "batchId": "SUP-0019",
+      "eventType": "SUPPLIER_REG",
+      "bizTime": "2026-11-18 22:03:43",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "0a0d1e4c58170ba30c64043310953aba58b82d44436131c5b688e058e358055c",
+      "text": "2026-11-18 22:03，供应商 SUP-0019「自检供应商-1795010623」完成备案。许可证号 JX2026SMOKE，状态 ACTIVE。",
+      "payload": {
+        "name": "自检供应商-1795010623",
+        "status": "ACTIVE",
+        "licenseNo": "JX2026SMOKE",
+        "supplierCode": "SUP-0019"
+      }
+    },
+    {
+      "eventId": "3a704309f9b3e66c971f0c5bc0a602fc6224648ccd0e23be936a2835ba1bffcf",
+      "batchId": "PB20261118032",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 22:03:43",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "0cadec9553d285a870b851dbc9eca9450f2b6607185a15a54ecf0c50d7d2cc02",
+      "text": "2026-11-18 22:03，采购批次 PB20261118032（冷鲜猪肉，88.000 kg）建单。供应商编码 SUP-0019，检疫合格证号 JX-JY-2026-SMOKE623。",
+      "payload": {
+        "batchNo": "PB20261118032",
+        "meatType": "冷鲜猪肉",
+        "quantity": 88.0,
+        "quarantineNo": "JX-JY-2026-SMOKE623",
+        "supplierCode": "SUP-0019"
+      }
+    },
+    {
+      "eventId": "3a8e9eb3bdf30423884feb48fea9849cbbd8f991e3206326a6b67a85ff73484f",
+      "batchId": "PB20261118032",
+      "eventType": "ACCEPT_RESULT",
+      "bizTime": "2026-11-18 22:03:49",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "0fd541cd0ead4b562e218c8bd94a09c83fd56e1fb9453c2cb450b5a93620a4cf",
+      "text": "2026-11-18 22:03，采购批次 PB20261118032（88.000 kg）完成入库验收。验收人 自检员，到货中心温度 3.100 ℃，索证索票齐全，检验结论：合格（PASS）。验收单号 AC20261118023。",
+      "payload": {
+        "result": "PASS",
+        "acceptNo": "AC20261118023",
+        "inspector": "自检员",
+        "temperature": 3.1,
+        "certComplete": true
+      }
+    },
+    {
+      "eventId": "8206d69fef2ae2871e864699a16752e606f4d363f0fdb2a86996ef1f5d2a96fa",
+      "batchId": "PR20261118031",
+      "eventType": "PROCESS_CREATE",
+      "bizTime": "2026-11-18 22:03:53",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "be1a2c8b2c17a63ca07abdb4ee25ef6294f713dfc8d40c5c330ac12273cd9ac5",
+      "text": "2026-11-18 22:03，加工批次 PR20261118031 完成投料，共 1 个来源：PB20261118032 投入 30.000 kg。投入合计 30.000 kg，产出 28.000 kg，留样号 LY-SMOKE-001，车间 自检后厨，操作人 自检员。",
+      "payload": {
+        "sources": [
+          {
+            "usedQty": 30.0,
+            "purchaseBatchNo": "PB20261118032"
+          }
+        ],
+        "meatType": "冷鲜猪肉",
+        "operator": "自检员",
+        "workshop": "自检后厨",
+        "outputQty": 28.0,
+        "processNo": "PR20261118031",
+        "retainSampleNo": "LY-SMOKE-001"
+      }
+    },
+    {
+      "eventId": "b353af65fe06236655ebbd36785e35345d3935a25b5f361d95e9c30ad002b637",
+      "batchId": "PB20261118033",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 22:03:54",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "3aaf5be04d7b58a0147cfc7965555991106841bb33bf1acd6bddf60c51b5d6fe",
+      "text": "2026-11-18 22:03，采购批次 PB20261118033（冷鲜猪肉，50.000 kg）建单。供应商编码 SUP-0019，检疫合格证号 JX-JY-2026-SMOKE2-10634。",
+      "payload": {
+        "batchNo": "PB20261118033",
+        "meatType": "冷鲜猪肉",
+        "quantity": 50.0,
+        "quarantineNo": "JX-JY-2026-SMOKE2-10634",
+        "supplierCode": "SUP-0019"
+      }
+    },
+    {
+      "eventId": "629cf7f77bf974f67ef5a547fbfc5567f0a1882c854e93e807d616699aeea20f",
+      "batchId": "PB20261118033",
+      "eventType": "ACCEPT_RESULT",
+      "bizTime": "2026-11-18 22:03:54",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "d9ca805401ee6638bcf51ff6cb1fac20a8da49fa5b1ca738467e622852f1c78f",
+      "text": "2026-11-18 22:03，采购批次 PB20261118033（50.000 kg）完成入库验收。验收人 自检员，到货中心温度 3.100 ℃，索证索票齐全，检验结论：合格（PASS）。验收单号 AC20261118024。",
+      "payload": {
+        "result": "PASS",
+        "acceptNo": "AC20261118024",
+        "inspector": "自检员",
+        "temperature": 3.1,
+        "certComplete": true
+      }
+    },
+    {
+      "eventId": "d48d75fd47ccfbd4e917fdb3f80464f9e58aa371bb1377a5d59e5ceefc0d7c33",
+      "batchId": "PR20261118032",
+      "eventType": "PROCESS_CREATE",
+      "bizTime": "2026-11-18 22:03:54",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "f54b85c5c37a79eb852e203c7c6c21bc658bb25e8ae0825cac9be3e0282b355e",
+      "text": "2026-11-18 22:03，加工批次 PR20261118032 完成投料，共 2 个来源：PB20261118032 投入 20.000 kg；PB20261118033 投入 20.000 kg。投入合计 40.000 kg，产出 40.000 kg，留样号 LY-SMOKE-002，车间 自检后厨，操作人 自检员。",
+      "payload": {
+        "sources": [
+          {
+            "usedQty": 20.0,
+            "purchaseBatchNo": "PB20261118032"
+          },
+          {
+            "usedQty": 20.0,
+            "purchaseBatchNo": "PB20261118033"
+          }
+        ],
+        "meatType": "冷鲜猪肉",
+        "operator": "自检员",
+        "workshop": "自检后厨",
+        "outputQty": 40.0,
+        "processNo": "PR20261118032",
+        "retainSampleNo": "LY-SMOKE-002"
+      }
+    },
+    {
+      "eventId": "ae94006cb6bdf30b8745c0a768534c5b9f51a2017cf47ea5c88e84d5327a44f8",
+      "batchId": "PB20261118034",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 22:03:54",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "5fee3cd45090d3cf4cc9d7bff0a56ff6871bc6cbc3e5ede3f7e080ae59784c65",
+      "text": "2026-11-18 22:03，采购批次 PB20261118034（冷鲜猪肉，40.000 kg）建单。供应商编码 SUP-0019，检疫合格证号 JX-JY-2026-SMOKE3-10634。",
+      "payload": {
+        "batchNo": "PB20261118034",
+        "meatType": "冷鲜猪肉",
+        "quantity": 40.0,
+        "quarantineNo": "JX-JY-2026-SMOKE3-10634",
+        "supplierCode": "SUP-0019"
+      }
+    },
+    {
+      "eventId": "2b73e3c7c71bdf94a442f16792f9162a1f2c63128e1b2752327b7438a05c3761",
+      "batchId": "SUP-0020",
+      "eventType": "SUPPLIER_REG",
+      "bizTime": "2026-11-18 22:21:54",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "6af4db3af82bb0466fd1a6525e6f963f010f601b4940b40b64817c612299aaa5",
+      "text": "2026-11-18 22:21，供应商 SUP-0020「自检供应商-1795011714」完成备案。许可证号 JX2026SMOKE，状态 ACTIVE。",
+      "payload": {
+        "name": "自检供应商-1795011714",
+        "status": "ACTIVE",
+        "licenseNo": "JX2026SMOKE",
+        "supplierCode": "SUP-0020"
+      }
+    },
+    {
+      "eventId": "0b95b1f272952cab936dcc33ee080c1727679021b67fd28f259b3a9051c2183c",
+      "batchId": "PB20261118035",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 22:21:54",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "8ad61e9a4ff2a08dffb2db7239feaa33ff391c7602f46810cf49a2d09811e8fd",
+      "text": "2026-11-18 22:21，采购批次 PB20261118035（冷鲜猪肉，88.000 kg）建单。供应商编码 SUP-0020，检疫合格证号 JX-JY-2026-SMOKE1714。",
+      "payload": {
+        "batchNo": "PB20261118035",
+        "meatType": "冷鲜猪肉",
+        "quantity": 88.0,
+        "quarantineNo": "JX-JY-2026-SMOKE1714",
+        "supplierCode": "SUP-0020"
+      }
+    },
+    {
+      "eventId": "631b98c8b58fdd529e08847c94e5d9ae80d5194fe8bbbc98e1f99abdd997d6af",
+      "batchId": "PB20261118035",
+      "eventType": "ACCEPT_RESULT",
+      "bizTime": "2026-11-18 22:22:12",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "39c150c7f8554c19cf6611c233ba948d536b6b527c33885a003af179b14b97fd",
+      "text": "2026-11-18 22:22，采购批次 PB20261118035（88.000 kg）完成入库验收。验收人 自检员，到货中心温度 3.100 ℃，索证索票齐全，检验结论：合格（PASS）。验收单号 AC20261118025。",
+      "payload": {
+        "result": "PASS",
+        "acceptNo": "AC20261118025",
+        "inspector": "自检员",
+        "temperature": 3.1,
+        "certComplete": true
+      }
+    },
+    {
+      "eventId": "a8e633a032217294d9b32112a5f396f295c863666f0ca07587764a48d0957353",
+      "batchId": "PR20261118033",
+      "eventType": "PROCESS_CREATE",
+      "bizTime": "2026-11-18 22:22:17",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "d89330983fc27522dd952f0c021ff6380725a941c68f9c8900acc15787c9dd25",
+      "text": "2026-11-18 22:22，加工批次 PR20261118033 完成投料，共 1 个来源：PB20261118035 投入 30.000 kg。投入合计 30.000 kg，产出 28.000 kg，留样号 LY-SMOKE-001，车间 自检后厨，操作人 自检员。",
+      "payload": {
+        "sources": [
+          {
+            "usedQty": 30.0,
+            "purchaseBatchNo": "PB20261118035"
+          }
+        ],
+        "meatType": "冷鲜猪肉",
+        "operator": "自检员",
+        "workshop": "自检后厨",
+        "outputQty": 28.0,
+        "processNo": "PR20261118033",
+        "retainSampleNo": "LY-SMOKE-001"
+      }
+    },
+    {
+      "eventId": "e39dd5e67c882602206db29ce051971df04b9ce3452e8b3b327c348c2f4c68cb",
+      "batchId": "PB20261118036",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 22:22:17",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "71e8680142089881df0bb2866e805d4755c322a570a24539c36f44ab58a6d1dc",
+      "text": "2026-11-18 22:22，采购批次 PB20261118036（冷鲜猪肉，50.000 kg）建单。供应商编码 SUP-0020，检疫合格证号 JX-JY-2026-SMOKE2-11737。",
+      "payload": {
+        "batchNo": "PB20261118036",
+        "meatType": "冷鲜猪肉",
+        "quantity": 50.0,
+        "quarantineNo": "JX-JY-2026-SMOKE2-11737",
+        "supplierCode": "SUP-0020"
+      }
+    },
+    {
+      "eventId": "d66b12c28d0d0dfe33be33c132309ef783769f1e348813d0e5632bf2e5e17dbb",
+      "batchId": "PB20261118036",
+      "eventType": "ACCEPT_RESULT",
+      "bizTime": "2026-11-18 22:22:17",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "9ffd094d748f5fd9b3e144242105cac654ce53105864146be9dae8847b9eb097",
+      "text": "2026-11-18 22:22，采购批次 PB20261118036（50.000 kg）完成入库验收。验收人 自检员，到货中心温度 3.100 ℃，索证索票齐全，检验结论：合格（PASS）。验收单号 AC20261118026。",
+      "payload": {
+        "result": "PASS",
+        "acceptNo": "AC20261118026",
+        "inspector": "自检员",
+        "temperature": 3.1,
+        "certComplete": true
+      }
+    },
+    {
+      "eventId": "0a5d352308fdfb67348a203c48df27c0984fb573b7f8ff92010e4501ddeaf76c",
+      "batchId": "PR20261118034",
+      "eventType": "PROCESS_CREATE",
+      "bizTime": "2026-11-18 22:22:17",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "56d54ed35671293586edd65d49dc2a245fb224f3dffd8eb176974daf929e9a78",
+      "text": "2026-11-18 22:22，加工批次 PR20261118034 完成投料，共 2 个来源：PB20261118035 投入 20.000 kg；PB20261118036 投入 20.000 kg。投入合计 40.000 kg，产出 40.000 kg，留样号 LY-SMOKE-002，车间 自检后厨，操作人 自检员。",
+      "payload": {
+        "sources": [
+          {
+            "usedQty": 20.0,
+            "purchaseBatchNo": "PB20261118035"
+          },
+          {
+            "usedQty": 20.0,
+            "purchaseBatchNo": "PB20261118036"
+          }
+        ],
+        "meatType": "冷鲜猪肉",
+        "operator": "自检员",
+        "workshop": "自检后厨",
+        "outputQty": 40.0,
+        "processNo": "PR20261118034",
+        "retainSampleNo": "LY-SMOKE-002"
+      }
+    },
+    {
+      "eventId": "3e60b059464021adbd070d7a8b19d7563f04907749e901966ee1604e859d5564",
+      "batchId": "PB20261118037",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 22:22:17",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "5ac0aab3e47b5adc83f0c83dd8f557f7dad46bb4f50ba4b7f8dbe8d61e64225d",
+      "text": "2026-11-18 22:22，采购批次 PB20261118037（冷鲜猪肉，40.000 kg）建单。供应商编码 SUP-0020，检疫合格证号 JX-JY-2026-SMOKE3-11737。",
+      "payload": {
+        "batchNo": "PB20261118037",
+        "meatType": "冷鲜猪肉",
+        "quantity": 40.0,
+        "quarantineNo": "JX-JY-2026-SMOKE3-11737",
+        "supplierCode": "SUP-0020"
+      }
+    },
+    {
+      "eventId": "bb3e8a3127d1c9a356458486612788711201146547311ec49ea33e73871b1f60",
+      "batchId": "PR20261118033",
+      "eventType": "SALE_CREATE",
+      "bizTime": "2026-11-18 22:22:30",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "c89414260e7cf48905ad3f0eed63cb81e12f49cebe0f6dfe74381b415fcd4bb7",
+      "text": "2026-11-18 22:22，加工批次 PR20261118033 销售 10.000 kg 至「一食堂 3 号窗口」，单价 38.000 元/kg，销售单号 SL20261118005，操作人 自检员。",
+      "payload": {
+        "saleNo": "SL20261118005",
+        "channel": "一食堂 3 号窗口",
+        "operator": "自检员",
+        "quantity": 10.0,
+        "processNo": "PR20261118033",
+        "unitPrice": 38.0
+      }
+    },
+    {
+      "eventId": "06f1a0d806d42fb45cdb1e3631b5880f7872206fcd7a5d7d7e0b1bca1cc86e7b",
+      "batchId": "PR20261118033",
+      "eventType": "SALE_CREATE",
+      "bizTime": "2026-11-18 22:22:30",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "66631c48f846ae3324e2fc9f5ae1f25469dfe71f2a9db20851ab6617d904d294",
+      "text": "2026-11-18 22:22，加工批次 PR20261118033 销售 1.000 kg 至「一食堂 3 号窗口」，单价 38.000 元/kg，销售单号 SL20261118006，操作人 未记录。",
+      "payload": {
+        "saleNo": "SL20261118006",
+        "channel": "一食堂 3 号窗口",
+        "quantity": 1.0,
+        "processNo": "PR20261118033",
+        "unitPrice": 38.0
+      }
+    },
+    {
+      "eventId": "2d55c8d93a5b513b12555f085a126d71967f4f6dc9b3e9e288858c49270e91df",
+      "batchId": "PR20261118033",
+      "eventType": "SALE_CREATE",
+      "bizTime": "2026-11-18 22:22:30",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "dda9a46b0fad3cb0482f2e7d32b98df727f310aa8507f4ae3143cd71938980e1",
+      "text": "2026-11-18 22:22，加工批次 PR20261118033 销售 17.000 kg 至「一食堂 3 号窗口」，单价 38.000 元/kg，销售单号 SL20261118007，操作人 未记录。",
+      "payload": {
+        "saleNo": "SL20261118007",
+        "channel": "一食堂 3 号窗口",
+        "quantity": 17.0,
+        "processNo": "PR20261118033",
+        "unitPrice": 38.0
+      }
+    },
+    {
+      "eventId": "9d70e6bc6a96c7fdc4998a3996bcd86562bc690bb5f1eb845e1f3e8071152f1e",
+      "batchId": "PR20261118033",
+      "eventType": "RECALL",
+      "bizTime": "2026-11-18 22:22:30",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "7ef3b8c6557021b6667221e154ad5380b411aa1370507044aaf6b6334eca5c3d",
+      "text": "2026-11-18 22:22，加工批次 PR20261118033 发起召回，原因：同批次抽检发现兽药残留超标（自检模拟）。波及 3.000 笔销售，需追回 28.000 kg，召回单号 RC20261118001，操作人 自检员。",
+      "payload": {
+        "scope": "自检当日全部销售记录",
+        "reason": "同批次抽检发现兽药残留超标（自检模拟）",
+        "operator": "自检员",
+        "recallNo": "RC20261118001",
+        "processNo": "PR20261118033",
+        "recalledQty": 28.0,
+        "affectedSales": 3.0
+      }
+    },
+    {
+      "eventId": "9b8af74afa1aef7b7a8e1fc73e980d365630acefd1a954b3b32981f20f8e1f2f",
+      "batchId": "PB20261118035",
+      "eventType": "COLD_CHAIN",
+      "bizTime": "2026-11-18 22:22:30",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "533f97dfc376bfd3a06f87a3dedd433097ca4216184a4b4b4f5a80146f928229",
+      "text": "2026-11-18 22:22，批次 PB20261118035 冷链温控登记：实测 3.000 ℃，阈值 4.000 ℃，未超限。运输段 WAREHOUSE_TO_CANTEEN，运输单 TR-SMOKE-001。",
+      "payload": {
+        "logNo": "CC20261118005",
+        "segment": "WAREHOUSE_TO_CANTEEN",
+        "exceeded": false,
+        "threshold": 4.0,
+        "temperature": 3.0,
+        "transportNo": "TR-SMOKE-001"
+      }
+    },
+    {
+      "eventId": "e0c1e3edc6588824d0f38b6466c43efc2339ccdc17451ccfa034355817fbdfa4",
+      "batchId": "PB20261118035",
+      "eventType": "COLD_CHAIN",
+      "bizTime": "2026-11-18 22:22:30",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "d0e37661d7df495d6023c2d48951f5db31e3806322f2c62fa65a6b9a63635ac7",
+      "text": "2026-11-18 22:22，批次 PB20261118035 冷链温控登记：实测 6.500 ℃，阈值 4.000 ℃，判定超限。运输段 ORIGIN_TO_WAREHOUSE，运输单 TR-SMOKE-002。",
+      "payload": {
+        "logNo": "CC20261118006",
+        "segment": "ORIGIN_TO_WAREHOUSE",
+        "exceeded": true,
+        "threshold": 4.0,
+        "abnormalNo": "AB20261118002",
+        "temperature": 6.5,
+        "transportNo": "TR-SMOKE-002"
+      }
+    },
+    {
+      "eventId": "14e42c7b19ec531526534b87aef105d1d5454e9382e6d9cdf16e036a26de343e",
+      "batchId": "PR20261118035",
+      "eventType": "PROCESS_CREATE",
+      "bizTime": "2026-11-18 22:22:30",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "fbba5329d02bb8f1083ed5a5ec24a14b0b735fbfa16166dc702ffc180d74b650",
+      "text": "2026-11-18 22:22，加工批次 PR20261118035 完成投料，共 1 个来源：PB20261118036 投入 5.000 kg。投入合计 5.000 kg，产出 4.000 kg，留样号 未记录，车间 自检后厨，操作人 自检员。",
+      "payload": {
+        "sources": [
+          {
+            "usedQty": 5.0,
+            "purchaseBatchNo": "PB20261118036"
+          }
+        ],
+        "meatType": "冷鲜猪肉",
+        "operator": "自检员",
+        "workshop": "自检后厨",
+        "outputQty": 4.0,
+        "processNo": "PR20261118035"
+      }
+    },
+    {
+      "eventId": "1909bcbe000e77c5ee7985a41b8fc30d7d55bab93d9a287df6d1401af3d16aef",
+      "batchId": "PR20261118035",
+      "eventType": "DISPOSAL",
+      "bizTime": "2026-11-18 22:22:30",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "843122417af34bdc292da9f519e95d37e95eb91382ed03795af3e661e0266314",
+      "text": "2026-11-18 22:22，批次 PR20261118035 异常处置（阶段 REPORTED）：抽检发现色泽异常，暂停销售待复检。类型 SENSORY_ABNORMAL，等级 HIGH，处理人 自检员，异常单号 AB20261118003。",
+      "payload": {
+        "level": "HIGH",
+        "stage": "REPORTED",
+        "handler": "自检员",
+        "abnormalNo": "AB20261118003",
+        "description": "抽检发现色泽异常，暂停销售待复检",
+        "abnormalType": "SENSORY_ABNORMAL"
+      }
+    },
+    {
+      "eventId": "1bd6d3f4740b4d90ac93db3fcc767f8c16f90389a7f87237b385c71665f2f3f0",
+      "batchId": "PR20261118035",
+      "eventType": "DISPOSAL",
+      "bizTime": "2026-11-18 22:22:30",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "0faca704a52b07b1865bc56fda0228e9d84dacf7d60cdc1532ed118d35443091",
+      "text": "2026-11-18 22:22，批次 PR20261118035 异常处置（阶段 CLOSED）：未记录。类型 SENSORY_ABNORMAL，等级 未记录，处理人 自检员，异常单号 AB20261118003。",
+      "payload": {
+        "stage": "CLOSED",
+        "action": "暂停销售、封存留样并送第三方复检",
+        "handler": "自检员",
+        "resumed": true,
+        "abnormalNo": "AB20261118003",
+        "conclusion": "复检合格，恢复销售",
+        "abnormalType": "SENSORY_ABNORMAL"
+      }
+    },
+    {
+      "eventId": "5c76b84d2e37291b1d928219a2e4eb16537813982ba57bb99687709739db2241",
+      "batchId": "PR20261118035",
+      "eventType": "SALE_CREATE",
+      "bizTime": "2026-11-18 22:22:31",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "52823cff6d35a36008e326301e4680dfb61aaa46b4eee2f3802d99d74d067b3c",
+      "text": "2026-11-18 22:22，加工批次 PR20261118035 销售 1.000 kg 至「二食堂 1 号窗口」，单价  元/kg，销售单号 SL20261118008，操作人 未记录。",
+      "payload": {
+        "saleNo": "SL20261118008",
+        "channel": "二食堂 1 号窗口",
+        "quantity": 1.0,
+        "processNo": "PR20261118035"
+      }
+    },
+    {
+      "eventId": "8a3d2b5b8081dd5533f055629324dff6426c52babe6ced087a2031c2e42139d4",
+      "batchId": "SUP-0021",
+      "eventType": "SUPPLIER_REG",
+      "bizTime": "2026-11-18 22:24:50",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "868f12c2b93e922a83730c1bad20d9593af8784a1587534aedbbfd36fb78c33b",
+      "text": "2026-11-18 22:24，供应商 SUP-0021「自检供应商-1795011890」完成备案。许可证号 JX2026SMOKE，状态 ACTIVE。",
+      "payload": {
+        "name": "自检供应商-1795011890",
+        "status": "ACTIVE",
+        "licenseNo": "JX2026SMOKE",
+        "supplierCode": "SUP-0021"
+      }
+    },
+    {
+      "eventId": "fa76b3157e8778e77b50e31e27158d0e3677836c8b0f46c1c9f023197f39ead3",
+      "batchId": "PB20261118038",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 22:24:50",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "ec25efe5b0731c93cbce93559da185566f3c6f9fd64113c7aa24bd4f6e0a54b2",
+      "text": "2026-11-18 22:24，采购批次 PB20261118038（冷鲜猪肉，88.000 kg）建单。供应商编码 SUP-0021，检疫合格证号 JX-JY-2026-SMOKE1890。",
+      "payload": {
+        "batchNo": "PB20261118038",
+        "meatType": "冷鲜猪肉",
+        "quantity": 88.0,
+        "quarantineNo": "JX-JY-2026-SMOKE1890",
+        "supplierCode": "SUP-0021"
+      }
+    },
+    {
+      "eventId": "df7aae1c0c70961b0a8d4727c7c3b7b267bf4f9d740c2913ef523661f3fce47d",
+      "batchId": "PB20261118038",
+      "eventType": "ACCEPT_RESULT",
+      "bizTime": "2026-11-18 22:24:56",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "9c7c11fa63591e2af065913b8185759abb021b5e9a888d5ce0e644311c1b3137",
+      "text": "2026-11-18 22:24，采购批次 PB20261118038（88.000 kg）完成入库验收。验收人 自检员，到货中心温度 3.100 ℃，索证索票齐全，检验结论：合格（PASS）。验收单号 AC20261118027。",
+      "payload": {
+        "result": "PASS",
+        "acceptNo": "AC20261118027",
+        "inspector": "自检员",
+        "temperature": 3.1,
+        "certComplete": true
+      }
+    },
+    {
+      "eventId": "63f2743fdd59cec3d340e4b7e34fb6ba43efce0d70c087cab0b9996b2e2573e8",
+      "batchId": "PR20261118036",
+      "eventType": "PROCESS_CREATE",
+      "bizTime": "2026-11-18 22:25:00",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "8796b37559775310b0985ce02807430107c72682865faa68cb42d0d0e2673451",
+      "text": "2026-11-18 22:25，加工批次 PR20261118036 完成投料，共 1 个来源：PB20261118038 投入 30.000 kg。投入合计 30.000 kg，产出 28.000 kg，留样号 LY-SMOKE-001，车间 自检后厨，操作人 自检员。",
+      "payload": {
+        "sources": [
+          {
+            "usedQty": 30.0,
+            "purchaseBatchNo": "PB20261118038"
+          }
+        ],
+        "meatType": "冷鲜猪肉",
+        "operator": "自检员",
+        "workshop": "自检后厨",
+        "outputQty": 28.0,
+        "processNo": "PR20261118036",
+        "retainSampleNo": "LY-SMOKE-001"
+      }
+    },
+    {
+      "eventId": "b28d148c057fd36bc88455ec4dd15b683fab9295f99aa54d5654025b4dd4a417",
+      "batchId": "PB20261118039",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 22:25:01",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "275a33c898796f1765632229a503e0bf5835e5039af8a776031d2c236141473f",
+      "text": "2026-11-18 22:25，采购批次 PB20261118039（冷鲜猪肉，50.000 kg）建单。供应商编码 SUP-0021，检疫合格证号 JX-JY-2026-SMOKE2-11901。",
+      "payload": {
+        "batchNo": "PB20261118039",
+        "meatType": "冷鲜猪肉",
+        "quantity": 50.0,
+        "quarantineNo": "JX-JY-2026-SMOKE2-11901",
+        "supplierCode": "SUP-0021"
+      }
+    },
+    {
+      "eventId": "dade85d89f2ea1c456488062fb070a08c20a5f0fb469024049f71f6511836fbc",
+      "batchId": "PB20261118039",
+      "eventType": "ACCEPT_RESULT",
+      "bizTime": "2026-11-18 22:25:01",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "c0d9118466da855e2f88f92b4151ee01c65126eb25b0d0ab4c1ef6010313467c",
+      "text": "2026-11-18 22:25，采购批次 PB20261118039（50.000 kg）完成入库验收。验收人 自检员，到货中心温度 3.100 ℃，索证索票齐全，检验结论：合格（PASS）。验收单号 AC20261118028。",
+      "payload": {
+        "result": "PASS",
+        "acceptNo": "AC20261118028",
+        "inspector": "自检员",
+        "temperature": 3.1,
+        "certComplete": true
+      }
+    },
+    {
+      "eventId": "1c765da8dd96c1b22f7936df76e3826d074235ed31117f6547f2b59d533db4ca",
+      "batchId": "PR20261118037",
+      "eventType": "PROCESS_CREATE",
+      "bizTime": "2026-11-18 22:25:01",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "8083e30e402cccc2c6ace7b446334943e2e985a02138313b9324b7e379265f5c",
+      "text": "2026-11-18 22:25，加工批次 PR20261118037 完成投料，共 2 个来源：PB20261118038 投入 20.000 kg；PB20261118039 投入 20.000 kg。投入合计 40.000 kg，产出 40.000 kg，留样号 LY-SMOKE-002，车间 自检后厨，操作人 自检员。",
+      "payload": {
+        "sources": [
+          {
+            "usedQty": 20.0,
+            "purchaseBatchNo": "PB20261118038"
+          },
+          {
+            "usedQty": 20.0,
+            "purchaseBatchNo": "PB20261118039"
+          }
+        ],
+        "meatType": "冷鲜猪肉",
+        "operator": "自检员",
+        "workshop": "自检后厨",
+        "outputQty": 40.0,
+        "processNo": "PR20261118037",
+        "retainSampleNo": "LY-SMOKE-002"
+      }
+    },
+    {
+      "eventId": "03999de64c24748dc9983a4e82a74baf5d954ba5e2495f454948287c82501fe4",
+      "batchId": "PB20261118040",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 22:25:01",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "4d5934d8f3c3cfce03e0b9188ffc22722c8e98a99e4c74ca8636f60821ef600d",
+      "text": "2026-11-18 22:25，采购批次 PB20261118040（冷鲜猪肉，40.000 kg）建单。供应商编码 SUP-0021，检疫合格证号 JX-JY-2026-SMOKE3-11901。",
+      "payload": {
+        "batchNo": "PB20261118040",
+        "meatType": "冷鲜猪肉",
+        "quantity": 40.0,
+        "quarantineNo": "JX-JY-2026-SMOKE3-11901",
+        "supplierCode": "SUP-0021"
+      }
+    },
+    {
+      "eventId": "401af18257f59361ab43e81b806695251dfbcb8c673ccc8a8112a38a524029cd",
+      "batchId": "PR20261118036",
+      "eventType": "SALE_CREATE",
+      "bizTime": "2026-11-18 22:25:12",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "9a98325a850c9fe87016fe2363b3bcc4b142d5d6cc7d65ec6a186b775a47e6fd",
+      "text": "2026-11-18 22:25，加工批次 PR20261118036 销售 10.000 kg 至「一食堂 3 号窗口」，单价 38.000 元/kg，销售单号 SL20261118009，操作人 自检员。",
+      "payload": {
+        "saleNo": "SL20261118009",
+        "channel": "一食堂 3 号窗口",
+        "operator": "自检员",
+        "quantity": 10.0,
+        "processNo": "PR20261118036",
+        "unitPrice": 38.0
+      }
+    },
+    {
+      "eventId": "855fc0bc2560037014230690f9327a0abaa53b66b4640fc7a389f6a8186b5271",
+      "batchId": "PR20261118036",
+      "eventType": "SALE_CREATE",
+      "bizTime": "2026-11-18 22:25:12",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "1665f7fd12b547ed596401e5585dd0c5d7323bdcd3da0f828c74b96048b582c0",
+      "text": "2026-11-18 22:25，加工批次 PR20261118036 销售 1.000 kg 至「一食堂 3 号窗口」，单价 38.000 元/kg，销售单号 SL20261118010，操作人 未记录。",
+      "payload": {
+        "saleNo": "SL20261118010",
+        "channel": "一食堂 3 号窗口",
+        "quantity": 1.0,
+        "processNo": "PR20261118036",
+        "unitPrice": 38.0
+      }
+    },
+    {
+      "eventId": "8f9fd623509393dd3851e7f13f39d2bf4e76a429248b7daee044a0d36e35eb37",
+      "batchId": "PR20261118036",
+      "eventType": "SALE_CREATE",
+      "bizTime": "2026-11-18 22:25:12",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "b74c275f53a57c6ee90bf4663c675e46e076efc4db0f80f94c379ddcd36d42fb",
+      "text": "2026-11-18 22:25，加工批次 PR20261118036 销售 17.000 kg 至「一食堂 3 号窗口」，单价 38.000 元/kg，销售单号 SL20261118011，操作人 未记录。",
+      "payload": {
+        "saleNo": "SL20261118011",
+        "channel": "一食堂 3 号窗口",
+        "quantity": 17.0,
+        "processNo": "PR20261118036",
+        "unitPrice": 38.0
+      }
+    },
+    {
+      "eventId": "f3ef01c805981258b3b5bbf6273f78be8c38c41665a5681373471f79573f0af9",
+      "batchId": "PR20261118036",
+      "eventType": "RECALL",
+      "bizTime": "2026-11-18 22:25:12",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "e0e5285f5bf86d6240891e82a53eaefd9f071986177365ec1a7803e147f543e3",
+      "text": "2026-11-18 22:25，加工批次 PR20261118036 发起召回，原因：同批次抽检发现兽药残留超标（自检模拟）。波及 3.000 笔销售，需追回 28.000 kg，召回单号 RC20261118002，操作人 自检员。",
+      "payload": {
+        "scope": "自检当日全部销售记录",
+        "reason": "同批次抽检发现兽药残留超标（自检模拟）",
+        "operator": "自检员",
+        "recallNo": "RC20261118002",
+        "processNo": "PR20261118036",
+        "recalledQty": 28.0,
+        "affectedSales": 3.0
+      }
+    },
+    {
+      "eventId": "c3e8e0cc09e1bae112d183fd256cc15e22fbb95915db249575e24a9edb7e68f3",
+      "batchId": "PB20261118038",
+      "eventType": "COLD_CHAIN",
+      "bizTime": "2026-11-18 22:25:12",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "025de40dbf820962c911dfff844320550b2b3e869a73d20110f53a82b2e78d0f",
+      "text": "2026-11-18 22:25，批次 PB20261118038 冷链温控登记：实测 3.000 ℃，阈值 4.000 ℃，未超限。运输段 WAREHOUSE_TO_CANTEEN，运输单 TR-SMOKE-001。",
+      "payload": {
+        "logNo": "CC20261118007",
+        "segment": "WAREHOUSE_TO_CANTEEN",
+        "exceeded": false,
+        "threshold": 4.0,
+        "temperature": 3.0,
+        "transportNo": "TR-SMOKE-001"
+      }
+    },
+    {
+      "eventId": "2ad4a27fa13520cf1bb6cb2e820ff76051fab2d031d8288a725e3bd96e5e1b24",
+      "batchId": "PB20261118038",
+      "eventType": "COLD_CHAIN",
+      "bizTime": "2026-11-18 22:25:12",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "2b268bc7a763818f1a785e8fd10afd94620270dadab101541dd13f722df40f50",
+      "text": "2026-11-18 22:25，批次 PB20261118038 冷链温控登记：实测 6.500 ℃，阈值 4.000 ℃，判定超限。运输段 ORIGIN_TO_WAREHOUSE，运输单 TR-SMOKE-002。",
+      "payload": {
+        "logNo": "CC20261118008",
+        "segment": "ORIGIN_TO_WAREHOUSE",
+        "exceeded": true,
+        "threshold": 4.0,
+        "abnormalNo": "AB20261118004",
+        "temperature": 6.5,
+        "transportNo": "TR-SMOKE-002"
+      }
+    },
+    {
+      "eventId": "a0450a3b2b671a113c9d07c250262c4e469bb8282d0ac61650161ade4ea3d5a0",
+      "batchId": "PR20261118038",
+      "eventType": "PROCESS_CREATE",
+      "bizTime": "2026-11-18 22:25:12",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "0f68f0b787c92c624e398c38658487e6ec064dc411c3661b7af40593077e9418",
+      "text": "2026-11-18 22:25，加工批次 PR20261118038 完成投料，共 1 个来源：PB20261118039 投入 5.000 kg。投入合计 5.000 kg，产出 4.000 kg，留样号 未记录，车间 自检后厨，操作人 自检员。",
+      "payload": {
+        "sources": [
+          {
+            "usedQty": 5.0,
+            "purchaseBatchNo": "PB20261118039"
+          }
+        ],
+        "meatType": "冷鲜猪肉",
+        "operator": "自检员",
+        "workshop": "自检后厨",
+        "outputQty": 4.0,
+        "processNo": "PR20261118038"
+      }
+    },
+    {
+      "eventId": "04cd923324fefc6af1e77b24e1febfb5b20d9917d1b8fcb577dc1ec7b1b44941",
+      "batchId": "PR20261118038",
+      "eventType": "DISPOSAL",
+      "bizTime": "2026-11-18 22:25:12",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "8cfd8c294846d7490fab43b2cdd5b35df29ec4b70833e045b5cb7f14b497f3d4",
+      "text": "2026-11-18 22:25，批次 PR20261118038 异常处置（阶段 REPORTED）：抽检发现色泽异常，暂停销售待复检。类型 SENSORY_ABNORMAL，等级 HIGH，处理人 自检员，异常单号 AB20261118005。",
+      "payload": {
+        "level": "HIGH",
+        "stage": "REPORTED",
+        "handler": "自检员",
+        "abnormalNo": "AB20261118005",
+        "description": "抽检发现色泽异常，暂停销售待复检",
+        "abnormalType": "SENSORY_ABNORMAL"
+      }
+    },
+    {
+      "eventId": "6d1ac9ff9b5c9989a3142aec6e7972d08d1d861f15dea346ef4d0cbab9549c05",
+      "batchId": "PR20261118038",
+      "eventType": "DISPOSAL",
+      "bizTime": "2026-11-18 22:25:12",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "486fc30168512b461b461625d16d10d157a123a4627987eb91e0b4ba8d40e2a7",
+      "text": "2026-11-18 22:25，批次 PR20261118038 异常处置（阶段 CLOSED）：未记录。类型 SENSORY_ABNORMAL，等级 未记录，处理人 自检员，异常单号 AB20261118005。",
+      "payload": {
+        "stage": "CLOSED",
+        "action": "暂停销售、封存留样并送第三方复检",
+        "handler": "自检员",
+        "resumed": true,
+        "abnormalNo": "AB20261118005",
+        "conclusion": "复检合格，恢复销售",
+        "abnormalType": "SENSORY_ABNORMAL"
+      }
+    },
+    {
+      "eventId": "9746f51fd565df435823427bd4b28695bb9aa2447dac42e9e46dd6297952bfa3",
+      "batchId": "PR20261118038",
+      "eventType": "SALE_CREATE",
+      "bizTime": "2026-11-18 22:25:13",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "273b6cb90e2905cd00b46d523dc6f86805b99d9d3f4d51fda15e091b6ee3e6ba",
+      "text": "2026-11-18 22:25，加工批次 PR20261118038 销售 1.000 kg 至「二食堂 1 号窗口」，单价  元/kg，销售单号 SL20261118012，操作人 未记录。",
+      "payload": {
+        "saleNo": "SL20261118012",
+        "channel": "二食堂 1 号窗口",
+        "quantity": 1.0,
+        "processNo": "PR20261118038"
+      }
+    },
+    {
+      "eventId": "bb52d5113685cf07678a30c6b355618fbdbaab3d54888363cabdcdea04a2676d",
+      "batchId": "SUP-0022",
+      "eventType": "SUPPLIER_REG",
+      "bizTime": "2026-11-18 23:27:53",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "4a60cf039c04c57b83d0437d5db0e7690bf49bd8389dcb06feef92908ad2d2c6",
+      "text": "2026-11-18 23:27，供应商 SUP-0022「验收测试-正常供应商-20261118-232737」完成备案。许可证号 JX4AD8D171D6，状态 ACTIVE。",
+      "payload": {
+        "name": "验收测试-正常供应商-20261118-232737",
+        "status": "ACTIVE",
+        "licenseNo": "JX4AD8D171D6",
+        "supplierCode": "SUP-0022"
+      }
+    },
+    {
+      "eventId": "8205e12682e41eac120a6881781f340f466706835822ee69730bedad61c132f2",
+      "batchId": "SUP-0023",
+      "eventType": "SUPPLIER_REG",
+      "bizTime": "2026-11-18 23:27:57",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "9ab944e93bc96ab4a9767bebec354dee1321912448dd275dfc6d4021312f3c3d",
+      "text": "2026-11-18 23:27，供应商 SUP-0023「验收测试-黑名单供应商-20261118-232737」完成备案。许可证号 JX672BA0AE4C，状态 ACTIVE。",
+      "payload": {
+        "name": "验收测试-黑名单供应商-20261118-232737",
+        "status": "ACTIVE",
+        "licenseNo": "JX672BA0AE4C",
+        "supplierCode": "SUP-0023"
+      }
+    },
+    {
+      "eventId": "dce243ca88d7b873ee47827000636b7b5ee78698754809041d9ac78846ccdd64",
+      "batchId": "PB20261118041",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 23:27:57",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "85c818d0c5f0575ff56e9b15b606e835bfea6a13ab7226e940757b7d72c36dc3",
+      "text": "2026-11-18 23:27，采购批次 PB20261118041（冷鲜猪肉，120.000 kg）建单。供应商编码 SUP-0022，检疫合格证号 JX-JY-2026-DDF5F183。",
+      "payload": {
+        "batchNo": "PB20261118041",
+        "meatType": "冷鲜猪肉",
+        "quantity": 120.0,
+        "quarantineNo": "JX-JY-2026-DDF5F183",
+        "supplierCode": "SUP-0022"
+      }
+    },
+    {
+      "eventId": "0b5a17a6ee4dadf5f43a3d7a4d181a4725d60870b81df166e6b98e6ff8bf2218",
+      "batchId": "PB20261118042",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 23:27:57",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "36c0a40a486787fb8e739c30193e55fe81135f1c1b60635c46f0a37334eaab58",
+      "text": "2026-11-18 23:27，采购批次 PB20261118042（冷鲜猪肉，120.000 kg）建单。供应商编码 SUP-0022，检疫合格证号 JX-JY-2026-EFAD2DAA。",
+      "payload": {
+        "batchNo": "PB20261118042",
+        "meatType": "冷鲜猪肉",
+        "quantity": 120.0,
+        "quarantineNo": "JX-JY-2026-EFAD2DAA",
+        "supplierCode": "SUP-0022"
+      }
+    },
+    {
+      "eventId": "64e51cc7da361655da410cd1b1f37712bc9ae1fb063a73666e382f8b92adda4e",
+      "batchId": "PB20261118041",
+      "eventType": "ACCEPT_RESULT",
+      "bizTime": "2026-11-18 23:27:57",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "4e714ac367967ad7e90deb5bf685e8120114f3c82da32f0022919fbf188dc3d0",
+      "text": "2026-11-18 23:27，采购批次 PB20261118041（120.000 kg）完成入库验收。验收人 验收测试员，到货中心温度 3.500 ℃，索证索票齐全，检验结论：合格（PASS）。验收单号 AC20261118029。",
+      "payload": {
+        "result": "PASS",
+        "acceptNo": "AC20261118029",
+        "inspector": "验收测试员",
+        "temperature": 3.5,
+        "certComplete": true
+      }
+    },
+    {
+      "eventId": "734b0e3ae4dfdbd49a509128010f3e1a48181dba8f143d129dc638bbc08a132a",
+      "batchId": "PB20261118043",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 23:27:57",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "3a7f94752cab685ee4a909f915699139f2de1cb022d56300956002e6d7db6014",
+      "text": "2026-11-18 23:27，采购批次 PB20261118043（冷鲜猪肉，30.000 kg）建单。供应商编码 SUP-0022，检疫合格证号 JX-JY-2026-91CF540B。",
+      "payload": {
+        "batchNo": "PB20261118043",
+        "meatType": "冷鲜猪肉",
+        "quantity": 30.0,
+        "quarantineNo": "JX-JY-2026-91CF540B",
+        "supplierCode": "SUP-0022"
+      }
+    },
+    {
+      "eventId": "5662931488d01bc65a598c877dd97f844455385a980033e65c49d164a6be2ac5",
+      "batchId": "PB20261118043",
+      "eventType": "ACCEPT_RESULT",
+      "bizTime": "2026-11-18 23:27:57",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "b11f460a29d80e0bc854c75d0678762de4873b2de252b801a9a80cd4c79ce8dc",
+      "text": "2026-11-18 23:27，采购批次 PB20261118043（30.000 kg）完成入库验收。验收人 验收测试员，到货中心温度 3.200 ℃，索证索票不齐全，检验结论：不合格（FAIL）。验收单号 AC20261118030。",
+      "payload": {
+        "result": "FAIL",
+        "acceptNo": "AC20261118030",
+        "inspector": "验收测试员",
+        "temperature": 3.2,
+        "certComplete": false
+      }
+    },
+    {
+      "eventId": "beeb1043fd71f4993845b6647bb12d0150a0ec8070cb670e562d1f06cad10d32",
+      "batchId": "PB20261118044",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 23:27:57",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "e5e96330e043cb13e05af910537722f58862949c9cbeecb6328a418705d37877",
+      "text": "2026-11-18 23:27，采购批次 PB20261118044（冷鲜猪肉，10.000 kg）建单。供应商编码 SUP-0022，检疫合格证号 JX-JY-2026-DF131982。",
+      "payload": {
+        "batchNo": "PB20261118044",
+        "meatType": "冷鲜猪肉",
+        "quantity": 10.0,
+        "quarantineNo": "JX-JY-2026-DF131982",
+        "supplierCode": "SUP-0022"
+      }
+    },
+    {
+      "eventId": "6e2978870be3ac3cd1e25ed3c34ce80617f66db016d41cb20baface543e12cf3",
+      "batchId": "PB20261118045",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 23:28:19",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "b76ceb6ec7182b52f5f4e138df208ac1da18458e95b7a01cdb7984b99ad851e0",
+      "text": "2026-11-18 23:28，采购批次 PB20261118045（冷鲜猪肉，12.000 kg）建单。供应商编码 SUP-0022，检疫合格证号 JX-JY-2026-F70E114D。",
+      "payload": {
+        "batchNo": "PB20261118045",
+        "meatType": "冷鲜猪肉",
+        "quantity": 12.0,
+        "quarantineNo": "JX-JY-2026-F70E114D",
+        "supplierCode": "SUP-0022"
+      }
+    },
+    {
+      "eventId": "7eb438a7ec7fd7d2e3970a92cc7f54f2de28fd6fba2e7a71cae96c03149e3f64",
+      "batchId": "PB20261118046",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 23:28:27",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "e44e2742531a06c88a651944f7db431da12af25259025adeb694ada59693da23",
+      "text": "2026-11-18 23:28，采购批次 PB20261118046（冷鲜猪肉，15.000 kg）建单。供应商编码 SUP-0022，检疫合格证号 JX-JY-2026-BDC9EA6F。",
+      "payload": {
+        "batchNo": "PB20261118046",
+        "meatType": "冷鲜猪肉",
+        "quantity": 15.0,
+        "quarantineNo": "JX-JY-2026-BDC9EA6F",
+        "supplierCode": "SUP-0022"
+      }
+    },
+    {
+      "eventId": "353eeab042614c08d1b3b2d3a25ba184c1af5a616d400a15299ec033bf15b1af",
+      "batchId": "PB20261118046",
+      "eventType": "ACCEPT_RESULT",
+      "bizTime": "2026-11-18 23:28:31",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "db24e80d605f94aa2dc8674d817468dbfb9db51dab6819da02492c41031c50b8",
+      "text": "2026-11-18 23:28，采购批次 PB20261118046（15.000 kg）完成入库验收。验收人 验收测试员，到货中心温度 3.200 ℃，索证索票齐全，检验结论：合格（PASS）。验收单号 AC20261118031。",
+      "payload": {
+        "result": "PASS",
+        "acceptNo": "AC20261118031",
+        "inspector": "验收测试员",
+        "temperature": 3.2,
+        "certComplete": true
+      }
+    },
+    {
+      "eventId": "e9b7f8679bb0f2f7330d44c1bae961ad61b693139b6fda9af8e2b3b53f18ea99",
+      "batchId": "PB20261118047",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 23:28:39",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "a2695112216db95091c38c7a31c7f4bb95c679bcd4d8b9d803ad5530b0ee2629",
+      "text": "2026-11-18 23:28，采购批次 PB20261118047（冷鲜猪肉，1.000 kg）建单。供应商编码 SUP-0022，检疫合格证号 JX-JY-2026-8948C27F。",
+      "payload": {
+        "batchNo": "PB20261118047",
+        "meatType": "冷鲜猪肉",
+        "quantity": 1.0,
+        "quarantineNo": "JX-JY-2026-8948C27F",
+        "supplierCode": "SUP-0022"
+      }
+    },
+    {
+      "eventId": "4d72f8a3f567bc01a4490fd23d642121843860e980a0dbaac9b5a0ac66f751d4",
+      "batchId": "PB20261118048",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 23:28:39",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "c06a433fbd0b99160fc238d8dd2ad4fcf48b0e4ab22e9972511851c908d7d5fb",
+      "text": "2026-11-18 23:28，采购批次 PB20261118048（冷鲜猪肉，1.000 kg）建单。供应商编码 SUP-0022，检疫合格证号 JX-JY-2026-1F80B726。",
+      "payload": {
+        "batchNo": "PB20261118048",
+        "meatType": "冷鲜猪肉",
+        "quantity": 1.0,
+        "quarantineNo": "JX-JY-2026-1F80B726",
+        "supplierCode": "SUP-0022"
+      }
+    },
+    {
+      "eventId": "f6820bf4101cc7b25d0772281bc97f36521b68a75b17e36167f0153a18f5769c",
+      "batchId": "PB20261118049",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 23:28:40",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "f85200d94f144c098bd3dae76fa6356e6655bbdbffe8d58381001e84dc52757a",
+      "text": "2026-11-18 23:28，采购批次 PB20261118049（冷鲜猪肉，1.000 kg）建单。供应商编码 SUP-0022，检疫合格证号 JX-JY-2026-CC121E74。",
+      "payload": {
+        "batchNo": "PB20261118049",
+        "meatType": "冷鲜猪肉",
+        "quantity": 1.0,
+        "quarantineNo": "JX-JY-2026-CC121E74",
+        "supplierCode": "SUP-0022"
+      }
+    },
+    {
+      "eventId": "a26379984797d0313863629e2bfa1f8cb782f511557f25a8bcdb6bef2e1cc91f",
+      "batchId": "PB20261118050",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 23:28:40",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "99af7d7999ba96ef47051924faf52a766440f82851c224ef6fa05f39cf58b27e",
+      "text": "2026-11-18 23:28，采购批次 PB20261118050（冷鲜猪肉，1.000 kg）建单。供应商编码 SUP-0022，检疫合格证号 JX-JY-2026-3767A256。",
+      "payload": {
+        "batchNo": "PB20261118050",
+        "meatType": "冷鲜猪肉",
+        "quantity": 1.0,
+        "quarantineNo": "JX-JY-2026-3767A256",
+        "supplierCode": "SUP-0022"
+      }
+    },
+    {
+      "eventId": "821692eea8e46b58446ad31bf29f15a0ae4e6965d9ce4209555d257edf2c3bf7",
+      "batchId": "PB20261118051",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 23:28:40",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "886bb257fdf2de36601a9f8b17c4072cd4d91d1319befc14c76d5c9e28dc1c01",
+      "text": "2026-11-18 23:28，采购批次 PB20261118051（冷鲜猪肉，1.000 kg）建单。供应商编码 SUP-0022，检疫合格证号 JX-JY-2026-374B1FAE。",
+      "payload": {
+        "batchNo": "PB20261118051",
+        "meatType": "冷鲜猪肉",
+        "quantity": 1.0,
+        "quarantineNo": "JX-JY-2026-374B1FAE",
+        "supplierCode": "SUP-0022"
+      }
+    },
+    {
+      "eventId": "a44fb92f382f0bcee162e99177d5c21dfcedce1e007352348c4c6831eaf29e86",
+      "batchId": "PB20261118052",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 23:28:40",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "725b89a52f60adf7edc3690d00b4cbadbeb365d56d9d0b6f3f7080ca76ef8399",
+      "text": "2026-11-18 23:28，采购批次 PB20261118052（冷鲜猪肉，1.000 kg）建单。供应商编码 SUP-0022，检疫合格证号 JX-JY-2026-8AF5434D。",
+      "payload": {
+        "batchNo": "PB20261118052",
+        "meatType": "冷鲜猪肉",
+        "quantity": 1.0,
+        "quarantineNo": "JX-JY-2026-8AF5434D",
+        "supplierCode": "SUP-0022"
+      }
+    },
+    {
+      "eventId": "f83a3f67a9aa73370167ac41eaccc47d5dcb46126753ee22482af614751357be",
+      "batchId": "PB20261118053",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 23:28:40",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "cc3762ab629132c6e29d4c103c769a63ff172c8937d903012cba523beac3c392",
+      "text": "2026-11-18 23:28，采购批次 PB20261118053（冷鲜猪肉，1.000 kg）建单。供应商编码 SUP-0022，检疫合格证号 JX-JY-2026-510C4407。",
+      "payload": {
+        "batchNo": "PB20261118053",
+        "meatType": "冷鲜猪肉",
+        "quantity": 1.0,
+        "quarantineNo": "JX-JY-2026-510C4407",
+        "supplierCode": "SUP-0022"
+      }
+    },
+    {
+      "eventId": "d3b26066db8f4b5d2a831e20592cda665533f3bf7d49605c3b370380fd3f1c5c",
+      "batchId": "PB20261118054",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 23:28:40",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "d1b365d0a170873cbba4372e910ce61bf7a7d5e092b965aaf9d4bdb6a70d8bd3",
+      "text": "2026-11-18 23:28，采购批次 PB20261118054（冷鲜猪肉，1.000 kg）建单。供应商编码 SUP-0022，检疫合格证号 JX-JY-2026-689447D1。",
+      "payload": {
+        "batchNo": "PB20261118054",
+        "meatType": "冷鲜猪肉",
+        "quantity": 1.0,
+        "quarantineNo": "JX-JY-2026-689447D1",
+        "supplierCode": "SUP-0022"
+      }
+    },
+    {
+      "eventId": "10aed5acbadbde55a000f88a5506c0407545457bf7c5826ced9651533b3bef09",
+      "batchId": "PB20261118055",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 23:28:40",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "6bde3edaccc6ad84b2d102fe8bd08df8443e2b660ec41fdacc60f4e5bf4c2e01",
+      "text": "2026-11-18 23:28，采购批次 PB20261118055（冷鲜猪肉，1.000 kg）建单。供应商编码 SUP-0022，检疫合格证号 JX-JY-2026-2D125577。",
+      "payload": {
+        "batchNo": "PB20261118055",
+        "meatType": "冷鲜猪肉",
+        "quantity": 1.0,
+        "quarantineNo": "JX-JY-2026-2D125577",
+        "supplierCode": "SUP-0022"
+      }
+    },
+    {
+      "eventId": "d88537ae85b8f71caada6ae242bb2727aa1eebb76a1f28303c92702f69f36aa5",
+      "batchId": "PB20261118056",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 23:28:40",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "a5ee5ea1f07d40735ba86dae4d7c168a00fb7eeb15f5dc4cde8712ce05482b1b",
+      "text": "2026-11-18 23:28，采购批次 PB20261118056（冷鲜猪肉，1.000 kg）建单。供应商编码 SUP-0022，检疫合格证号 JX-JY-2026-B8F95A12。",
+      "payload": {
+        "batchNo": "PB20261118056",
+        "meatType": "冷鲜猪肉",
+        "quantity": 1.0,
+        "quarantineNo": "JX-JY-2026-B8F95A12",
+        "supplierCode": "SUP-0022"
+      }
+    },
+    {
+      "eventId": "72537f5b74f963a626dca442b845e794013021062bf8c9092e87a301b98e4c13",
+      "batchId": "PB20261118057",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 23:28:40",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "97337b1016b5dd1982ef4c5af60ef4d49cf2e99480c5b9fe500e6b9ea1dba5d4",
+      "text": "2026-11-18 23:28，采购批次 PB20261118057（冷鲜猪肉，1.000 kg）建单。供应商编码 SUP-0022，检疫合格证号 JX-JY-2026-8A538F98。",
+      "payload": {
+        "batchNo": "PB20261118057",
+        "meatType": "冷鲜猪肉",
+        "quantity": 1.0,
+        "quarantineNo": "JX-JY-2026-8A538F98",
+        "supplierCode": "SUP-0022"
+      }
+    },
+    {
+      "eventId": "208f53acab88d56365188d44672a7117ed083f15007824559adb4771d0d178a8",
+      "batchId": "PB20261118058",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 23:28:40",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "c9e58dbf0c106de5d043b95860a85337f15eadbf836d70d594d84b7a82a29bea",
+      "text": "2026-11-18 23:28，采购批次 PB20261118058（冷鲜猪肉，1.000 kg）建单。供应商编码 SUP-0022，检疫合格证号 JX-JY-2026-25D895F7。",
+      "payload": {
+        "batchNo": "PB20261118058",
+        "meatType": "冷鲜猪肉",
+        "quantity": 1.0,
+        "quarantineNo": "JX-JY-2026-25D895F7",
+        "supplierCode": "SUP-0022"
+      }
+    },
+    {
+      "eventId": "8b522c052ec76a75f443a02298e3723c5fa5d21b4c64cdd4ead1a2791f9fd83e",
+      "batchId": "PB20261118059",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 23:28:40",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "c5c9a8f329d3948c1b32b7a1ffe14126cdee7ce1b3cb45714e5bba4d681fc28c",
+      "text": "2026-11-18 23:28，采购批次 PB20261118059（冷鲜猪肉，1.000 kg）建单。供应商编码 SUP-0022，检疫合格证号 JX-JY-2026-4758BBC4。",
+      "payload": {
+        "batchNo": "PB20261118059",
+        "meatType": "冷鲜猪肉",
+        "quantity": 1.0,
+        "quarantineNo": "JX-JY-2026-4758BBC4",
+        "supplierCode": "SUP-0022"
+      }
+    },
+    {
+      "eventId": "ce167e63ddc7173cf143423ea76a12041edf3e55bfecf28299266d7379cf9bf1",
+      "batchId": "PB20261118060",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 23:28:40",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "20a3bebadfed9bfb24b46d3f4eafc592c2dbb0cadb7f02165ffe4cc8917a8419",
+      "text": "2026-11-18 23:28，采购批次 PB20261118060（冷鲜猪肉，1.000 kg）建单。供应商编码 SUP-0022，检疫合格证号 JX-JY-2026-8B7C2A0E。",
+      "payload": {
+        "batchNo": "PB20261118060",
+        "meatType": "冷鲜猪肉",
+        "quantity": 1.0,
+        "quarantineNo": "JX-JY-2026-8B7C2A0E",
+        "supplierCode": "SUP-0022"
+      }
+    },
+    {
+      "eventId": "7f71439c90f274788c1af49df6f10f48fee855ff5c638ac012b980015ae4fb80",
+      "batchId": "PB20261118061",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 23:28:40",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "17e1fbea7d58a296d580f21919929cd15eb7bbcd4c76ac6b1d97bd785c3fd643",
+      "text": "2026-11-18 23:28，采购批次 PB20261118061（冷鲜猪肉，1.000 kg）建单。供应商编码 SUP-0022，检疫合格证号 JX-JY-2026-A80DFD41。",
+      "payload": {
+        "batchNo": "PB20261118061",
+        "meatType": "冷鲜猪肉",
+        "quantity": 1.0,
+        "quarantineNo": "JX-JY-2026-A80DFD41",
+        "supplierCode": "SUP-0022"
+      }
+    },
+    {
+      "eventId": "5842b528b26f524206e64cd621d0cd99649fc73b2d9cebf37f016404c8a7d5d1",
+      "batchId": "PB20261118062",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 23:28:40",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "438d864495db0bf3825b8c8d28c8a0cae6fa9a50c640e66ce7a1b5fe674624b1",
+      "text": "2026-11-18 23:28，采购批次 PB20261118062（冷鲜猪肉，1.000 kg）建单。供应商编码 SUP-0022，检疫合格证号 JX-JY-2026-B2C8533E。",
+      "payload": {
+        "batchNo": "PB20261118062",
+        "meatType": "冷鲜猪肉",
+        "quantity": 1.0,
+        "quarantineNo": "JX-JY-2026-B2C8533E",
+        "supplierCode": "SUP-0022"
+      }
+    },
+    {
+      "eventId": "4c3a0d206b1de88b860c83e32336c26e9ff11c76bd0b9964c7f37ba2bec03f9d",
+      "batchId": "PB20261118063",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 23:28:40",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "7067eb45cca05364983281f52a43393f064885725160945a0fc0aad0330664e7",
+      "text": "2026-11-18 23:28，采购批次 PB20261118063（冷鲜猪肉，1.000 kg）建单。供应商编码 SUP-0022，检疫合格证号 JX-JY-2026-391E6A0A。",
+      "payload": {
+        "batchNo": "PB20261118063",
+        "meatType": "冷鲜猪肉",
+        "quantity": 1.0,
+        "quarantineNo": "JX-JY-2026-391E6A0A",
+        "supplierCode": "SUP-0022"
+      }
+    },
+    {
+      "eventId": "6e4aad5932935747e30827f122d730faf1d030576ef07fbcab3596684f16c17b",
+      "batchId": "PB20261118064",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 23:28:40",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "0e40ea0546f465e2d27fddf0b3fbd81d912b4519057572f06b725ac7af5aa48a",
+      "text": "2026-11-18 23:28，采购批次 PB20261118064（冷鲜猪肉，1.000 kg）建单。供应商编码 SUP-0022，检疫合格证号 JX-JY-2026-3C0B80FF。",
+      "payload": {
+        "batchNo": "PB20261118064",
+        "meatType": "冷鲜猪肉",
+        "quantity": 1.0,
+        "quarantineNo": "JX-JY-2026-3C0B80FF",
+        "supplierCode": "SUP-0022"
+      }
+    },
+    {
+      "eventId": "a423648f83855d7ca7c2e77a922a55e78b943c894ea34fd75e5d38f3ad645b6d",
+      "batchId": "PB20261118065",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 23:28:40",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "b40e20ede4f7c864ed0b7c5fb1712eed2c89a3da77d90689dbd871aa6717e3b4",
+      "text": "2026-11-18 23:28，采购批次 PB20261118065（冷鲜猪肉，1.000 kg）建单。供应商编码 SUP-0022，检疫合格证号 JX-JY-2026-6146EE6A。",
+      "payload": {
+        "batchNo": "PB20261118065",
+        "meatType": "冷鲜猪肉",
+        "quantity": 1.0,
+        "quarantineNo": "JX-JY-2026-6146EE6A",
+        "supplierCode": "SUP-0022"
+      }
+    },
+    {
+      "eventId": "dbd21c790b658131ba47144e9a777deb5c1f7b97a22c6e8c014cad331f351134",
+      "batchId": "PB20261118066",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 23:28:40",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "849e82c9ceb7d7980a1f53f5765ee9cee13ba22b893667118b2d368091962cac",
+      "text": "2026-11-18 23:28，采购批次 PB20261118066（冷鲜猪肉，1.000 kg）建单。供应商编码 SUP-0022，检疫合格证号 JX-JY-2026-C1ADE75A。",
+      "payload": {
+        "batchNo": "PB20261118066",
+        "meatType": "冷鲜猪肉",
+        "quantity": 1.0,
+        "quarantineNo": "JX-JY-2026-C1ADE75A",
+        "supplierCode": "SUP-0022"
+      }
+    },
+    {
+      "eventId": "519fd235554e35414a290e54525b65893d8dc1f523ebf7d3c5c168f2b491ba2b",
+      "batchId": "SUP-0024",
+      "eventType": "SUPPLIER_REG",
+      "bizTime": "2026-11-18 23:29:48",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "2b391d12f685e9a3719ce1945939364f4dbd629f081a6740c69334e366a61c4f",
+      "text": "2026-11-18 23:29，供应商 SUP-0024「验收测试-UNCONFIRMED-20261118-232737」完成备案。许可证号 JX40B6EC45E1，状态 ACTIVE。",
+      "payload": {
+        "name": "验收测试-UNCONFIRMED-20261118-232737",
+        "status": "ACTIVE",
+        "licenseNo": "JX40B6EC45E1",
+        "supplierCode": "SUP-0024"
+      }
+    },
+    {
+      "eventId": "d0ebdc1d267ef50f15492109850c0b8b8d4c8381e8eab07c187193c5e803fed5",
+      "batchId": "PB20261118067",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 23:29:47",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "3f025990b73b1b43dabf0c5ea8aab126f24bd0c8dadf30401cf8364f071cbffa",
+      "text": "2026-11-18 23:29，采购批次 PB20261118067（冷鲜猪肉，5.000 kg）建单。供应商编码 SUP-0024，检疫合格证号 JX-JY-2026-4C23E2B2。",
+      "payload": {
+        "batchNo": "PB20261118067",
+        "meatType": "冷鲜猪肉",
+        "quantity": 5.0,
+        "quarantineNo": "JX-JY-2026-4C23E2B2",
+        "supplierCode": "SUP-0024"
+      }
+    },
+    {
+      "eventId": "583a77a995372fc49beaccdf4c65a64cdad96a79a4f22a076eef9836478802be",
+      "batchId": "SUP-0025",
+      "eventType": "SUPPLIER_REG",
+      "bizTime": "2026-11-18 23:30:07",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "70ff3fdeb51fdb3fc0e11c45e155fe68c6b7beb3c456b341f93c124c27dbb919",
+      "text": "2026-11-18 23:30，供应商 SUP-0025「验收测试-UNREACHABLE-20261118-232737」完成备案。许可证号 JXB943B7B272，状态 ACTIVE。",
+      "payload": {
+        "name": "验收测试-UNREACHABLE-20261118-232737",
+        "status": "ACTIVE",
+        "licenseNo": "JXB943B7B272",
+        "supplierCode": "SUP-0025"
+      }
+    },
+    {
+      "eventId": "fdaa2d998e805023967c62c8d6fef0472f93229ae47cbdd7924723a358cb2d52",
+      "batchId": "PB20261118068",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 23:30:07",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "d8863c300c9814c9805d4771443c83babf5ef17181873e1153fa6fa0ea970427",
+      "text": "2026-11-18 23:30，采购批次 PB20261118068（冷鲜猪肉，6.000 kg）建单。供应商编码 SUP-0025，检疫合格证号 JX-JY-2026-CCB18247。",
+      "payload": {
+        "batchNo": "PB20261118068",
+        "meatType": "冷鲜猪肉",
+        "quantity": 6.0,
+        "quarantineNo": "JX-JY-2026-CCB18247",
+        "supplierCode": "SUP-0025"
+      }
+    },
+    {
+      "eventId": "a658703e3a6fae3a98595c5ba5b5a9dd11f56e79e91c5a1d8e4fbba7567cad5b",
+      "batchId": "SUP-0026",
+      "eventType": "SUPPLIER_REG",
+      "bizTime": "2026-11-18 23:36:05",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "be393bdaefb58091b998c21724bb9852d281d6a39951e9df1ed9a27377fdfa77",
+      "text": "2026-11-18 23:36，供应商 SUP-0026「自检供应商-1795016164」完成备案。许可证号 JX2026SMOKE，状态 ACTIVE。",
+      "payload": {
+        "name": "自检供应商-1795016164",
+        "status": "ACTIVE",
+        "licenseNo": "JX2026SMOKE",
+        "supplierCode": "SUP-0026"
+      }
+    },
+    {
+      "eventId": "d344d8459e5bc56743ca7e4f05cd9060ccf72c41e5ba7be95d5ae5b79a774b10",
+      "batchId": "PB20261118069",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 23:36:05",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "1585e44e0e4bb4c39f265d9d0149f93a71eec55c42a7d644a072ab2f77f95bc0",
+      "text": "2026-11-18 23:36，采购批次 PB20261118069（冷鲜猪肉，88.000 kg）建单。供应商编码 SUP-0026，检疫合格证号 JX-JY-2026-SMOKE6165。",
+      "payload": {
+        "batchNo": "PB20261118069",
+        "meatType": "冷鲜猪肉",
+        "quantity": 88.0,
+        "quarantineNo": "JX-JY-2026-SMOKE6165",
+        "supplierCode": "SUP-0026"
+      }
+    },
+    {
+      "eventId": "88ccb912202f22b7b5951f0c483b8cfbec71873116863c20dc5e4b92db0a5d05",
+      "batchId": "PB20261118069",
+      "eventType": "ACCEPT_RESULT",
+      "bizTime": "2026-11-18 23:36:11",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "a944c1792c7213429f85c6f93572bf05f150d0bf1fb5eca6b7c00db405805ea7",
+      "text": "2026-11-18 23:36，采购批次 PB20261118069（88.000 kg）完成入库验收。验收人 自检员，到货中心温度 3.100 ℃，索证索票齐全，检验结论：合格（PASS）。验收单号 AC20261118032。",
+      "payload": {
+        "result": "PASS",
+        "acceptNo": "AC20261118032",
+        "inspector": "自检员",
+        "temperature": 3.1,
+        "certComplete": true
+      }
+    },
+    {
+      "eventId": "4dda2eed3f284a1f135486c7f7f9e4c77444fc13a430badae6fc2ef3c7cec163",
+      "batchId": "PR20261118039",
+      "eventType": "PROCESS_CREATE",
+      "bizTime": "2026-11-18 23:36:15",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "f5fa128219e0fbcb5cb7e72d26f52ebbe90777e8fe8985c13f5b214fddc988ac",
+      "text": "2026-11-18 23:36，加工批次 PR20261118039 完成投料，共 1 个来源：PB20261118069 投入 30.000 kg。投入合计 30.000 kg，产出 28.000 kg，留样号 LY-SMOKE-001，车间 自检后厨，操作人 自检员。",
+      "payload": {
+        "sources": [
+          {
+            "usedQty": 30.0,
+            "purchaseBatchNo": "PB20261118069"
+          }
+        ],
+        "meatType": "冷鲜猪肉",
+        "operator": "自检员",
+        "workshop": "自检后厨",
+        "outputQty": 28.0,
+        "processNo": "PR20261118039",
+        "retainSampleNo": "LY-SMOKE-001"
+      }
+    },
+    {
+      "eventId": "f4135b6f82b262c462d62a5fe2f1db9df4910d9751e2495dcf0a30714e4038e0",
+      "batchId": "PB20261118070",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 23:36:15",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "35bad3010e5f2e85d8bfbacf0d0ae47f7ee33415a8ed575006d4b678ba2d9d00",
+      "text": "2026-11-18 23:36，采购批次 PB20261118070（冷鲜猪肉，50.000 kg）建单。供应商编码 SUP-0026，检疫合格证号 JX-JY-2026-SMOKE2-16175。",
+      "payload": {
+        "batchNo": "PB20261118070",
+        "meatType": "冷鲜猪肉",
+        "quantity": 50.0,
+        "quarantineNo": "JX-JY-2026-SMOKE2-16175",
+        "supplierCode": "SUP-0026"
+      }
+    },
+    {
+      "eventId": "d996591850366ed91e7e622090d3fff6f45ec47d48a4573a45eef604dbcc8762",
+      "batchId": "PB20261118070",
+      "eventType": "ACCEPT_RESULT",
+      "bizTime": "2026-11-18 23:36:16",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "8cbcbeca693c7cc79068f9ad43e2a5e1da0a1cb48f0de24f84825c9abb87f110",
+      "text": "2026-11-18 23:36，采购批次 PB20261118070（50.000 kg）完成入库验收。验收人 自检员，到货中心温度 3.100 ℃，索证索票齐全，检验结论：合格（PASS）。验收单号 AC20261118033。",
+      "payload": {
+        "result": "PASS",
+        "acceptNo": "AC20261118033",
+        "inspector": "自检员",
+        "temperature": 3.1,
+        "certComplete": true
+      }
+    },
+    {
+      "eventId": "cc570f00dec41b31b43ac788bb7ecd4eb87f580b6c590f1c99a450adb3f88119",
+      "batchId": "PR20261118040",
+      "eventType": "PROCESS_CREATE",
+      "bizTime": "2026-11-18 23:36:16",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "dbd3c55a5fa9698c1fee048e4bf1f3a403802d963fceb8e04f155b47280f1d72",
+      "text": "2026-11-18 23:36，加工批次 PR20261118040 完成投料，共 2 个来源：PB20261118069 投入 20.000 kg；PB20261118070 投入 20.000 kg。投入合计 40.000 kg，产出 40.000 kg，留样号 LY-SMOKE-002，车间 自检后厨，操作人 自检员。",
+      "payload": {
+        "sources": [
+          {
+            "usedQty": 20.0,
+            "purchaseBatchNo": "PB20261118069"
+          },
+          {
+            "usedQty": 20.0,
+            "purchaseBatchNo": "PB20261118070"
+          }
+        ],
+        "meatType": "冷鲜猪肉",
+        "operator": "自检员",
+        "workshop": "自检后厨",
+        "outputQty": 40.0,
+        "processNo": "PR20261118040",
+        "retainSampleNo": "LY-SMOKE-002"
+      }
+    },
+    {
+      "eventId": "a40e08519baa2d902cc5faac1e3a40a97b143160358b86771f023adb529a38d2",
+      "batchId": "PB20261118071",
+      "eventType": "PURCHASE_CREATE",
+      "bizTime": "2026-11-18 23:36:16",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "0b6d6138a0976df1c6bdb133f3ff1a180e6cbbdb440e7296e22cabdb6b1ddf76",
+      "text": "2026-11-18 23:36，采购批次 PB20261118071（冷鲜猪肉，40.000 kg）建单。供应商编码 SUP-0026，检疫合格证号 JX-JY-2026-SMOKE3-16176。",
+      "payload": {
+        "batchNo": "PB20261118071",
+        "meatType": "冷鲜猪肉",
+        "quantity": 40.0,
+        "quarantineNo": "JX-JY-2026-SMOKE3-16176",
+        "supplierCode": "SUP-0026"
+      }
+    },
+    {
+      "eventId": "6d8deae13b499baae694b00ac1909dacd6e65ca64eb8447099e9e9a39c8a6d82",
+      "batchId": "PR20261118039",
+      "eventType": "SALE_CREATE",
+      "bizTime": "2026-11-18 23:36:26",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "c61ed5be0f398b6cd000fb33757971af875472f27fac89480054abd7cdbbc600",
+      "text": "2026-11-18 23:36，加工批次 PR20261118039 销售 10.000 kg 至「一食堂 3 号窗口」，单价 38.000 元/kg，销售单号 SL20261118013，操作人 自检员。",
+      "payload": {
+        "saleNo": "SL20261118013",
+        "channel": "一食堂 3 号窗口",
+        "operator": "自检员",
+        "quantity": 10.0,
+        "processNo": "PR20261118039",
+        "unitPrice": 38.0
+      }
+    },
+    {
+      "eventId": "1985e8704bc198429cb23c265030b518ead3e5e6129deb296a6c2789fbfd5e29",
+      "batchId": "PR20261118039",
+      "eventType": "SALE_CREATE",
+      "bizTime": "2026-11-18 23:36:27",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "5ec0e5b4992f66ab77bceb246c60120c271590d39228b1ee9d44a36e6cd1393d",
+      "text": "2026-11-18 23:36，加工批次 PR20261118039 销售 1.000 kg 至「一食堂 3 号窗口」，单价 38.000 元/kg，销售单号 SL20261118014，操作人 未记录。",
+      "payload": {
+        "saleNo": "SL20261118014",
+        "channel": "一食堂 3 号窗口",
+        "quantity": 1.0,
+        "processNo": "PR20261118039",
+        "unitPrice": 38.0
+      }
+    },
+    {
+      "eventId": "25324194bffd3c9a23897af96cf50b4ff2ee35537d2433481c2e49cd4188a065",
+      "batchId": "PR20261118039",
+      "eventType": "SALE_CREATE",
+      "bizTime": "2026-11-18 23:36:27",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "651ff5e08d0203da09397d514668bb7b8145355b081453e7c41a8bd75ef26906",
+      "text": "2026-11-18 23:36，加工批次 PR20261118039 销售 17.000 kg 至「一食堂 3 号窗口」，单价 38.000 元/kg，销售单号 SL20261118015，操作人 未记录。",
+      "payload": {
+        "saleNo": "SL20261118015",
+        "channel": "一食堂 3 号窗口",
+        "quantity": 17.0,
+        "processNo": "PR20261118039",
+        "unitPrice": 38.0
+      }
+    },
+    {
+      "eventId": "d70131f52a25d51b93f6d3f5d316c534def5ff188d3f4558ea183e94ac28ca58",
+      "batchId": "PR20261118039",
+      "eventType": "RECALL",
+      "bizTime": "2026-11-18 23:36:26",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "7328620eb8896131e39e47b7a087860a7b09886559353d7473c7adb81e876cae",
+      "text": "2026-11-18 23:36，加工批次 PR20261118039 发起召回，原因：同批次抽检发现兽药残留超标（自检模拟）。波及 3.000 笔销售，需追回 28.000 kg，召回单号 RC20261118003，操作人 自检员。",
+      "payload": {
+        "scope": "自检当日全部销售记录",
+        "reason": "同批次抽检发现兽药残留超标（自检模拟）",
+        "operator": "自检员",
+        "recallNo": "RC20261118003",
+        "processNo": "PR20261118039",
+        "recalledQty": 28.0,
+        "affectedSales": 3.0
+      }
+    },
+    {
+      "eventId": "2faca8b7e4fcc5bff7c7dadb55ad1686c49778158d738814abcf20633d37fb9f",
+      "batchId": "PB20261118069",
+      "eventType": "COLD_CHAIN",
+      "bizTime": "2026-11-18 23:36:27",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "ff92a2c4c23ddfab196898ce0fa63624fa0f994148b2e7477d239f8a7b286677",
+      "text": "2026-11-18 23:36，批次 PB20261118069 冷链温控登记：实测 3.000 ℃，阈值 4.000 ℃，未超限。运输段 WAREHOUSE_TO_CANTEEN，运输单 TR-SMOKE-001。",
+      "payload": {
+        "logNo": "CC20261118009",
+        "segment": "WAREHOUSE_TO_CANTEEN",
+        "exceeded": false,
+        "threshold": 4.0,
+        "temperature": 3.0,
+        "transportNo": "TR-SMOKE-001"
+      }
+    },
+    {
+      "eventId": "1b1b9c140ce1928bca973ff4b37ad12fc51e350b3fee2dde53c4428e927cbd8b",
+      "batchId": "PB20261118069",
+      "eventType": "COLD_CHAIN",
+      "bizTime": "2026-11-18 23:36:27",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "23374d5e42a5d061870e561783bc871d0ad12cf03865930ba408c720e9f9ec78",
+      "text": "2026-11-18 23:36，批次 PB20261118069 冷链温控登记：实测 6.500 ℃，阈值 4.000 ℃，判定超限。运输段 ORIGIN_TO_WAREHOUSE，运输单 TR-SMOKE-002。",
+      "payload": {
+        "logNo": "CC20261118010",
+        "segment": "ORIGIN_TO_WAREHOUSE",
+        "exceeded": true,
+        "threshold": 4.0,
+        "abnormalNo": "AB20261118006",
+        "temperature": 6.5,
+        "transportNo": "TR-SMOKE-002"
+      }
+    },
+    {
+      "eventId": "45c67d8503cdd755fa72625c33721c27ee0335b638dc0c86c5671b09db12a520",
+      "batchId": "PR20261118041",
+      "eventType": "PROCESS_CREATE",
+      "bizTime": "2026-11-18 23:36:27",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "76554a7c93c7ec7390af6449ec71b0d6ac136034b27840e21f020b3259780953",
+      "text": "2026-11-18 23:36，加工批次 PR20261118041 完成投料，共 1 个来源：PB20261118070 投入 5.000 kg。投入合计 5.000 kg，产出 4.000 kg，留样号 未记录，车间 自检后厨，操作人 自检员。",
+      "payload": {
+        "sources": [
+          {
+            "usedQty": 5.0,
+            "purchaseBatchNo": "PB20261118070"
+          }
+        ],
+        "meatType": "冷鲜猪肉",
+        "operator": "自检员",
+        "workshop": "自检后厨",
+        "outputQty": 4.0,
+        "processNo": "PR20261118041"
+      }
+    },
+    {
+      "eventId": "4026ae85b96fed242d7fe45e53dda3cc07b265b1a8410128d5adc6202d85f956",
+      "batchId": "PR20261118041",
+      "eventType": "DISPOSAL",
+      "bizTime": "2026-11-18 23:36:27",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "5aa2da505c21aeea26839d1bd0a9a7f3007694464dd6b2f96574801a95bf6984",
+      "text": "2026-11-18 23:36，批次 PR20261118041 异常处置（阶段 REPORTED）：抽检发现色泽异常，暂停销售待复检。类型 SENSORY_ABNORMAL，等级 HIGH，处理人 自检员，异常单号 AB20261118007。",
+      "payload": {
+        "level": "HIGH",
+        "stage": "REPORTED",
+        "handler": "自检员",
+        "abnormalNo": "AB20261118007",
+        "description": "抽检发现色泽异常，暂停销售待复检",
+        "abnormalType": "SENSORY_ABNORMAL"
+      }
+    },
+    {
+      "eventId": "56c17a9c63599ab98d53b8414691e36bbf7de28fc36d2a68e9a085aeaaa9e223",
+      "batchId": "PR20261118041",
+      "eventType": "DISPOSAL",
+      "bizTime": "2026-11-18 23:36:27",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "895d2d79a9a0d4ae2ab7989a84da17549a2b8c8d852d7c5d41f7f17f33167fef",
+      "text": "2026-11-18 23:36，批次 PR20261118041 异常处置（阶段 CLOSED）：未记录。类型 SENSORY_ABNORMAL，等级 未记录，处理人 自检员，异常单号 AB20261118007。",
+      "payload": {
+        "stage": "CLOSED",
+        "action": "暂停销售、封存留样并送第三方复检",
+        "handler": "自检员",
+        "resumed": true,
+        "abnormalNo": "AB20261118007",
+        "conclusion": "复检合格，恢复销售",
+        "abnormalType": "SENSORY_ABNORMAL"
+      }
+    },
+    {
+      "eventId": "22a42ab7468219a322bd8f93ece602ea157da77d35fbc85dd14222458efd9e08",
+      "batchId": "PR20261118041",
+      "eventType": "SALE_CREATE",
+      "bizTime": "2026-11-18 23:36:27",
+      "verifyStatus": "MATCHED",
+      "dataDigest": "e26a4b48a4411e911c5d964ea04c1dc9e45b90f36cc8c491f6db159e055432d5",
+      "text": "2026-11-18 23:36，加工批次 PR20261118041 销售 1.000 kg 至「二食堂 1 号窗口」，单价  元/kg，销售单号 SL20261118016，操作人 未记录。",
+      "payload": {
+        "saleNo": "SL20261118016",
+        "channel": "二食堂 1 号窗口",
+        "quantity": 1.0,
+        "processNo": "PR20261118041"
+      }
+    }
+  ]
+}

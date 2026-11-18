@@ -1,0 +1,20 @@
+{"id":"Q01","question":"PB20261118001 这批猪肉的检验结论是什么？","expect":"answer","expectBatch":"PB20261118001","keywords":["合格"]}
+{"id":"Q02","question":"PB20261118001 的验收人是谁？","expect":"answer","expectBatch":"PB20261118001","keywords":["李四"]}
+{"id":"Q03","question":"PB20261118001 到货中心温度是多少？","expect":"answer","expectBatch":"PB20261118001","keywords":["3.500"]}
+{"id":"Q04","question":"PB20261118035 的检疫合格证号是什么？","expect":"answer","expectBatch":"PB20261118035","keywords":["JX-JY-2026-SMOKE1714"]}
+{"id":"Q05","question":"PR20261118033 投入了多少公斤，产出多少？","expect":"answer","expectBatch":"PR20261118033","keywords":["30.000","28.000"]}
+{"id":"Q06","question":"PR20261118033 的留样号是什么？","expect":"answer","expectBatch":"PR20261118033","keywords":["LY-SMOKE-001"]}
+{"id":"Q07","question":"PR20261118036 销售到了哪个窗口？","expect":"answer","expectBatch":"PR20261118036","keywords":["一食堂 3 号窗口"]}
+{"id":"Q08","question":"PB20261118035 的冷链温控登记结果是什么？","expect":"answer","expectBatch":"PB20261118035","keywords":["冷链温控登记"]}
+{"id":"Q09","question":"哪些批次的冷链温度判定超限？","expect":"answer","keywords":["超限"]}
+{"id":"Q10","question":"哪些批次发起过召回？","expect":"answer","keywords":["召回"]}
+{"id":"Q11","question":"有验收不合格的批次吗？","expect":"answer","keywords":["不合格"]}
+{"id":"Q12","question":"SUP-0004 这家供应商叫什么名字？","expect":"answer","expectBatch":"SUP-0004","keywords":["南昌鑫旺肉业"]}
+{"id":"Q13","question":"SUP-0004 的许可证号是多少？","expect":"answer","expectBatch":"SUP-0004","keywords":["JX20260099"]}
+{"id":"Q14","question":"SUP-0004 的供应商状态是什么？","expect":"answer","expectBatch":"SUP-0004","keywords":["ACTIVE"]}
+{"id":"Q15","question":"召回之后还能继续销售吗？","expect":"answer","keywords":["禁止继续销售"]}
+{"id":"Q16","question":"冷鲜猪肉的冷链温度超过多少度算超限？","expect":"answer","keywords":["4.00"]}
+{"id":"Q17","question":"PB29991111001 的检疫证号是多少？","expect":"refuse"}
+{"id":"Q18","question":"这批肉吃了安全吗？","expect":"refuse"}
+{"id":"Q19","question":"明天该进多少肉？","expect":"refuse"}
+{"id":"Q20","question":"帮我写一段项目总结","expect":"refuse"}
