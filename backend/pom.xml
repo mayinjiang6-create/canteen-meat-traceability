@@ -87,6 +87,19 @@
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+            <!-- 迁移脚本的唯一来源在仓库根 db/migration，打包时复制进 classpath -->
+            <resource>
+                <directory>${project.basedir}/../db/migration</directory>
+                <targetPath>db/migration</targetPath>
+                <includes>
+                    <include>*.sql</include>
+                </includes>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

@@ -1,0 +1,24 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: meat-trace
+  profiles:
+    active: dev
+  jackson:
+    time-zone: Asia/Shanghai
+    date-format: yyyy-MM-dd'T'HH:mm:ssXXX
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+  global-config:
+    banner: false
+
+logging:
+  level:
+    root: INFO
+    com.jxgc.meattrace: DEBUG
+  pattern:
+    console: "%d{HH:mm:ss.SSS} %-5level [%X{traceId}] %logger{30} - %msg%n"
