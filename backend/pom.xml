@@ -84,6 +84,13 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <!-- 编译期生成 getter/setter：MyBatis-Plus 实体需要可变 POJO -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
     </dependencies>
 
     <build>
@@ -97,6 +104,14 @@
                 <targetPath>db/migration</targetPath>
                 <includes>
                     <include>*.sql</include>
+                </includes>
+            </resource>
+            <!-- 合约 ABI 进 classpath：写入时 handleWithSign 必须带上完整 ABI -->
+            <resource>
+                <directory>${project.basedir}/../contract/build</directory>
+                <targetPath>contract</targetPath>
+                <includes>
+                    <include>TraceRegistry.abi.json</include>
                 </includes>
             </resource>
         </resources>

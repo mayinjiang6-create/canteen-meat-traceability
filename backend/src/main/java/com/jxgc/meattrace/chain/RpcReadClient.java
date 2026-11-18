@@ -74,11 +74,32 @@ public class RpcReadClient {
         return brief;
     }
 
-    /** 读一条事件；链上不存在时返回 {@link Optional#empty()}。 */
+    /**
+     * 读一条事件；链上不存在时返回 {@link Optional#empty()}。
+     *
+     * <p><b>异常语义</b>：链不可达或返回数据畸形时抛 {@link ChainUnavailableException}，
+     * 调用方据此判定 {@code UNREACHABLE}；只有正常响应且 {@code exists=false} 才是
+     * {@code UNCONFIRMED}。两者混淆会把"链挂了"误读成"数据造假"，是业务红线。
+     */
     public Optional<ChainEvent> queryEvent(String contractAddress, String encodedData) {
         String hex = ethCall(contractAddress, encodedData);
+        byte[] raw;
+        try {
+            raw = HexFormat.of().parseHex(strip0x(hex));
+        } catch (IllegalArgumentException e) {
+            throw new ChainUnavailableException("链上返回不是合法 hex：" + hex, e);
+        }
+        if (raw.length < 32 * 7) {
+            throw new ChainUnavailableException(
+                    "链上返回数据长度异常：" + raw.length + " 字节（query 应返回 7 个 32 字节字）");
+        }
         ChainEvent event = decodeQueryResult(hex);
         return event.exists() ? Optional.of(event) : Optional.empty();
+    }
+
+    /** 按 eventId 读一条事件，内部用 {@link ChainCodec} 拼 calldata。 */
+    public Optional<ChainEvent> queryEventByEventId(String contractAddress, String eventId) {
+        return queryEvent(contractAddress, ChainCodec.queryCalldata(eventId));
     }
 
     /**

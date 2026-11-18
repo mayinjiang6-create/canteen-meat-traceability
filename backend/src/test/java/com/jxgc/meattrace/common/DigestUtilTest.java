@@ -1,6 +1,8 @@
 package com.jxgc.meattrace.common;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
@@ -82,5 +84,14 @@ class DigestUtilTest {
         String b = DigestUtil.sha256Hex(DigestUtil.canonicalText(
                 EVENT_ID, "PB20261118001", "ACCEPT_RESULT", t, new BigDecimal("120.000"), "KG", payload()));
         assertEquals(a, b, "数量写 120 与 120.000、单位写 kg 与 KG，摘要必须一致");
+    }
+
+    @Test
+    @DisplayName("newEventId 必须是 32 字节 → 64 位小写 hex")
+    void newEventIdFormat() {
+        String id = DigestUtil.newEventId();
+        assertEquals(64, id.length(), "必须是 64 位 hex，才能对齐合约 bytes32 与 CHAR(64)");
+        assertTrue(id.matches("[0-9a-f]{64}"), "只能是小写 hex");
+        assertNotEquals(id, DigestUtil.newEventId(), "两次生成不能相同");
     }
 }

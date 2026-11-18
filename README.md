@@ -97,23 +97,23 @@ payload:{"acceptNo":"AC20261118001","certComplete":true,…}
 
 | 模块 | 能力 | 状态 |
 |---|---|---|
-| 供应商管理 | 备案、资质、状态（正常/暂停/黑名单） | 设计完成 |
-| 采购批次 | 一批一档，检疫证、屠宰批次、到货温度 | 设计完成 |
-| 入库验收 | 感官 / 票证 / 温度 / 留样，判定合格与否 | 设计完成 |
-| 冷链登记 | 运输温控，超阈值触发异常事件 | 设计完成 |
-| 加工投料 | **多来源投料**，数量约束与并发安全 | 设计完成 |
-| 销售登记 | 按加工批次销售，累计受产出约束 | 设计完成 |
-| 异常处置 / 召回 | 召回后销售记录批量置 `RECALLED` | 设计完成 |
-| 存证管理 | 任务状态、手动重试（先查链再决定） | 设计完成 |
-| 公开溯源 | 扫码 / 输码，时间线 + 四类核验 | 设计完成 |
-| 溯源问答 | RAG，答案强制回引事件 ID | 设计完成 |
+| 供应商管理 | 备案、资质、状态（正常/暂停/黑名单） | ✅ 已实现 |
+| 采购批次 | 一批一档，检疫证、屠宰批次、到货温度 | ✅ 已实现 |
+| 入库验收 | 感官 / 票证 / 温度 / 留样，判定合格与否 | ✅ 已实现 |
+| 存证管理 | 任务状态、手动重试（先查链再决定） | ✅ 已实现 |
+| 公开溯源 | 扫码 / 输码，时间线 + 四类核验 | ✅ 接口就绪，页面待做 |
+| 冷链登记 | 运输温控，超阈值触发异常事件 | ⬜ 表已建，接口待做 |
+| 加工投料 | **多来源投料**，数量约束与并发安全 | ⬜ 表已建，接口待做 |
+| 销售登记 | 按加工批次销售，累计受产出约束 | ⬜ 表已建，接口待做 |
+| 异常处置 / 召回 | 召回后销售记录批量置 `RECALLED` | ⬜ 表已建，接口待做 |
+| 溯源问答 | RAG，答案强制回引事件 ID | ⬜ 表已建，待做 |
 
 ---
 
 ## 技术栈
 
 **前端**：Vue 3 · Vite · Element Plus · Pinia · Axios
-**后端**：Java 21 · Spring Boot 3.3 · MyBatis-Plus · HikariCP · Flyway
+**后端**：Java 21 · Spring Boot 3.3 · MyBatis-Plus · HikariCP · Flyway · Lombok
 **存储**：MySQL 8.0 ·（文件凭证存本地磁盘）
 **区块链**：FISCO BCOS 3.17（Air 四节点，`group0`）· Solidity 0.8.11 · WeBASE 3.1.1（Front `/trans/handleWithSign` + Sign 外部签名）
 **AI**：RAG（embedding + 内存余弦检索 + 引用回链），可一键关闭
@@ -129,23 +129,71 @@ payload:{"acceptNo":"AC20261118001","certComplete":true,…}
 ```bash
 # 1. 启动联盟链（虚拟机内，四节点）
 bash nodes/127.0.0.1/start_all.sh
-docker start webase-front
 
-# 2. 建库
-mysql -u root -p -e "CREATE DATABASE meat_trace DEFAULT CHARSET utf8mb4;"
+# 2. 确认 WeBASE 在跑（压缩包部署，不是 Docker）
+curl -s http://192.168.239.130:5002/WeBASE-Front/group0/web3/blockNumber
+curl -s -X POST http://192.168.239.130:8545 -H "Content-Type: application/json" \
+     -d '{"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":1}'
 
-# 3. 后端（Flyway 自动建表 + 导入演示数据）
+# 3. 建库（Flyway 会自动建表并导入演示数据）
+mysql -u root -p --default-character-set=utf8mb4 \
+  -e "CREATE DATABASE meat_trace DEFAULT CHARSET utf8mb4;"
+
+# 4. 后端
 cd backend && mvn package -DskipTests
 java -jar target/meat-trace-0.1.0.jar --spring.profiles.active=dev
 
-# 4. 前端
-cd frontend && npm install && npm run dev
+# 5. 前端（阶段 C 待做）
 ```
 
-打开 `http://localhost:5173`，账号 `admin / Admin@123`。公开溯源页免登录：`/trace/PR20261118001`。
+后端起来后是 `http://localhost:8080`，账号 `admin / Admin@123`。
+
+**前端页面还没做**，现在可以直接用接口验证：
+
+```bash
+TOKEN=$(curl -s -X POST http://localhost:8080/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"username":"admin","password":"Admin@123"}' | python -c "import sys,json;print(json.load(sys.stdin)['data']['token'])")
+
+# 公开溯源（免登录，扫码看到的就是这个）
+curl -s "http://localhost:8080/api/public/trace/PB20261118001" | python -m json.tool
+curl -s "http://localhost:8080/api/public/trace/PR20261118001" | python -m json.tool
+```
 
 > **不要用 `mvn spring-boot:run`**：仓库路径含中文时 classpath 解析会抛 `ClassNotFoundException`，一律用 `mvn package` + `java -jar`。
-> 演示数据已内置：3 家供应商、4 个采购批次、3 个加工批次（含一条多来源投料）、4 笔销售、1 条冷链超限拒收闭环。其中 `PB20261118001` 的验收事件**链上真实存在**，导入后公开溯源页直接显示「记录已核验」。
+> 演示数据已内置：3 家供应商、4 个采购批次、3 个加工批次（含一条多来源投料）、4 笔销售、1 条冷链超限拒收闭环。其中 `PB20261118001` 的验收事件**链上真实存在**，导入后公开溯源直接返回 `MATCHED`。
+
+---
+
+## 一条命令自检
+
+```bash
+python scripts/smoke_test.py
+```
+
+它会自己起一个实例（18099 端口），跑完 27 项断言后关掉，约 20 秒。覆盖：
+
+```
+登录 → 错误口令被拒 → 建供应商 → 建采购批次 → 同 requestId 重放（幂等）
+→ 等上链确认 → 验收登记 → 重复验收被拒 → 公开溯源 2 条 MATCHED
+→ 仅核验接口 → 演示批次核验 → 不存在批次返回 40401
+```
+
+链没开时加 `--skip-chain` 只验业务；已有实例在跑时用 `--base-url http://127.0.0.1:8080` 复用。
+
+**跑通它 = 业务链路、摘要规范、上链、幂等、四类核验同时都是好的。** 任何一处坏了都会红。
+
+## 单元测试
+
+```bash
+cd backend && mvn test -DforkCount=0
+```
+
+必须加 `-DforkCount=0`：仓库路径含中文时 surefire 的 fork 进程起不来
+（`The forked VM terminated without properly saying goodbye`）。
+
+当前 20 项：`VerifyStatusResolverTest`（四类状态判定，7）、`ChainCodecTest`（ABI 编码，5）、
+`DigestUtilTest`（含金标准向量与 eventId 格式，5）、`RpcReadClientChainTest`（连真链，3）。
 
 完整步骤与排障见 [`docs/product/03-部署演示指南.md`](docs/product/03-部署演示指南.md)。
 
@@ -199,9 +247,13 @@ cd frontend && npm install && npm run dev
 
 ## 测试
 
-30 项功能用例，覆盖正常链路、多来源、数量不足、重复请求、验收不合格、未到货销售、超量、冷链异常、召回、四类核验与幂等。
+**已有**：20 项单元测试（四类状态判定 7 项、ABI 编码 5 项、摘要金标准 5 项、连真链读路径 3 项）
++ 27 项全链路回归断言（`scripts/smoke_test.py`）。
 
-性能采样：公开查询与批次详情各 20 次，报告均值与最大值，并注明是否包含链上查询。原始数据见 [`docs/tech/08-测试记录.md`](docs/tech/08-测试记录.md)。
+**待做**：`TECH-07` 里的 30 条功能用例逐条执行并回填 `TECH-08`，以及公开查询与批次详情各 20 次的性能采样。
+后者要注明是否包含链上查询——不含链的毫秒级和不含链的几百毫秒是两个量级的结论。
+
+性能约数（本机实测）：公开溯源 2 条事件核验约 40ms（含 2 次 `eth_call`）；链不可达时因熔断只超时一次。
 
 ---
 
@@ -219,11 +271,11 @@ cd frontend && npm install && npm run dev
 
 - [x] 设计基线冻结（数据库 / 接口 / 合约 / 状态机）
 - [x] P0 链环境打通（四节点 + WeBASE-Front）—— 实测记录见 [TECH-10](docs/tech/10-链环境实测记录.md)
-- [ ] P1 存证闭环 —— 读路径 `RpcReadClient` 已通并有集成测试；写路径已验证但尚未接进 Java
-- [ ] P2 业务域完整（15 条业务规则）
-- [ ] P3 前后端页面 + 公开溯源页
+- [x] P1 存证闭环 —— 写入走 `ChainWriteClient` + `EvidenceWorker`，真实 txHash 落库；读走节点 `eth_call`
+- [ ] P2 业务域完整（15 条业务规则）—— 供应商 / 采购 / 验收已完成，加工投料、销售、召回、冷链待做
+- [ ] P3 前端页面 + 公开溯源页 —— **接口已就绪**（`/api/public/trace/{batchNo}` 四类核验可用），页面待做
 - [ ] P3.5 问答模块
-- [ ] P4 30 项测试 + 性能采样
+- [ ] P4 30 项测试 + 性能采样 —— 已有 20 项单测 + 27 项全链路回归
 - [ ] P5 论文初稿
 
 ---

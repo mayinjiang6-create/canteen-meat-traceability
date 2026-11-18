@@ -16,6 +16,11 @@ spring:
     # 演示环境务必 false：校验失败时宁可启动失败，也不清库
     clean-on-validation-error: false
 
+jwt:
+  # 生产环境用环境变量覆盖；HS256 要求至少 32 字节
+  secret: ${JWT_SECRET:meat-trace-demo-secret-please-override-in-env-2026}
+  expire-hours: 12
+
 chain:
   webase:
     base-url: http://192.168.239.130:5002/WeBASE-Front
@@ -24,7 +29,8 @@ chain:
     sign-user-id: meattraceadmin
     user-address: "0x0bd53242ca7ee7fb0ce57a3cb296b6d4b237dbe8"
     contract-name: TraceRegistry
-    contract-path: trace
+    # 实测必须传空串（scripts/chain_tools.py 验证过），传 "trace" 会找不到合约
+    contract-path: ""
     contract-address: "0xd24180cc0fef2f3e545de4f9aafc09345cd08903"
     connect-timeout-ms: 3000
     read-timeout-ms: 8000
@@ -32,9 +38,14 @@ chain:
     url: http://192.168.239.130:8545
     timeout-ms: 5000
   evidence:
-    worker-enabled: false        # 链未就绪时先关，避免无谓重试
+    worker-enabled: true
     poll-interval-ms: 2000
+    batch-size: 5
     max-retry: 5
+    # 指数退避：1s / 5s / 30s / 300s，超出取最后一位
+    retry-backoff-ms: 1000,5000,30000,300000
+    # 卡在 SUBMITTED 超过该时长判定为"结果不明"，先查链再决定是否重发（BR-14）
+    stuck-timeout-ms: 60000
 
 trace:
   cold-chain:

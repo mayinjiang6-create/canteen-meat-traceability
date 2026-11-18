@@ -73,9 +73,15 @@ public final class DigestUtil {
         }
     }
 
-    /** 生成 32 位 hex 事件标识。 */
+    /**
+     * 生成事件标识：32 字节 → 64 位小写 hex。
+     *
+     * <p>必须是 32 字节，三处对齐：合约 {@code append(bytes32)}、
+     * {@code event_snapshot.event_id CHAR(64)}、金标准向量 {@code 6f1c2b9a…0718}。
+     * （TECH-04 中"32 位 hex"是"32 字节"的措辞歧义，以金标准为准。）
+     */
     public static String newEventId() {
-        byte[] bytes = new byte[16];
+        byte[] bytes = new byte[32];
         RANDOM.nextBytes(bytes);
         return HexFormat.of().formatHex(bytes);
     }
