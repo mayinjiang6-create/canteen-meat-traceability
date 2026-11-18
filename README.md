@@ -135,13 +135,17 @@ docker start webase-front
 mysql -u root -p -e "CREATE DATABASE meat_trace DEFAULT CHARSET utf8mb4;"
 
 # 3. 后端（Flyway 自动建表 + 导入演示数据）
-cd backend && mvn spring-boot:run -Dspring-boot.run.profiles=dev
+cd backend && mvn package -DskipTests
+java -jar target/meat-trace-0.1.0.jar --spring.profiles.active=dev
 
 # 4. 前端
 cd frontend && npm install && npm run dev
 ```
 
 打开 `http://localhost:5173`，账号 `admin / Admin@123`。公开溯源页免登录：`/trace/PR20261118001`。
+
+> **不要用 `mvn spring-boot:run`**：仓库路径含中文时 classpath 解析会抛 `ClassNotFoundException`，一律用 `mvn package` + `java -jar`。
+> 演示数据已内置：3 家供应商、4 个采购批次、3 个加工批次（含一条多来源投料）、4 笔销售、1 条冷链超限拒收闭环。其中 `PB20261118001` 的验收事件**链上真实存在**，导入后公开溯源页直接显示「记录已核验」。
 
 完整步骤与排障见 [`docs/product/03-部署演示指南.md`](docs/product/03-部署演示指南.md)。
 
@@ -189,6 +193,7 @@ cd frontend && npm install && npm run dev
 | [测试记录](docs/tech/08-测试记录.md) | 执行环境、结果汇总、20 次耗时采样 |
 | [AI 模块设计](docs/tech/09-AI模块设计.md) | 知识库构建、检索、Prompt、引用回链、评测 |
 | [链环境实测记录](docs/tech/10-链环境实测记录.md) | P0 环境体检、真实上链证据、已发现的接口缺陷 |
+| [落地实施计划](docs/tech/11-落地实施计划.md) | 现状盘点与缺口、GitHub 可复用资产、8 周排期、关键决策点 |
 
 ---
 
@@ -213,8 +218,8 @@ cd frontend && npm install && npm run dev
 ## 路线图
 
 - [x] 设计基线冻结（数据库 / 接口 / 合约 / 状态机）
-- [ ] P0 链环境打通（四节点 + WeBASE-Front）
-- [ ] P1 存证闭环（真实 txHash 落库、幂等验证）
+- [x] P0 链环境打通（四节点 + WeBASE-Front）—— 实测记录见 [TECH-10](docs/tech/10-链环境实测记录.md)
+- [ ] P1 存证闭环 —— 读路径 `RpcReadClient` 已通并有集成测试；写路径已验证但尚未接进 Java
 - [ ] P2 业务域完整（15 条业务规则）
 - [ ] P3 前后端页面 + 公开溯源页
 - [ ] P3.5 问答模块

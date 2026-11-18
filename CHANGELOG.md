@@ -6,9 +6,32 @@
 ## [Unreleased]
 
 ### 计划中
-- 联盟链存证通道联调（WeBASE-Front）
+- 存证写路径接进 Java（`ChainWriteClient`，目前仅在 `scripts/chain_tools.py` 中验证）
+- 业务域 11 个模块的 Entity / Mapper / Service / Controller
 - 公开溯源页四类核验状态
 - 溯源问答模块（RAG）
+
+## [0.2.0] - 2026-11-18
+
+### 新增
+- **`db/migration/V2__missing_tables.sql`**：补齐设计文档承诺但 V1 缺失的 4 张表
+  - `cold_chain_log` 冷链温控记录（对应事件类型 `COLD_CHAIN`，支持多运输段）
+  - `abnormal_event` 异常事件与处置（对应 `DISPOSAL`，采购/加工批次二选一挂靠）
+  - `recall_record` 召回记录（对应 `RECALL`，联动销售记录置 `RECALLED`）
+  - `kb_chunk` 知识库分块（RAG，向量存 JSON，供 Java 内存余弦检索）
+- **`db/migration/V3__demo_data.sql`**：一整套自洽演示数据
+  - 3 家供应商（含 1 家停用）、4 个账号（admin / inspector01 / supplier01 / viewer01）
+  - 4 个采购批次、3 个加工批次、4 笔销售、4 条冷链记录、1 条冷链超限异常闭环
+  - 刻意埋了三个演示点：**多来源投料**（PR20261118003 同时消耗两个采购批次）、**冷链超限拒收**、**数量严格守恒**
+- **`docs/tech/11-落地实施计划.md`**：现状盘点、8 个缺口、GitHub 可复用资产调研、8 周排期（A–E 五阶段）、关键决策点与风险对策
+
+### 变更
+- `README.md`：路线图修正 P0 状态（链环境已实际完成），补 TECH-11 索引
+- `CHANGELOG.md`：修正 0.1.0 中「V2 演示数据 / V3 AI 扩展」的规划描述，实际为 V2 补表、V3 演示数据
+
+### 说明
+- 演示数据中 `PB20261118001` 的验收事件**链上真实存在**（txHash `0xcf8c6e6f…b95a`，block 5）。其规范串 294 字节、摘要 `16decfa5…70bf` 与 `DigestUtilTest` 金标准逐字节一致，因此数据导入后公开溯源页可直接显示「记录已核验 MATCHED」，无需等待程序上链
+- 其余业务数据只写业务表、不预置事件快照——快照应由程序运行时生成并上链，避免"造好的假数据"冒充系统能力
 
 ## [0.1.0] - 2026-11-18
 
