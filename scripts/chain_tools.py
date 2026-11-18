@@ -8,9 +8,11 @@
     python scripts/chain_tools.py deploy
     python scripts/chain_tools.py append <eventId> <batchId> <eventType> <bizTime> <digest>
     python scripts/chain_tools.py query <eventId>
+    python scripts/chain_tools.py receipt <txHash>
 
 环境变量：
     WEBASE_URL     默认 http://192.168.239.130:5002/WeBASE-Front
+    RPC_URL        默认 http://192.168.239.130:8545（节点标准 JSON-RPC，用于只读查询）
     GROUP_ID       默认 group0（FISCO BCOS 3.x 用字符串组名）
     SIGN_USER_ID   默认 meattraceadmin
 """
@@ -28,6 +30,7 @@ WEBASE_URL = os.environ.get("WEBASE_URL", "http://192.168.239.130:5002/WeBASE-Fr
 GROUP_ID = os.environ.get("GROUP_ID", "group0")
 SIGN_USER = os.environ.get("SIGN_USER_ID", "meattraceadmin")
 USER_ADDR = os.environ.get("USER_ADDR", "0x0bd53242ca7ee7fb0ce57a3cb296b6d4b237dbe8")
+RPC_URL = os.environ.get("RPC_URL", "http://192.168.239.130:8545")
 CONTRACT = "TraceRegistry"
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -162,12 +165,46 @@ def cmd_append(args: list[str]) -> int:
     return 0
 
 
+def _rpc(method: str, params: list, timeout: int = 20) -> dict:
+    """调用节点标准 JSON-RPC（web3_rpc，默认 8545）。"""
+    payload = {"jsonrpc": "2.0", "method": method, "params": params, "id": 1}
+    req = urllib.request.Request(
+        RPC_URL, data=json.dumps(payload).encode("utf-8"),
+        headers={"Content-Type": "application/json"})
+    raw = urllib.request.urlopen(req, timeout=timeout).read().decode("utf-8")
+    return json.loads(raw)
+
+
+def _word(data: bytes, index: int) -> bytes:
+    return data[index * 32:(index + 1) * 32]
+
+
+def _decode_dyn_string(data: bytes, offset_word: bytes) -> str:
+    off = int.from_bytes(offset_word, "big")
+    length = int.from_bytes(data[off:off + 32], "big")
+    return data[off + 32:off + 32 + length].decode("utf-8", "replace")
+
+
+def decode_query_result(hexstr: str) -> dict:
+    """解出 query() 的 7 个返回值。"""
+    raw = hexstr[2:] if hexstr.startswith("0x") else hexstr
+    data = bytes.fromhex(raw)
+    return {
+        "batchId": _decode_dyn_string(data, _word(data, 0)),
+        "eventType": _decode_dyn_string(data, _word(data, 1)),
+        "bizTime": int.from_bytes(_word(data, 2), "big"),
+        "dataDigest": _word(data, 3).hex(),
+        "submitter": "0x" + _word(data, 4)[12:].hex(),
+        "createdAt": int.from_bytes(_word(data, 5), "big"),
+        "exists": bool(int.from_bytes(_word(data, 6), "big")),
+    }
+
+
 def cmd_query(args: list[str]) -> int:
     if len(args) != 1:
         print("用法: query <eventId(64hex)>", file=sys.stderr)
         return 2
     abi_str, addr = _abi_and_addr()
-    # encodeFunction 成功时返回纯 hex 文本（不带 0x）
     code, encode_str = _post_raw(
         "/trans/encodeFunction",
         {"groupId": GROUP_ID, "contractAbi": json.loads(abi_str),
@@ -177,17 +214,31 @@ def cmd_query(args: list[str]) -> int:
     if code != 200 or not encode_str:
         print(f"编码失败 HTTP {code}: {encode_str[:300]}", file=sys.stderr)
         return 1
-    resp = _post(
-        "/trans/query-transaction",
-        {
-            "groupId": GROUP_ID,
-            "contractAbi": abi_str,
-            "contractAddress": addr,
-            "funcName": "query",
-            "encodeStr": encode_str,
-        },
-    )
-    print(json.dumps(resp, ensure_ascii=False))
+    # 读走标准 JSON-RPC，绕开 WeBASE-Front 3.1.1 的 query-transaction 缺陷
+    resp = _rpc("eth_call", [{"to": addr, "data": "0x" + encode_str}, "latest"])
+    if "error" in resp:
+        print(json.dumps(resp, ensure_ascii=False), file=sys.stderr)
+        return 1
+    decoded = decode_query_result(resp["result"])
+    print(json.dumps(decoded, ensure_ascii=False, indent=2))
+    return 0
+
+
+def cmd_receipt(args: list[str]) -> int:
+    if len(args) != 1:
+        print("用法: receipt <txHash(0x...)>", file=sys.stderr)
+        return 2
+    resp = _rpc("eth_getTransactionReceipt", [args[0]])
+    result = resp.get("result") or {}
+    brief = {
+        "transactionHash": result.get("transactionHash"),
+        "blockNumber": int(result["blockNumber"], 16) if result.get("blockNumber") else None,
+        "status": result.get("status"),
+        "gasUsed": int(result["gasUsed"], 16) if result.get("gasUsed") else None,
+        "from": result.get("from"),
+        "to": result.get("to"),
+    }
+    print(json.dumps(brief, ensure_ascii=False, indent=2))
     return 0
 
 
@@ -198,7 +249,7 @@ def main() -> int:
     cmd, rest = sys.argv[1], sys.argv[2:]
     table = {"info": lambda: cmd_info(), "compile": lambda: cmd_compile(),
              "deploy": lambda: cmd_deploy(), "append": lambda: cmd_append(rest),
-             "query": lambda: cmd_query(rest)}
+             "query": lambda: cmd_query(rest), "receipt": lambda: cmd_receipt(rest)}
     if cmd not in table:
         print(f"未知命令: {cmd}", file=sys.stderr)
         return 2

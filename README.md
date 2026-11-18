@@ -118,7 +118,9 @@ payload:{"acceptNo":"AC20261118001","certComplete":true,…}
 **区块链**：FISCO BCOS 3.17（Air 四节点，`group0`）· Solidity 0.8.11 · WeBASE 3.1.1（Front `/trans/handleWithSign` + Sign 外部签名）
 **AI**：RAG（embedding + 内存余弦检索 + 引用回链），可一键关闭
 
-> 为什么不用 `fisco-bcos-java-sdk`：它和 Druid 有版本冲突历史，且升级会牵动整棵依赖树。走 HTTP 前置服务，后端只依赖一个 HTTP 客户端。
+> **读写分工**：写走 WeBASE-Front + WeBASE-Sign（私钥托管、统一演示账户），读走节点标准 `eth_call`（免交易、毫秒级）。
+> 不引 `fisco-bcos-java-sdk`：它与 Druid 有版本冲突历史，且升级会牵动整棵依赖树；后端只依赖 HTTP 客户端。
+> 读路径之所以不走 WeBASE，是因为 Front 3.1.1 的 `query-transaction` 在 solc 0.8 ABI 下必现空指针——定位与绕开过程记录在 [链环境实测记录](docs/tech/10-链环境实测记录.md) 第 5 节。
 
 ---
 
