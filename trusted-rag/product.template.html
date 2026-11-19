@@ -132,9 +132,9 @@
 <section class="panel">
   <h2>一键复现评测</h2>
   <p style="color:var(--muted);margin:0 0 12px;font-size:13px">
-    点一下，浏览器会实时跑完 40 条评测题并给出通过率——和仓库里
+    点一下，浏览器会实时跑完 __EVAL_COUNT__ 条评测题并给出通过率——和仓库里
     <code>python demo.py</code> 的结果一致，不是预先写死的数字。</p>
-  <button class="ghost" id="runEval">运行 40 条评测</button>
+  <button class="ghost" id="runEval">运行 __EVAL_COUNT__ 条评测</button>
   <div class="evalgrid" id="evalGrid"></div>
   <div class="evalbox" id="evalBox"></div>
 </section>
@@ -149,7 +149,7 @@
           说：<b>「没有批次号就不硬答，会拒答的系统才可信。」</b></li>
       <li>点「A 和 B 哪个温度高」→ 看拒答。
           说：<b>「知道自己不会什么，比什么都答更专业。」</b></li>
-      <li>点「运行 40 条评测」→ 看全部通过。
+      <li>点「运行 __EVAL_COUNT__ 条评测」→ 看全部通过。
           说：<b>「所有数字当场可复现，仓库里也有同一份脚本。」</b></li>
     </ol>
     <p>四步讲完，核心就三件事：数据有门槛、答案有出处、不会就拒答。</p>
@@ -177,7 +177,7 @@
   <div class="body">
     <ul style="padding-left:20px;margin:0">
       <li>离线模式是<b>词面混合检索</b>，不是语义 embedding；答案是<b>抽取式呈现</b>，不是 LLM 生成</li>
-      <li>40 条评测满分不等于真实场景准确率：语料与问题同分布，多为带批次号的精确查询</li>
+      <li>__EVAL_COUNT__ 条评测满分不等于真实场景准确率：语料与问题同分布，多为带批次号的精确查询</li>
       <li>仍未解决：实体消歧（同名供应商）、无锚点泛问的语义判断</li>
       <li>接真 embedding / LLM 后必须重跑评测——换检索器不改评测集，等于没测</li>
     </ul>
@@ -203,7 +203,7 @@ const OUT_OF_SCOPE_PATTERNS = [
   /你是谁|你是.*模型|GPT|ChatGPT/,
 ];
 const COMPARISON_RE = /哪个.*(?:高|低|多|少|大|小|好)|哪个更|相比|对比|两者.*比较|哪一个.*更/;
-const ANCHOR_RE = /(?:PB|PR|SUP|SL|RC|AB)[A-Z0-9-]{4,}|检疫|验收|温度|留样|许可证|窗口|产出|产量|召回|冷链|供应商|核验|阈值|超限|合格|结论|状态|证号|编号|规则|流程/;
+const ANCHOR_RE = /(?:PB|PR|SUP|SL|RC|AB)[A-Z0-9-]{4,}|检疫|验收|温度|留样|许可证|窗口|产出|产量|召回|冷链|供应商|核验|阈值|超限|合格|结论|状态|证号|编号|规则|流程|异常|处置|工单|错误码|知识库/;
 const BATCH_RE = /\b((?:PB|PR|SUP|SL|RC|AB|AC|CC|LY)[A-Z0-9-]{4,})\b/gi;
 const FILLER_RE = /请问|麻烦|帮我看一下|一下|呗|啊|吧|随便|有啥|最近/g;
 const CJK_RE = /[\u4e00-\u9fff]+/g;
@@ -345,13 +345,19 @@ class TrustedRAG{
     const asked=new Set([...q.matchAll(BATCH_RE)].map(m=>m[1].toUpperCase()));
     if(asked.size===0&&!ANCHOR_RE.test(q))
       return this._result(q,NO_ANCHOR_MSG,[],[],"no_anchor",false,t0);
-    const hits=this.retrieve(q);
-    const best=hits.length?Math.max(...hits.map(h=>h.score)):0;
-    if(!hits.length||best<this.threshold)
-      return this._result(q,REFUSAL,[],hits,"low_score",false,t0);
+    let hits=this.retrieve(q);
     const known=new Set(this.chunks.filter(c=>c.batchId).map(c=>c.batchId.toUpperCase()));
     if(asked.size&&![...asked].some(a=>known.has(a)))
       return this._result(q,REFUSAL,[],hits,"unknown_batch",false,t0);
+    // 点名了批次就只引用该批次：否则会「问 A 的证号、答出 B 的记录」
+    if(asked.size){
+      hits=hits.filter(h=>(h.chunk.batchId||"")&&asked.has(h.chunk.batchId.toUpperCase()));
+      if(!hits.length)
+        return this._result(q,REFUSAL,[],[],"evidence_not_covered",false,t0);
+    }
+    const best=hits.length?Math.max(...hits.map(h=>h.score)):0;
+    if(!hits.length||best<this.threshold)
+      return this._result(q,REFUSAL,[],hits,"low_score",false,t0);
     const chosen=MULTI_RE.test(q)?hits.slice(0,3):hits.slice(0,1);
     const contexts=chosen.map(h=>({index:h.index,eventId:h.chunk.sourceId,
       batchId:h.chunk.batchId,eventType:h.chunk.eventType,

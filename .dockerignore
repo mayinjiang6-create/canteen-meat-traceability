@@ -1,0 +1,19 @@
+# 后端镜像的构建上下文是仓库根目录，这里把不需要进构建缓存的东西排掉
+.git
+.workbuddy
+.github
+screenshots
+docs
+app
+trusted-rag
+frontend
+scripts
+data
+deploy
+**/node_modules
+**/target
+**/dist
+**/__pycache__
+**/*.log
+**/*.png
+**/*.mp4

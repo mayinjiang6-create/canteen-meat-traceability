@@ -188,7 +188,7 @@ const fb = await C.runAgentSmart('给我一份业务整体概览')
 check('规划器失败回退到友好拒答', fb.refused === true && !!fb.plannerFallback)
 ctx.fetch = mockFetch
 C.clearLLMConfig()
-check('工具集扩为 11 个', Object.keys(TOOLS).length === 11)
+check('工具集扩为 12 个', Object.keys(TOOLS).length === 12)
 
 console.log('\n=== 结论 ===')
 console.log(`  PASS ${pass} / FAIL ${fail}`)

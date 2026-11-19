@@ -1,0 +1,20 @@
+{"id":"H01","question":"PB20261118010 这批肉有多重？","expect":"answer","expectBatch":"PB20261118010","keywords":["40.000"]}
+{"id":"H02","question":"PB20261118018 的检疫合格证号是什么？","expect":"answer","expectBatch":"PB20261118018","keywords":["JX-JY-2026-SMOKE2-10263"]}
+{"id":"H03","question":"SUP-0026 现在的状态是什么？","expect":"answer","expectBatch":"SUP-0026","keywords":["ACTIVE"]}
+{"id":"H04","question":"PR20261118012 的留样号是多少？","expect":"answer","expectBatch":"PR20261118012","keywords":["未记录"]}
+{"id":"H05","question":"PR20261118041 的异常处置类型是什么？","expect":"answer","expectBatch":"PR20261118041","keywords":["SENSORY_ABNORMAL"]}
+{"id":"H06","question":"PB20261118035 判定超限的那次登记，运输单号是多少？","expect":"answer","expectBatch":"PB20261118035","keywords":["TR-SMOKE-002"]}
+{"id":"H07","question":"冷鲜猪肉和牛肉的冷链温度上限是几度？","expect":"answer","keywords":["4.00"]}
+{"id":"H08","question":"知识库只收录哪种核验状态的事件？","expect":"answer","keywords":["MATCHED"]}
+{"id":"H09","question":"PR20261118004 是哪个车间加工的？","expect":"answer","expectBatch":"PR20261118004","keywords":["自检后厨"]}
+{"id":"H10","question":"PB20261118005 的供应商编码是多少？","expect":"answer","expectBatch":"PB20261118005","keywords":["SUP-0005"]}
+{"id":"H11","question":"PR20261118035 的异常单号是多少？","expect":"answer","expectBatch":"PR20261118035","keywords":["AB20261118003"]}
+{"id":"H12","question":"哪些批次做过异常处置？","expect":"answer","keywords":["SENSORY_ABNORMAL"]}
+{"id":"H13","question":"PB20261118001 的验收单号是多少？","expect":"answer","expectBatch":"PB20261118001","keywords":["AC20261118001"]}
+{"id":"H14","question":"PB20269999999 的检验结论是什么？","expect":"refuse"}
+{"id":"H15","question":"这批肉吃了会不会中毒？","expect":"refuse"}
+{"id":"H16","question":"PB20261118007 和 PB20261118008 哪个温度高？","expect":"refuse"}
+{"id":"H17","question":"明天该进多少肉？","expect":"refuse"}
+{"id":"H18","question":"随便聊两句","expect":"refuse"}
+{"id":"H19","question":"你觉得这批肉质量好不好？","expect":"refuse"}
+{"id":"H20","question":"PB20261118001 的检疫合格证号是多少？","expect":"refuse"}

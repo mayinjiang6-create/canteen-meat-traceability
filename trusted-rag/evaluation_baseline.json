@@ -17,15 +17,15 @@
     "note": "离线模式为词面检索 + 抽取式回答，非语义 embedding / 非 LLM 生成"
   },
   "metrics": {
-    "cases": 40,
-    "answerCases": 26,
-    "refuseCases": 14,
+    "cases": 60,
+    "answerCases": 39,
+    "refuseCases": 21,
     "answerAccuracy": 1.0,
     "refusalAccuracy": 0.7143,
     "recallAt5": 1.0,
     "citationConsistency": 1.0,
-    "avgLatencyMs": 0.53,
-    "maxLatencyMs": 2.64
+    "avgLatencyMs": 0.48,
+    "maxLatencyMs": 2.0
   },
   "rows": [
     {
@@ -40,7 +40,7 @@
         "PB20261118001"
       ],
       "grounded": true,
-      "latencyMs": 2.64
+      "latencyMs": 2.0
     },
     {
       "id": "Q02",
@@ -82,7 +82,7 @@
         "PB20261118035"
       ],
       "grounded": true,
-      "latencyMs": 0.52
+      "latencyMs": 0.55
     },
     {
       "id": "Q05",
@@ -96,7 +96,7 @@
         "PR20261118033"
       ],
       "grounded": true,
-      "latencyMs": 0.46
+      "latencyMs": 0.48
     },
     {
       "id": "Q06",
@@ -110,7 +110,7 @@
         "PR20261118033"
       ],
       "grounded": true,
-      "latencyMs": 0.72
+      "latencyMs": 0.4
     },
     {
       "id": "Q07",
@@ -124,7 +124,7 @@
         "PR20261118036"
       ],
       "grounded": true,
-      "latencyMs": 0.83
+      "latencyMs": 0.43
     },
     {
       "id": "Q08",
@@ -138,7 +138,7 @@
         "PB20261118035"
       ],
       "grounded": true,
-      "latencyMs": 0.69
+      "latencyMs": 0.62
     },
     {
       "id": "Q09",
@@ -154,7 +154,7 @@
         "PB20261118038"
       ],
       "grounded": true,
-      "latencyMs": 0.82
+      "latencyMs": 0.64
     },
     {
       "id": "Q10",
@@ -170,7 +170,7 @@
         "PR20261118036"
       ],
       "grounded": true,
-      "latencyMs": 0.66
+      "latencyMs": 0.72
     },
     {
       "id": "Q11",
@@ -184,7 +184,7 @@
         "PB20261118043"
       ],
       "grounded": true,
-      "latencyMs": 0.63
+      "latencyMs": 0.5
     },
     {
       "id": "Q12",
@@ -198,7 +198,7 @@
         "SUP-0004"
       ],
       "grounded": true,
-      "latencyMs": 0.43
+      "latencyMs": 0.47
     },
     {
       "id": "Q13",
@@ -212,7 +212,7 @@
         "SUP-0004"
       ],
       "grounded": true,
-      "latencyMs": 0.37
+      "latencyMs": 0.44
     },
     {
       "id": "Q14",
@@ -240,7 +240,7 @@
         null
       ],
       "grounded": true,
-      "latencyMs": 0.58
+      "latencyMs": 0.46
     },
     {
       "id": "Q16",
@@ -254,7 +254,7 @@
         null
       ],
       "grounded": true,
-      "latencyMs": 1.09
+      "latencyMs": 0.67
     },
     {
       "id": "Q17",
@@ -266,7 +266,7 @@
       "recallAt5": null,
       "citedBatches": [],
       "grounded": false,
-      "latencyMs": 0.58
+      "latencyMs": 0.42
     },
     {
       "id": "Q18",
@@ -316,7 +316,7 @@
         "PB20261118001"
       ],
       "grounded": true,
-      "latencyMs": 0.48
+      "latencyMs": 0.41
     },
     {
       "id": "Q22",
@@ -330,7 +330,7 @@
         "PB20261118001"
       ],
       "grounded": true,
-      "latencyMs": 0.41
+      "latencyMs": 0.42
     },
     {
       "id": "Q23",
@@ -344,7 +344,7 @@
         "PR20261118033"
       ],
       "grounded": true,
-      "latencyMs": 0.35
+      "latencyMs": 0.71
     },
     {
       "id": "Q24",
@@ -358,7 +358,7 @@
         "PB20261118035"
       ],
       "grounded": true,
-      "latencyMs": 0.51
+      "latencyMs": 0.83
     },
     {
       "id": "Q25",
@@ -372,7 +372,7 @@
         "PR20261118036"
       ],
       "grounded": true,
-      "latencyMs": 0.45
+      "latencyMs": 0.51
     },
     {
       "id": "Q26",
@@ -386,7 +386,7 @@
         "SUP-0004"
       ],
       "grounded": true,
-      "latencyMs": 0.54
+      "latencyMs": 0.46
     },
     {
       "id": "Q27",
@@ -400,7 +400,7 @@
         null
       ],
       "grounded": true,
-      "latencyMs": 0.45
+      "latencyMs": 0.47
     },
     {
       "id": "Q28",
@@ -414,7 +414,7 @@
         null
       ],
       "grounded": true,
-      "latencyMs": 0.52
+      "latencyMs": 0.39
     },
     {
       "id": "Q29",
@@ -428,7 +428,7 @@
         "PB20261118035"
       ],
       "grounded": true,
-      "latencyMs": 0.68
+      "latencyMs": 0.34
     },
     {
       "id": "Q30",
@@ -442,7 +442,7 @@
         "PR20261118033"
       ],
       "grounded": true,
-      "latencyMs": 0.62
+      "latencyMs": 0.24
     },
     {
       "id": "Q31",
@@ -456,7 +456,7 @@
         "SUP-0005"
       ],
       "grounded": true,
-      "latencyMs": 0.41
+      "latencyMs": 0.26
     },
     {
       "id": "Q32",
@@ -482,7 +482,7 @@
         "PB20261118001"
       ],
       "grounded": true,
-      "latencyMs": 0.38
+      "latencyMs": 0.35
     },
     {
       "id": "Q34",
@@ -498,7 +498,7 @@
         "PR20261118036"
       ],
       "grounded": true,
-      "latencyMs": 0.67
+      "latencyMs": 0.43
     },
     {
       "id": "Q35",
@@ -514,7 +514,7 @@
         "PB20261118036"
       ],
       "grounded": true,
-      "latencyMs": 0.55
+      "latencyMs": 0.39
     },
     {
       "id": "Q36",
@@ -538,7 +538,7 @@
       "recallAt5": null,
       "citedBatches": [],
       "grounded": false,
-      "latencyMs": 0.5
+      "latencyMs": 0.58
     },
     {
       "id": "Q38",
@@ -550,7 +550,7 @@
       "recallAt5": null,
       "citedBatches": [],
       "grounded": false,
-      "latencyMs": 0.32
+      "latencyMs": 0.41
     },
     {
       "id": "Q39",
@@ -562,7 +562,7 @@
       "recallAt5": null,
       "citedBatches": [],
       "grounded": false,
-      "latencyMs": 0.0
+      "latencyMs": 0.01
     },
     {
       "id": "Q40",
@@ -575,6 +575,278 @@
       "citedBatches": [],
       "grounded": false,
       "latencyMs": 0.0
+    },
+    {
+      "id": "Q41",
+      "question": "PB20261118005 这批肉有多重？",
+      "expect": "answer",
+      "pass": true,
+      "detail": "grounded=True 关键词=True 批次=True",
+      "citeOk": true,
+      "recallAt5": true,
+      "citedBatches": [
+        "PB20261118005"
+      ],
+      "grounded": true,
+      "latencyMs": 0.39
+    },
+    {
+      "id": "Q42",
+      "question": "PB20261118006 的检疫证明编号是什么？",
+      "expect": "answer",
+      "pass": true,
+      "detail": "grounded=True 关键词=True 批次=True",
+      "citeOk": true,
+      "recallAt5": true,
+      "citedBatches": [
+        "PB20261118006"
+      ],
+      "grounded": true,
+      "latencyMs": 0.47
+    },
+    {
+      "id": "Q43",
+      "question": "SUP-0005 这家供应商的全称叫什么？",
+      "expect": "answer",
+      "pass": true,
+      "detail": "grounded=True 关键词=True 批次=True",
+      "citeOk": true,
+      "recallAt5": true,
+      "citedBatches": [
+        "SUP-0005"
+      ],
+      "grounded": true,
+      "latencyMs": 0.46
+    },
+    {
+      "id": "Q44",
+      "question": "PR20261118005 用了几个来源投料？",
+      "expect": "answer",
+      "pass": true,
+      "detail": "grounded=True 关键词=True 批次=True",
+      "citeOk": true,
+      "recallAt5": true,
+      "citedBatches": [
+        "PR20261118005"
+      ],
+      "grounded": true,
+      "latencyMs": 0.38
+    },
+    {
+      "id": "Q45",
+      "question": "PR20261118004 的留样编号是多少？",
+      "expect": "answer",
+      "pass": true,
+      "detail": "grounded=True 关键词=True 批次=True",
+      "citeOk": true,
+      "recallAt5": true,
+      "citedBatches": [
+        "PR20261118004"
+      ],
+      "grounded": true,
+      "latencyMs": 0.75
+    },
+    {
+      "id": "Q46",
+      "question": "PR20261118005 产出了多少公斤？",
+      "expect": "answer",
+      "pass": true,
+      "detail": "grounded=True 关键词=True 批次=True",
+      "citeOk": true,
+      "recallAt5": true,
+      "citedBatches": [
+        "PR20261118005"
+      ],
+      "grounded": true,
+      "latencyMs": 0.66
+    },
+    {
+      "id": "Q47",
+      "question": "PB20261118069 的冷链登记里哪一次判定超限？",
+      "expect": "answer",
+      "pass": true,
+      "detail": "grounded=True 关键词=True 批次=True",
+      "citeOk": true,
+      "recallAt5": true,
+      "citedBatches": [
+        "PB20261118069"
+      ],
+      "grounded": true,
+      "latencyMs": 1.67
+    },
+    {
+      "id": "Q48",
+      "question": "PR20261118033 的肉卖到哪个食堂窗口了？",
+      "expect": "answer",
+      "pass": true,
+      "detail": "grounded=True 关键词=True 批次=True",
+      "citeOk": true,
+      "recallAt5": true,
+      "citedBatches": [
+        "PR20261118033"
+      ],
+      "grounded": true,
+      "latencyMs": 1.97
+    },
+    {
+      "id": "Q49",
+      "question": "PR20261118039 是因为什么原因召回的？",
+      "expect": "answer",
+      "pass": true,
+      "detail": "grounded=True 关键词=True 批次=True",
+      "citeOk": true,
+      "recallAt5": true,
+      "citedBatches": [
+        "PR20261118039"
+      ],
+      "grounded": true,
+      "latencyMs": 0.59
+    },
+    {
+      "id": "Q50",
+      "question": "冻品的冷链温度上限是几度？",
+      "expect": "answer",
+      "pass": true,
+      "detail": "grounded=True 关键词=True 批次=True",
+      "citeOk": true,
+      "recallAt5": null,
+      "citedBatches": [
+        null
+      ],
+      "grounded": true,
+      "latencyMs": 0.52
+    },
+    {
+      "id": "Q51",
+      "question": "冷链温度超限后系统会自动开什么工单？",
+      "expect": "answer",
+      "pass": true,
+      "detail": "grounded=True 关键词=True 批次=True",
+      "citeOk": true,
+      "recallAt5": null,
+      "citedBatches": [
+        null
+      ],
+      "grounded": true,
+      "latencyMs": 0.62
+    },
+    {
+      "id": "Q52",
+      "question": "召回之后再销售会返回哪个错误码？",
+      "expect": "answer",
+      "pass": true,
+      "detail": "grounded=True 关键词=True 批次=True",
+      "citeOk": true,
+      "recallAt5": null,
+      "citedBatches": [
+        null
+      ],
+      "grounded": true,
+      "latencyMs": 0.61
+    },
+    {
+      "id": "Q53",
+      "question": "哪几个批次的冷链温度判定超限？",
+      "expect": "answer",
+      "pass": true,
+      "detail": "grounded=True 关键词=True 批次=True",
+      "citeOk": true,
+      "recallAt5": null,
+      "citedBatches": [
+        "PB20261118035",
+        "PB20261118069",
+        "PB20261118038"
+      ],
+      "grounded": true,
+      "latencyMs": 0.55
+    },
+    {
+      "id": "Q54",
+      "question": "PB20261231999 的验收人是谁？",
+      "expect": "refuse",
+      "pass": true,
+      "detail": "正确拒答",
+      "citeOk": false,
+      "recallAt5": null,
+      "citedBatches": [],
+      "grounded": false,
+      "latencyMs": 0.35
+    },
+    {
+      "id": "Q55",
+      "question": "这批肉能不能吃？",
+      "expect": "refuse",
+      "pass": true,
+      "detail": "正确拒答",
+      "citeOk": false,
+      "recallAt5": null,
+      "citedBatches": [],
+      "grounded": false,
+      "latencyMs": 0.0
+    },
+    {
+      "id": "Q56",
+      "question": "PB20261118005 和 PB20261118006 哪个更重？",
+      "expect": "refuse",
+      "pass": false,
+      "detail": "错误作答",
+      "citeOk": true,
+      "recallAt5": null,
+      "citedBatches": [
+        "PB20261118006"
+      ],
+      "grounded": true,
+      "latencyMs": 0.31
+    },
+    {
+      "id": "Q57",
+      "question": "预测下个月猪肉价格会涨吗？",
+      "expect": "refuse",
+      "pass": true,
+      "detail": "正确拒答",
+      "citeOk": false,
+      "recallAt5": null,
+      "citedBatches": [],
+      "grounded": false,
+      "latencyMs": 0.0
+    },
+    {
+      "id": "Q58",
+      "question": "你是 GPT 吗？",
+      "expect": "refuse",
+      "pass": true,
+      "detail": "正确拒答",
+      "citeOk": false,
+      "recallAt5": null,
+      "citedBatches": [],
+      "grounded": false,
+      "latencyMs": 0.0
+    },
+    {
+      "id": "Q59",
+      "question": "帮我翻译一下这段记录",
+      "expect": "refuse",
+      "pass": true,
+      "detail": "正确拒答",
+      "citeOk": false,
+      "recallAt5": null,
+      "citedBatches": [],
+      "grounded": false,
+      "latencyMs": 0.0
+    },
+    {
+      "id": "Q60",
+      "question": "今天有啥情况？",
+      "expect": "refuse",
+      "pass": false,
+      "detail": "错误作答",
+      "citeOk": true,
+      "recallAt5": null,
+      "citedBatches": [
+        "SUP-0005"
+      ],
+      "grounded": true,
+      "latencyMs": 0.35
     }
   ]
 }

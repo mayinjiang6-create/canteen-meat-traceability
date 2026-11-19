@@ -1,0 +1,291 @@
+{
+  "meta": {
+    "eval": "eval_set.jsonl",
+    "cases": 60,
+    "implementation": "deterministic approximation of RAGAS triad",
+    "realRagas": "需 API Key 与额外依赖，本仓库默认不跑；生产化建议接 ragas + LLM 评审"
+  },
+  "metrics": {
+    "answerCases": 39,
+    "faithfulness": 1.0,
+    "answerRelevance": 0.3707,
+    "contextPrecision": 0.9829,
+    "contextRecall": 1.0,
+    "note": "RAGAS 指标定义的零依赖近似：词面判定，非 LLM-as-judge，数值不可与官方 ragas 直接对比"
+  },
+  "rows": [
+    {
+      "id": "Q01",
+      "faithfulness": 1.0,
+      "answerRelevance": 0.3333,
+      "contextPrecision": 1.0,
+      "contextRecall": 1.0
+    },
+    {
+      "id": "Q02",
+      "faithfulness": 1.0,
+      "answerRelevance": 0.5,
+      "contextPrecision": 1.0,
+      "contextRecall": 1.0
+    },
+    {
+      "id": "Q03",
+      "faithfulness": 1.0,
+      "answerRelevance": 0.6667,
+      "contextPrecision": 1.0,
+      "contextRecall": 1.0
+    },
+    {
+      "id": "Q04",
+      "faithfulness": 1.0,
+      "answerRelevance": 0.6,
+      "contextPrecision": 1.0,
+      "contextRecall": 1.0
+    },
+    {
+      "id": "Q05",
+      "faithfulness": 1.0,
+      "answerRelevance": 0.3333,
+      "contextPrecision": 1.0,
+      "contextRecall": 1.0
+    },
+    {
+      "id": "Q06",
+      "faithfulness": 1.0,
+      "answerRelevance": 0.4286,
+      "contextPrecision": 1.0,
+      "contextRecall": 1.0
+    },
+    {
+      "id": "Q07",
+      "faithfulness": 1.0,
+      "answerRelevance": 0.375,
+      "contextPrecision": 1.0,
+      "contextRecall": 1.0
+    },
+    {
+      "id": "Q08",
+      "faithfulness": 1.0,
+      "answerRelevance": 0.5,
+      "contextPrecision": 1.0,
+      "contextRecall": 1.0
+    },
+    {
+      "id": "Q09",
+      "faithfulness": 1.0,
+      "answerRelevance": 0.5,
+      "contextPrecision": 1.0,
+      "contextRecall": null
+    },
+    {
+      "id": "Q10",
+      "faithfulness": 1.0,
+      "answerRelevance": 0.5,
+      "contextPrecision": 1.0,
+      "contextRecall": null
+    },
+    {
+      "id": "Q11",
+      "faithfulness": 1.0,
+      "answerRelevance": 0.4444,
+      "contextPrecision": 1.0,
+      "contextRecall": null
+    },
+    {
+      "id": "Q12",
+      "faithfulness": 1.0,
+      "answerRelevance": 0.3,
+      "contextPrecision": 1.0,
+      "contextRecall": 1.0
+    },
+    {
+      "id": "Q13",
+      "faithfulness": 1.0,
+      "answerRelevance": 0.5,
+      "contextPrecision": 1.0,
+      "contextRecall": 1.0
+    },
+    {
+      "id": "Q14",
+      "faithfulness": 1.0,
+      "answerRelevance": 0.4444,
+      "contextPrecision": 1.0,
+      "contextRecall": 1.0
+    },
+    {
+      "id": "Q15",
+      "faithfulness": 1.0,
+      "answerRelevance": 0.4,
+      "contextPrecision": 1.0,
+      "contextRecall": null
+    },
+    {
+      "id": "Q16",
+      "faithfulness": 1.0,
+      "answerRelevance": 0.5625,
+      "contextPrecision": 1.0,
+      "contextRecall": null
+    },
+    {
+      "id": "Q21",
+      "faithfulness": 1.0,
+      "answerRelevance": 0.25,
+      "contextPrecision": 1.0,
+      "contextRecall": 1.0
+    },
+    {
+      "id": "Q22",
+      "faithfulness": 1.0,
+      "answerRelevance": 0.2857,
+      "contextPrecision": 1.0,
+      "contextRecall": 1.0
+    },
+    {
+      "id": "Q23",
+      "faithfulness": 1.0,
+      "answerRelevance": 0.1667,
+      "contextPrecision": 1.0,
+      "contextRecall": 1.0
+    },
+    {
+      "id": "Q24",
+      "faithfulness": 1.0,
+      "answerRelevance": 0.2,
+      "contextPrecision": 1.0,
+      "contextRecall": 1.0
+    },
+    {
+      "id": "Q25",
+      "faithfulness": 1.0,
+      "answerRelevance": 0.3333,
+      "contextPrecision": 1.0,
+      "contextRecall": 1.0
+    },
+    {
+      "id": "Q26",
+      "faithfulness": 1.0,
+      "answerRelevance": 0.2,
+      "contextPrecision": 1.0,
+      "contextRecall": 1.0
+    },
+    {
+      "id": "Q27",
+      "faithfulness": 1.0,
+      "answerRelevance": 0.1667,
+      "contextPrecision": 1.0,
+      "contextRecall": null
+    },
+    {
+      "id": "Q28",
+      "faithfulness": 1.0,
+      "answerRelevance": 0.2222,
+      "contextPrecision": 1.0,
+      "contextRecall": null
+    },
+    {
+      "id": "Q34",
+      "faithfulness": 1.0,
+      "answerRelevance": 0.1111,
+      "contextPrecision": 1.0,
+      "contextRecall": null
+    },
+    {
+      "id": "Q35",
+      "faithfulness": 1.0,
+      "answerRelevance": 0.375,
+      "contextPrecision": 0.3333,
+      "contextRecall": null
+    },
+    {
+      "id": "Q41",
+      "faithfulness": 1.0,
+      "answerRelevance": 0.1667,
+      "contextPrecision": 1.0,
+      "contextRecall": 1.0
+    },
+    {
+      "id": "Q42",
+      "faithfulness": 1.0,
+      "answerRelevance": 0.2,
+      "contextPrecision": 1.0,
+      "contextRecall": 1.0
+    },
+    {
+      "id": "Q43",
+      "faithfulness": 1.0,
+      "answerRelevance": 0.2727,
+      "contextPrecision": 1.0,
+      "contextRecall": 1.0
+    },
+    {
+      "id": "Q44",
+      "faithfulness": 1.0,
+      "answerRelevance": 0.5,
+      "contextPrecision": 1.0,
+      "contextRecall": 1.0
+    },
+    {
+      "id": "Q45",
+      "faithfulness": 1.0,
+      "answerRelevance": 0.25,
+      "contextPrecision": 1.0,
+      "contextRecall": 1.0
+    },
+    {
+      "id": "Q46",
+      "faithfulness": 1.0,
+      "answerRelevance": 0.2857,
+      "contextPrecision": 1.0,
+      "contextRecall": 1.0
+    },
+    {
+      "id": "Q47",
+      "faithfulness": 1.0,
+      "answerRelevance": 0.4615,
+      "contextPrecision": 1.0,
+      "contextRecall": 1.0
+    },
+    {
+      "id": "Q48",
+      "faithfulness": 1.0,
+      "answerRelevance": 0.2727,
+      "contextPrecision": 1.0,
+      "contextRecall": 1.0
+    },
+    {
+      "id": "Q49",
+      "faithfulness": 1.0,
+      "answerRelevance": 0.3,
+      "contextPrecision": 1.0,
+      "contextRecall": 1.0
+    },
+    {
+      "id": "Q50",
+      "faithfulness": 1.0,
+      "answerRelevance": 0.4545,
+      "contextPrecision": 1.0,
+      "contextRecall": null
+    },
+    {
+      "id": "Q51",
+      "faithfulness": 1.0,
+      "answerRelevance": 0.5625,
+      "contextPrecision": 1.0,
+      "contextRecall": null
+    },
+    {
+      "id": "Q52",
+      "faithfulness": 1.0,
+      "answerRelevance": 0.5714,
+      "contextPrecision": 1.0,
+      "contextRecall": null
+    },
+    {
+      "id": "Q53",
+      "faithfulness": 1.0,
+      "answerRelevance": 0.4615,
+      "contextPrecision": 1.0,
+      "contextRecall": null
+    }
+  ]
+}

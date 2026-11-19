@@ -7,7 +7,7 @@
 
 ## 1 它是什么
 
-把毕业设计的整套系统做成了**单文件离线交互软件**（158 KB）：
+把毕业设计的整套系统做成了**单文件离线交互软件**（174 KB）：
 
 - 10 个业务模块可真实操作，表单提交会改变状态、触发联动、给出与后端一致的错误提示
 - 第 11 个模块是 **AI 溯源智能体**：有工具集、执行轨迹、拒答纪律
@@ -42,8 +42,8 @@
 
 **它不是聊天框**：按意图规划步骤 → 调用工具 → 把每一步观察写进轨迹 → 答案只从工具结果生成。
 
-- **11 个工具**：`list_suppliers` / `get_purchase` / `list_cold_exceeded` /
-  `list_abnormals` / `list_recalls` / `get_process` / `list_sales` /
+- **12 个工具**：`list_suppliers` / `get_purchase` / `list_cold_exceeded` /
+  `list_abnormals` / `list_recalls` / `list_acceptances` / `get_process` / `list_sales` /
   `list_events` / `get_rule` / `verify_status` / `compute_stats`（代码精确汇总数量，
   含 kg→斤 换算，不让模型做算术）
 - **两种执行模式**
@@ -128,7 +128,23 @@
 python build_app.py            # 零依赖：读 data/snapshot.json + 模板 → app.html
 node verify_app.mjs            # 核心逻辑：业务规则 / 状态流转 / 智能体轨迹
 node verify_app_browser.mjs    # 真实浏览器：登录 → 切模块 → 跑智能体 → 截图
+node export_trace.mjs          # 把 18 条代表性问题的执行轨迹落成 trace.jsonl
 ```
+
+### 执行轨迹落盘（`trace.jsonl`）
+
+`node export_trace.mjs` 会抽 `app.html` 里真正运行的 `app-core` 跑一批问题，每条记录：
+`question / refused / refusalReason / mode / tools / steps(含每步 ms) / totalMs / answerChars / citations`。
+
+用途对应 JD 里的「监控告警 / 数据闭环 / AI 错误标签体系」：
+
+- 按 `refusalReason` 聚合 → **错题本**（当前 18 条里 4 条拒答：越界 2、无锚点 2）
+- 按 `steps[].ms` 聚合 → 工具耗时回归
+- 对比两次导出的 `tools` 序列 → 改路由有没有跑偏
+
+> 这份日志第一次跑就抓到一个真缺陷：「有没有验收不合格的？」被判成"缺少锚点"——
+> 锚点词表漏了「验收/合格」，补上后新增 `list_acceptances` 工具（工具集 11 → 12），
+> 现在能按结论筛选并列出不合格批次。**有日志才看得见这类漏配。**
 
 - `data/snapshot.json`：真实业务数据快照（不含任何账号密码）
 - `app.template.html`：界面与逻辑模板

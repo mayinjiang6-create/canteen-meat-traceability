@@ -1,6 +1,6 @@
 /**
  * 一致性验证：把 product.html 里真正运行的 <script id="rag-core"> 抽出来执行，
- * 用同一份 40 条评测集跑一遍，与 Python 版 evaluation.json 对比。
+ * 用同一份公开评测集跑一遍，与 Python 版 evaluation.json 对比。
  *
  * 目的：证明这个离线页面不是「写死结果的静态页」，而是与 trusted_rag.py 同源。
  *
@@ -35,7 +35,7 @@ const keys = ['cases', 'answerCases', 'refuseCases', 'answerAccuracy',
 const num = (v) => typeof v === 'number' ? Number(v.toFixed(4)) : v
 let allSame = true
 
-console.log('=== 浏览器页面 vs Python 版（同一份 40 条评测集）===')
+console.log('=== 浏览器页面 vs Python 版（同一份评测集）===')
 console.log('指标'.padEnd(20) + '页面'.padEnd(12) + 'Python'.padEnd(12) + '一致')
 for (const k of keys) {
   const a = num(js[k]), b = num(py[k])

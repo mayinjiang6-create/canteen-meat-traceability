@@ -14,7 +14,7 @@
 
 **v2 改进**：TF-IDF + Okapi BM25 双路召回 → RRF 按名次融合、查询改写
 （口语归一 / 同义归一）、六类查询意图拦截。v1 baseline 冻结在
-`trusted_rag_v1.py`，用 `compare.py` 在同一份 40 条评测集上做公平对比。
+`trusted_rag_v1.py`，用 `compare.py` 在同一份公开评测集上做公平对比。
 
 **诚实声明**：离线模式使用词面混合检索，不是语义向量模型；答案为命中片段的
 抽取式呈现，不是语言模型生成。接 embedding / LLM 后评测数字会变，需重跑。
@@ -60,14 +60,17 @@ FIELD_EVIDENCE = [
     (r"检验结论|合格吗|合格不|是否合格", r"检验结论"),
 ]
 
-# v2：查询意图路由。拒答不能只依赖"检索不到"——baseline 在 40 条扩充集上
+# v2：查询意图路由。拒答不能只依赖"检索不到"——baseline 在扩充集上
 # 有 4 条失败全部是「本来就不该答却硬答」的问法。
 COMPARISON_RE = re.compile(
     r"哪个.*(?:高|低|多|少|大|小|好)|哪个更|相比|对比|两者.*比较|哪一个.*更")
 ANCHOR_TERMS = re.compile(
     r"(?:PB|PR|SUP|SL|RC|AB)[A-Z0-9-]{4,}|"
     r"检疫|验收|温度|留样|许可证|窗口|产出|产量|召回|冷链|供应商|核验|"
-    r"阈值|超限|合格|结论|状态|证号|编号|规则|流程")
+    r"阈值|超限|合格|结论|状态|证号|编号|规则|流程|"
+    # 2026-11-19 held-out 首跑发现：「哪些批次做过异常处置」被判成无锚点泛问。
+    # 异常/处置/工单/错误码/知识库 都是语料里真实存在的字段词，属于漏配而非设计取舍。
+    r"异常|处置|工单|错误码|知识库")
 FILLER_RE = re.compile(r"请问|麻烦|帮我看一下|一下|呗|啊|吧|随便|有啥|最近")
 # 同义 / 口语说法归一到语料里的原始词汇，避免换个说法就漏召回
 SYNONYMS = [
@@ -259,14 +262,26 @@ class TrustedRAG:
 
         hits = self.retrieve(q)
         best = max((h.score for h in hits), default=0.0)
-        if not hits or best < self.threshold:
-            return self._result(q, REFUSAL, [], hits, t0, "low_score")
 
         # 问句点名了某个批次号，但语料里根本没有这个批次 → 无依据。
         # 不能因为「检疫证号」这类高频词撞上了别的批次就凑一个答案出来。
         known = {c["batchId"].upper() for c in self.chunks if c["batchId"]}
         if asked and not (asked & known):
             return self._result(q, REFUSAL, [], hits, t0, "unknown_batch")
+
+        # 点名了批次就只允许引用该批次的记录。
+        # 否则会出现「问 A 批次的证号，答的却是 B 批次」——有引用、有编号、看起来像答案，
+        # 却是另一条记录，比直接拒答危险得多（2026-11-19 held-out H20 抓到）。
+        if asked:
+            hits = [h for h in hits if (h.chunk["batchId"] or "").upper() in asked]
+            if hits:
+                best = max(h.score for h in hits)
+            else:
+                # 该批次存在，但它没有所问字段的记录 → 与"字段未覆盖"同类
+                return self._result(q, REFUSAL, [], [], t0, "evidence_not_covered")
+
+        if not hits or best < self.threshold:
+            return self._result(q, REFUSAL, [], hits, t0, "low_score")
 
         # 「哪些 / 几批 / 有没有」类聚合问题给 3 条上下文，其余给 1 条
         multi = bool(re.search(r"哪些|哪几|几批|有没有|列出|对比", q))
@@ -305,16 +320,19 @@ class TrustedRAG:
         } for c in contexts if c["index"] in used]
 
         return self._result(q, raw_answer, citations, hits, t0,
-                            "ok", hallucinated=hallucinated)
+                            "ok", hallucinated=hallucinated, contexts=contexts)
 
     def _result(self, q, ans, citations, hits, t0, mode,
-                hallucinated=None, grounded: bool | None = None) -> dict:
+                hallucinated=None, grounded: bool | None = None,
+                contexts: list[dict] | None = None) -> dict:
         if grounded is None:
             grounded = bool(citations) and ans not in (REFUSAL, OUT_OF_SCOPE)
         return {
             "question": q, "answer": ans,
             "grounded": grounded,
             "citations": citations,
+            # 供离线复算 faithfulness / context precision 用（不参与对外展示）
+            "contexts": contexts or [],
             "retrieved": [{"batchId": h.chunk["batchId"],
                            "eventType": h.chunk["eventType"],
                            "sourceType": h.chunk["sourceType"],

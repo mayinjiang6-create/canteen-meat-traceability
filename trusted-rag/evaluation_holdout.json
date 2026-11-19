@@ -1,0 +1,350 @@
+{
+  "meta": {
+    "corpus": {
+      "generatedAt": "2026-11-18T23:53:21",
+      "source": "meat_trace.event_snapshot（真实运行数据）",
+      "chainVerified": true,
+      "rule": "链上摘要 == 本地 data_digest 才收录；链不可达时降级为 CONFIRMED 任务并标注",
+      "totalSnapshots": 186,
+      "included": 186,
+      "excluded": 0,
+      "matched": 186
+    },
+    "chunks": 190,
+    "threshold": 0.08,
+    "topK": 5,
+    "generator": "extractive-offline",
+    "retrieval": "TF-IDF + BM25 双路召回 / RRF 融合 / 查询改写 / 意图路由",
+    "note": "离线模式为词面检索 + 抽取式回答，非语义 embedding / 非 LLM 生成"
+  },
+  "metrics": {
+    "cases": 20,
+    "answerCases": 13,
+    "refuseCases": 7,
+    "answerAccuracy": 1.0,
+    "refusalAccuracy": 1.0,
+    "recallAt5": 1.0,
+    "top1Accuracy": 1.0,
+    "mrr": 1.0,
+    "citationConsistency": 1.0,
+    "refusalBreakdown": {
+      "unknown_batch": 1,
+      "out_of_scope": 3,
+      "comparison_unsupported": 1,
+      "no_anchor": 1,
+      "evidence_not_covered": 1
+    },
+    "avgLatencyMs": 0.83,
+    "maxLatencyMs": 2.63
+  },
+  "rows": [
+    {
+      "id": "H01",
+      "question": "PB20261118010 这批肉有多重？",
+      "expect": "answer",
+      "pass": true,
+      "detail": "grounded=True 关键词=True 批次=True",
+      "citeOk": true,
+      "recallAt5": true,
+      "rank": 1,
+      "mode": "ok",
+      "citedBatches": [
+        "PB20261118010"
+      ],
+      "grounded": true,
+      "latencyMs": 2.63
+    },
+    {
+      "id": "H02",
+      "question": "PB20261118018 的检疫合格证号是什么？",
+      "expect": "answer",
+      "pass": true,
+      "detail": "grounded=True 关键词=True 批次=True",
+      "citeOk": true,
+      "recallAt5": true,
+      "rank": 1,
+      "mode": "ok",
+      "citedBatches": [
+        "PB20261118018"
+      ],
+      "grounded": true,
+      "latencyMs": 1.33
+    },
+    {
+      "id": "H03",
+      "question": "SUP-0026 现在的状态是什么？",
+      "expect": "answer",
+      "pass": true,
+      "detail": "grounded=True 关键词=True 批次=True",
+      "citeOk": true,
+      "recallAt5": true,
+      "rank": 1,
+      "mode": "ok",
+      "citedBatches": [
+        "SUP-0026"
+      ],
+      "grounded": true,
+      "latencyMs": 0.82
+    },
+    {
+      "id": "H04",
+      "question": "PR20261118012 的留样号是多少？",
+      "expect": "answer",
+      "pass": true,
+      "detail": "grounded=True 关键词=True 批次=True",
+      "citeOk": true,
+      "recallAt5": true,
+      "rank": 1,
+      "mode": "ok",
+      "citedBatches": [
+        "PR20261118012"
+      ],
+      "grounded": true,
+      "latencyMs": 0.8
+    },
+    {
+      "id": "H05",
+      "question": "PR20261118041 的异常处置类型是什么？",
+      "expect": "answer",
+      "pass": true,
+      "detail": "grounded=True 关键词=True 批次=True",
+      "citeOk": true,
+      "recallAt5": true,
+      "rank": 1,
+      "mode": "ok",
+      "citedBatches": [
+        "PR20261118041"
+      ],
+      "grounded": true,
+      "latencyMs": 0.82
+    },
+    {
+      "id": "H06",
+      "question": "PB20261118035 判定超限的那次登记，运输单号是多少？",
+      "expect": "answer",
+      "pass": true,
+      "detail": "grounded=True 关键词=True 批次=True",
+      "citeOk": true,
+      "recallAt5": true,
+      "rank": 1,
+      "mode": "ok",
+      "citedBatches": [
+        "PB20261118035"
+      ],
+      "grounded": true,
+      "latencyMs": 1.29
+    },
+    {
+      "id": "H07",
+      "question": "冷鲜猪肉和牛肉的冷链温度上限是几度？",
+      "expect": "answer",
+      "pass": true,
+      "detail": "grounded=True 关键词=True 批次=True",
+      "citeOk": true,
+      "recallAt5": null,
+      "rank": null,
+      "mode": "ok",
+      "citedBatches": [
+        null
+      ],
+      "grounded": true,
+      "latencyMs": 1.08
+    },
+    {
+      "id": "H08",
+      "question": "知识库只收录哪种核验状态的事件？",
+      "expect": "answer",
+      "pass": true,
+      "detail": "grounded=True 关键词=True 批次=True",
+      "citeOk": true,
+      "recallAt5": null,
+      "rank": null,
+      "mode": "ok",
+      "citedBatches": [
+        null
+      ],
+      "grounded": true,
+      "latencyMs": 1.2
+    },
+    {
+      "id": "H09",
+      "question": "PR20261118004 是哪个车间加工的？",
+      "expect": "answer",
+      "pass": true,
+      "detail": "grounded=True 关键词=True 批次=True",
+      "citeOk": true,
+      "recallAt5": true,
+      "rank": 1,
+      "mode": "ok",
+      "citedBatches": [
+        "PR20261118004"
+      ],
+      "grounded": true,
+      "latencyMs": 0.86
+    },
+    {
+      "id": "H10",
+      "question": "PB20261118005 的供应商编码是多少？",
+      "expect": "answer",
+      "pass": true,
+      "detail": "grounded=True 关键词=True 批次=True",
+      "citeOk": true,
+      "recallAt5": true,
+      "rank": 1,
+      "mode": "ok",
+      "citedBatches": [
+        "PB20261118005"
+      ],
+      "grounded": true,
+      "latencyMs": 1.16
+    },
+    {
+      "id": "H11",
+      "question": "PR20261118035 的异常单号是多少？",
+      "expect": "answer",
+      "pass": true,
+      "detail": "grounded=True 关键词=True 批次=True",
+      "citeOk": true,
+      "recallAt5": true,
+      "rank": 1,
+      "mode": "ok",
+      "citedBatches": [
+        "PR20261118035"
+      ],
+      "grounded": true,
+      "latencyMs": 0.92
+    },
+    {
+      "id": "H12",
+      "question": "哪些批次做过异常处置？",
+      "expect": "answer",
+      "pass": true,
+      "detail": "grounded=True 关键词=True 批次=True",
+      "citeOk": true,
+      "recallAt5": null,
+      "rank": null,
+      "mode": "ok",
+      "citedBatches": [
+        "PR20261118035",
+        "PR20261118038",
+        "PR20261118041"
+      ],
+      "grounded": true,
+      "latencyMs": 0.98
+    },
+    {
+      "id": "H13",
+      "question": "PB20261118001 的验收单号是多少？",
+      "expect": "answer",
+      "pass": true,
+      "detail": "grounded=True 关键词=True 批次=True",
+      "citeOk": true,
+      "recallAt5": true,
+      "rank": 1,
+      "mode": "ok",
+      "citedBatches": [
+        "PB20261118001"
+      ],
+      "grounded": true,
+      "latencyMs": 0.82
+    },
+    {
+      "id": "H14",
+      "question": "PB20269999999 的检验结论是什么？",
+      "expect": "refuse",
+      "pass": true,
+      "detail": "正确拒答",
+      "citeOk": false,
+      "recallAt5": null,
+      "rank": null,
+      "mode": "unknown_batch",
+      "citedBatches": [],
+      "grounded": false,
+      "latencyMs": 0.77
+    },
+    {
+      "id": "H15",
+      "question": "这批肉吃了会不会中毒？",
+      "expect": "refuse",
+      "pass": true,
+      "detail": "正确拒答",
+      "citeOk": false,
+      "recallAt5": null,
+      "rank": null,
+      "mode": "out_of_scope",
+      "citedBatches": [],
+      "grounded": false,
+      "latencyMs": 0.01
+    },
+    {
+      "id": "H16",
+      "question": "PB20261118007 和 PB20261118008 哪个温度高？",
+      "expect": "refuse",
+      "pass": true,
+      "detail": "正确拒答",
+      "citeOk": false,
+      "recallAt5": null,
+      "rank": null,
+      "mode": "comparison_unsupported",
+      "citedBatches": [],
+      "grounded": false,
+      "latencyMs": 0.0
+    },
+    {
+      "id": "H17",
+      "question": "明天该进多少肉？",
+      "expect": "refuse",
+      "pass": true,
+      "detail": "正确拒答",
+      "citeOk": false,
+      "recallAt5": null,
+      "rank": null,
+      "mode": "out_of_scope",
+      "citedBatches": [],
+      "grounded": false,
+      "latencyMs": 0.0
+    },
+    {
+      "id": "H18",
+      "question": "随便聊两句",
+      "expect": "refuse",
+      "pass": true,
+      "detail": "正确拒答",
+      "citeOk": false,
+      "recallAt5": null,
+      "rank": null,
+      "mode": "no_anchor",
+      "citedBatches": [],
+      "grounded": false,
+      "latencyMs": 0.0
+    },
+    {
+      "id": "H19",
+      "question": "你觉得这批肉质量好不好？",
+      "expect": "refuse",
+      "pass": true,
+      "detail": "正确拒答",
+      "citeOk": false,
+      "recallAt5": null,
+      "rank": null,
+      "mode": "out_of_scope",
+      "citedBatches": [],
+      "grounded": false,
+      "latencyMs": 0.0
+    },
+    {
+      "id": "H20",
+      "question": "PB20261118001 的检疫合格证号是多少？",
+      "expect": "refuse",
+      "pass": true,
+      "detail": "正确拒答",
+      "citeOk": false,
+      "recallAt5": null,
+      "rank": null,
+      "mode": "evidence_not_covered",
+      "citedBatches": [],
+      "grounded": false,
+      "latencyMs": 1.12
+    }
+  ]
+}

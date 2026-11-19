@@ -1,0 +1,95 @@
+# 提交即回归：三道门禁 + 一份交付包静态校验
+#
+# 有意**不跑**的东西：scripts/smoke_test.py、scripts/acceptance_test.py。
+# 它们要真 MySQL + 真 FISCO 链（虚拟机里的四节点），CI 上没有；
+# 把需要外部基础设施的用例塞进 CI，只会得到"天天红、人人忽略"的流水线。
+# 这两条的边界写在 docs/product/09-客户现场部署清单.md 与 TECH-08。
+name: ci
+
+# 加引号是为了让 PyYAML 等 1.1 解析器不把 on 当成布尔值（GitHub 两种写法都接受）
+"on":
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  rag-eval:
+    name: 可信 RAG 评测（拒答正确率低于 100% 直接失败）
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      # demo.py 退出码 = 拒答正确率是否 100%，这里天然就是回归门禁
+      - name: 跑公开评测集
+        run: python trusted-rag/demo.py
+      # held-out 集：任何一条失败都让流水线红（防止只报喜不报忧）
+      - name: 跑 held-out 集
+        run: python trusted-rag/holdout.py
+      - name: RAGAS 口径近似
+        run: python trusted-rag/ragas_like.py
+      - name: v1 / v2 公平对比
+        run: python trusted-rag/compare.py
+      - name: 上传评测报告
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rag-evaluation
+          path: |
+            trusted-rag/evaluation.json
+            trusted-rag/evaluation_baseline.json
+            trusted-rag/evaluation_holdout.json
+            trusted-rag/ragas_like.json
+            trusted-rag/comparison.json
+          retention-days: 14
+
+  app-core:
+    name: 单文件应用与页面的核心断言
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      # verify_app.mjs 抽出 app.html 里真正运行的脚本，用 Node vm 跑 63 项业务与智能体断言
+      - name: 业务规则 + 智能体（63 项）
+        run: node app/verify_app.mjs
+      # 用同一份评测集对比"页面里的实现"与 Python 版，防止页面写死结果
+      - name: 页面与 Python 版指标一致性
+        run: node trusted-rag/verify_product.mjs
+
+  backend:
+    name: 后端单元测试
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+      # RpcReadClientChainTest 用 assumeTrue 探测链，CI 上自动跳过（3 项），其余 46 项照跑
+      - name: mvn test
+        run: mvn -B -f backend/pom.xml test -DforkCount=0
+
+  delivery:
+    name: 交付包静态校验
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: 安装 PyYAML（仅校验用，不进业务依赖）
+        run: pip install pyyaml
+      - name: 交付包一致性 34 项
+        run: python deploy/check_deploy.py --strict
+      # compose 语法与插值的权威校验，本机没有 Docker 时无法执行
+      - name: docker compose config
+        run: docker compose -f deploy/docker-compose.yml config -q

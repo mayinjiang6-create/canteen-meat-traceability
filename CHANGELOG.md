@@ -9,6 +9,76 @@
 - 论文初稿（截止 2027-01-11）：第 5 / 6 章按 `TECH-08` §7「论文素材索引」取图与数据
 - 溯源问答模块（RAG）：任务书外扩展，**已决定不实装**；`TECH-07` 的 TC-36~38 如实标「未实施」
 
+## [1.4.0] - 2026-11-19
+
+**按 `CAREER-06` 改进清单把「交付形态」补齐：容器化 + 现场部署清单 + CI 门禁，
+并把可信 RAG 的评测扩到 80 条（60 公开 + 20 held-out）、新增双口径与执行轨迹。**
+
+### 新增 · 容器化交付（P0）
+- `deploy/docker-compose.yml`：MySQL + 后端 + 前端三服务，健康检查 + 依赖顺序 + 数据卷；
+  **链为可选外部依赖**，不接链时业务照常、公开溯源返回 `UNREACHABLE`
+- `backend/Dockerfile`：多阶段（Maven 构建 → JRE 运行），非 root、HEALTHCHECK，
+  `mvn package` 而不是 `spring-boot:run`
+- `frontend/Dockerfile` + `frontend/nginx.conf`：Node 构建 → Nginx 托管，`/api` 反代
+  使用 Docker 内置 DNS（后端重启换 IP 不会 502），SPA history 兜底
+- `deploy/.env.example`：端口 / 口令 / 链参数模板；`.env` 已被 gitignore
+- `deploy/check_deploy.py`：**35 项**静态自检（端口冲突、构建上下文、jar 名与 pom 一致、
+  反代目标、环境变量闭环、密钥不入库）
+- `docs/product/09-客户现场部署清单.md`（PROD-09）：十节作业手册，含端口表、密钥注入、
+  链可选与降级、备份恢复、升级回滚、**14 条客户验收 Checklist**、12 类故障排查
+
+### 新增 · CI（P0）
+- `.github/workflows/ci.yml`：推送即跑 60 条公开评测 + 20 条 held-out + RAGAS 口径 +
+  v1/v2 对比 + 63 项应用断言 + 页面一致性 + 49 项单测 + 交付包自检 + `docker compose config`
+- 明确不跑 `smoke_test.py` / `acceptance_test.py`（需真链与本机 MySQL），边界写进文档
+
+### 变更 · 配置可注入（P0）
+- `application-dev.yml` 的 JDBC / WeBASE / RPC / 合约地址 / 存证工作器改为
+  `${ENV:默认值}` 形式，默认值与原先完全一致，本机开发行为不变
+- 新增 `GET /api/health` 存活探针（不查库不查链），加入 `WebConfig` 免鉴权白名单；
+  TECH-03 补接口说明，TECH-06 改为三套环境对照
+
+### 新增 · 评测与可观测（P3）
+- 评测集 40 → **60 条公开**（39 应回答 + 21 应拒答）
+- 新增 `eval_holdout.jsonl` **20 条 held-out**（13 应回答 + 7 应拒答）+ `holdout.py`
+  - **首跑 18/20，抓到两个真缺陷，修完 20/20（期望值未改）**：
+    ①「哪些批次做过异常处置」误判无锚点 → 补齐 `ANCHOR_TERMS`；
+    ②「PB20261118001 的检疫合格证号」**答出了 PB20261118035 的证号** →
+       命中集按被点名批次过滤，过滤后为空则拒答（跨批次串台）
+- 新增 `ragas_like.py`：faithfulness / answer relevance / context precision / context recall 的
+  零依赖确定性近似，产 `ragas_like.json`，并在 README 写清与官方 ragas 的差距
+- 新增 `app/export_trace.mjs` + `app/trace.jsonl`：18 条代表性问题的执行轨迹
+  （问题 / 拒答原因 / 工具链 / 每步耗时 / 引用编号），对应「错题本 / 监控告警」
+- `product.html` 重建（60 条评测内嵌）；模板里的条数改为占位符，扩集不再改模板
+
+### 变更 · 离线软件（P3 副产物）
+- 新增第 12 个工具 `list_acceptances`：按结论筛选验收记录
+- 锚点词表补「验收 / 合格 / 不合格 / 留样 / 证号 / 许可证」，修掉「有没有验收不合格的？」误拒
+- `verify_app.mjs` 断言同步为 12 个工具；重跑核心 63/0、浏览器 14/0
+
+### 新增 · 框架对照与产品材料（P1 / P4）
+- `deploy/dify/`：190 块知识库（`kb_meat_trace.md` + `build_kb.py`）、7 条硬约束 Prompt、
+  同口径打分脚本 `score_platform.py`、搭建清单 README
+- `docs/career/框架选型对比-Dify.md`（CAREER-07）：三方案对照 + 7 条约束逐条判定
+  （4 条平台做不到）+ 判断清单 + 4 条面试标准答法。**平台未实跑，文档里写明**
+- `docs/career/AI产品作品说明.md`（CAREER-08）、`docs/career/90秒演示脚本.md`
+
+### 修复 · 文档口径（P2）
+- `trusted-rag/README.md` 159–166 行表格表头重复串行（渲染错乱）
+- 根 README 补「三个 AI 不要混为一谈」表：Java 主项目未实装 / `trusted-rag` 已实现 / `app` 已实现
+- CAREER-01 加状态提示（路线图以 CAREER-05 / 06 为准）；CAREER-05 §5 第 3 项回填
+- 简历与求职包数字同步为 80 条（60 公开 + 20 held-out）
+
+### 验证
+- `deploy/check_deploy.py`：**PASS 35 / FAIL 0**
+- `python demo.py`：60 条全过（答案 1.00 / 拒答 1.00）；`python holdout.py`：20 条全过
+- `python compare.py`：v1 拒答 0.7143 → v2 1.00（失败 6 条全修）
+- `node verify_app.mjs` 63/0、`node verify_app_browser.mjs` 14/0、`node verify_product.mjs` 8 项一致
+- `mvn test -DforkCount=0`：49 项（3 项需真链自动跳过）
+- 本机实跑后端 jar：`/api/health` 200、登录 `code=0`、无链时公开溯源 1 条 `UNREACHABLE`
+- **未验证**：容器构建与 `docker compose up`（本机 Hyper-V 关闭、Docker Desktop 不可用）；
+  Dify 平台实跑（同上原因）——两处都在文档里如实标注
+
 ## [1.3.0] - 2026-11-19
 
 **修复「很多问题都搜不到」：从固定关键词路由升级为三层意图覆盖。**

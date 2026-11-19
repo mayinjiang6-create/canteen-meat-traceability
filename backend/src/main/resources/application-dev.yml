@@ -1,6 +1,7 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/meat_trace?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+    # 容器部署时用 DB_HOST=mysql 覆盖；本机开发保持默认 localhost
+    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/meat_trace?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
     username: ${DB_USER:meat}
     password: ${DB_PASSWORD:Meat@2026}
     hikari:
@@ -31,14 +32,15 @@ chain:
     contract-name: TraceRegistry
     # 实测必须传空串（scripts/chain_tools.py 验证过），传 "trace" 会找不到合约
     contract-path: ""
-    contract-address: "0xd24180cc0fef2f3e545de4f9aafc09345cd08903"
+    contract-address: "${CONTRACT_ADDRESS:0xd24180cc0fef2f3e545de4f9aafc09345cd08903}"
     connect-timeout-ms: 3000
     read-timeout-ms: 8000
   rpc:
-    url: http://192.168.239.130:8545
-    timeout-ms: 5000
+    url: "${CHAIN_RPC_URL:http://192.168.239.130:8545}"
+    timeout-ms: ${CHAIN_RPC_TIMEOUT_MS:5000}
   evidence:
-    worker-enabled: true
+    # 纯业务演示（无链）时设 false：不轮询、不重试，事件停在待存证状态
+    worker-enabled: ${EVIDENCE_WORKER_ENABLED:true}
     poll-interval-ms: 2000
     batch-size: 5
     max-retry: 5

@@ -377,6 +377,9 @@ const TOOLS={
     return {rows,summary:'命中 '+rows.length+' 条异常工单'};}},
   list_recalls:{label:'查询召回记录',desc:'列出召回单及波及销售数',run(){
     return {rows:S.recalls,summary:'命中 '+S.recalls.length+' 条召回记录'};}},
+  list_acceptances:{label:'查询验收记录',desc:'按结论筛选验收记录（PASS / FAIL）',run(a){
+    const rows=S.acceptances.filter(x=>!a.result||x.result===a.result);
+    return {rows,summary:'命中 '+rows.length+' 条验收记录'};}},
   get_process:{label:'查询加工批次',desc:'取加工批次及其多来源投料关系',run(a){
     let rows=S.processes.filter(x=>!a.processNo||x.process_no===a.processNo);
     return {rows,summary:'命中 '+rows.length+' 个加工批次'};}},
@@ -490,6 +493,16 @@ function plan(q){
     build(ctx){const st=ctx[0].rows[0];return {text:'当前核验状态：'+st.status+'（'+st.note+'）。\n'+
       '系统定义四类：MATCHED 记录一致 / MISMATCHED 摘要不同 / UNCONFIRMED 尚未上链 / UNREACHABLE 链暂不可达。\n'+
       '记录核验状态与检验结论严格分栏，链挂了不会被读成数据造假。\n\n依据：[T1] verify_status · [T2] RULE-VERIFY-STATUS',empty:false};}};
+  if(has('验收','不合格','合格','留样'))return {
+    mode:'single',name:'单步工具调用',
+    steps:[{thought:'查询验收记录并按结论筛选',tool:'list_acceptances',args:{}}],
+    build(ctx){const rows=ctx[0].rows;
+      const fail=rows.filter(x=>x.result==='FAIL');
+      return {text:'当前共 '+rows.length+' 条验收记录，其中不合格 '+fail.length+' 条。\n'+
+        (fail.length?fail.slice(0,3).map(x=>'· 批次 '+x.batch_id+'：'+(x.reject_reason||'未填原因')).join('\n')
+                     :'没有不合格记录。')+
+        '\n规则：不合格必须填写原因，且该批次不得进入加工投料。\n\n'+
+        '依据：[T1] list_acceptances 命中 '+rows.length+' 条',empty:false};}};
   if(has('供应商','哪几家','名单'))return {
     mode:'single',name:'单步工具调用',
     steps:[{thought:'直接查询供应商档案',tool:'list_suppliers',args:{}}],
@@ -550,7 +563,7 @@ function runAgent(question){
   const q=question.trim();
   for(const g of GUARD)if(g.re.test(q))
     return {refused:true,reason:'越界拦截',text:'该问题超出溯源系统职责：'+g.msg+'。',trace:[],tools:[]};
-  if(!/PB\d|PR\d|SUP-|冷链|超限|异常|召回|核验|供应商|销售|加工|投料|规则|温度|批次|多少|合计|一共|总共|汇总|统计|计算|斤|公斤/i.test(q))
+  if(!/PB\d|PR\d|SUP-|冷链|超限|异常|召回|核验|供应商|销售|加工|投料|规则|温度|批次|多少|合计|一共|总共|汇总|统计|计算|斤|公斤|验收|合格|不合格|留样|证号|许可证/i.test(q))
     return {refused:true,reason:'缺少可核验锚点',text:'问题缺少可核验的批次号或业务对象，请补充后再问。',trace:[],tools:[]};
   const p=plan(q);
   if(!p)return {refused:true,reason:'未匹配到可用工具',

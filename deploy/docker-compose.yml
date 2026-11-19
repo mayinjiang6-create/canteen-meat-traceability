@@ -1,0 +1,84 @@
+# 交付包：MySQL + 后端 + 前端（三个服务）
+# 链（FISCO BCOS / WeBASE）是**可选外部依赖**，默认不接：业务数据照常可读写，
+# 公开溯源页的核验状态显示 UNREACHABLE，不会把「没接链」误报成「数据被改」。
+#
+#   cd deploy && cp .env.example .env && docker compose up -d --build
+#
+name: meat-trace
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: meat-trace-mysql
+    restart: unless-stopped
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_0900_ai_ci
+      - --default-time-zone=+08:00
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-Root@Meat2026}
+      MYSQL_DATABASE: meat_trace
+      MYSQL_USER: ${DB_USER:-meat}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-Meat@2026}
+      TZ: Asia/Shanghai
+    ports:
+      - "${MYSQL_PORT:-3306}:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u root -p\"$$MYSQL_ROOT_PASSWORD\" --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 40s
+
+  backend:
+    build:
+      context: ..
+      dockerfile: backend/Dockerfile
+    image: meat-trace/backend:0.1.0
+    container_name: meat-trace-backend
+    restart: unless-stopped
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      DB_HOST: mysql
+      DB_PORT: "3306"
+      DB_USER: ${DB_USER:-meat}
+      DB_PASSWORD: ${DB_PASSWORD:-Meat@2026}
+      # 生产环境必须覆盖：HS256 要求至少 32 字节
+      JWT_SECRET: ${JWT_SECRET:-meat-trace-demo-secret-please-override-in-env-2026}
+      # 不接链时留空即可，写入事件停在待存证、读路径返回 UNREACHABLE
+      WEBASE_BASE_URL: ${WEBASE_BASE_URL:-http://host.docker.internal:5002/WeBASE-Front}
+      CHAIN_RPC_URL: ${CHAIN_RPC_URL:-http://host.docker.internal:8545}
+      CONTRACT_ADDRESS: ${CONTRACT_ADDRESS:-0xd24180cc0fef2f3e545de4f9aafc09345cd08903}
+      EVIDENCE_WORKER_ENABLED: ${EVIDENCE_WORKER_ENABLED:-false}
+      TZ: Asia/Shanghai
+    extra_hosts:
+      # Linux 上让 host.docker.internal 指向宿主机，便于连宿主机/虚拟机里的链
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "${BACKEND_PORT:-8080}:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    volumes:
+      - backend-logs:/app/logs
+
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+      args:
+        NPM_REGISTRY: ${NPM_REGISTRY:-https://registry.npmjs.org}
+    image: meat-trace/frontend:0.1.0
+    container_name: meat-trace-frontend
+    restart: unless-stopped
+    ports:
+      - "${FRONTEND_PORT:-8088}:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+
+volumes:
+  mysql-data:
+  backend-logs:

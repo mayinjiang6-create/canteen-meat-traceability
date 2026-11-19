@@ -1,26 +1,28 @@
 {
-  "note": "同一份 40 条评测集、统一口径重算。答案类指标两者均满分，说明语料与问题同分布；真实提升在拒答纪律。",
+  "note": "同一份 60 条评测集、统一口径重算。答案类指标两者均满分，说明语料与问题同分布；真实提升在拒答纪律。",
   "baseline": {
     "tag": "v1 baseline（单路 TF-IDF）",
     "metrics": {
-      "cases": 40,
-      "answerCases": 26,
-      "refuseCases": 14,
+      "cases": 60,
+      "answerCases": 39,
+      "refuseCases": 21,
       "answerAccuracy": 1.0,
       "refusalAccuracy": 0.7143,
       "recallAt5": 1.0,
       "top1Accuracy": 1.0,
       "mrr": 1.0,
       "refusalBreakdown": {
-        "unknown_batch": 3,
-        "out_of_scope": 5,
+        "unknown_batch": 4,
+        "out_of_scope": 9,
         "low_score": 2
       },
       "failedCaseIds": [
         "Q29",
         "Q30",
         "Q31",
-        "Q33"
+        "Q33",
+        "Q56",
+        "Q60"
       ]
     },
     "rows": [
@@ -383,25 +385,205 @@
         "mode": "out_of_scope",
         "hasBatch": false,
         "grounded": false
+      },
+      {
+        "id": "Q41",
+        "expect": "answer",
+        "pass": true,
+        "rank": 1,
+        "mode": "ok",
+        "hasBatch": true,
+        "grounded": true
+      },
+      {
+        "id": "Q42",
+        "expect": "answer",
+        "pass": true,
+        "rank": 1,
+        "mode": "ok",
+        "hasBatch": true,
+        "grounded": true
+      },
+      {
+        "id": "Q43",
+        "expect": "answer",
+        "pass": true,
+        "rank": 1,
+        "mode": "ok",
+        "hasBatch": true,
+        "grounded": true
+      },
+      {
+        "id": "Q44",
+        "expect": "answer",
+        "pass": true,
+        "rank": 1,
+        "mode": "ok",
+        "hasBatch": true,
+        "grounded": true
+      },
+      {
+        "id": "Q45",
+        "expect": "answer",
+        "pass": true,
+        "rank": 1,
+        "mode": "ok",
+        "hasBatch": true,
+        "grounded": true
+      },
+      {
+        "id": "Q46",
+        "expect": "answer",
+        "pass": true,
+        "rank": 1,
+        "mode": "ok",
+        "hasBatch": true,
+        "grounded": true
+      },
+      {
+        "id": "Q47",
+        "expect": "answer",
+        "pass": true,
+        "rank": 1,
+        "mode": "ok",
+        "hasBatch": true,
+        "grounded": true
+      },
+      {
+        "id": "Q48",
+        "expect": "answer",
+        "pass": true,
+        "rank": 1,
+        "mode": "ok",
+        "hasBatch": true,
+        "grounded": true
+      },
+      {
+        "id": "Q49",
+        "expect": "answer",
+        "pass": true,
+        "rank": 1,
+        "mode": "ok",
+        "hasBatch": true,
+        "grounded": true
+      },
+      {
+        "id": "Q50",
+        "expect": "answer",
+        "pass": true,
+        "rank": null,
+        "mode": "ok",
+        "hasBatch": false,
+        "grounded": true
+      },
+      {
+        "id": "Q51",
+        "expect": "answer",
+        "pass": true,
+        "rank": null,
+        "mode": "ok",
+        "hasBatch": false,
+        "grounded": true
+      },
+      {
+        "id": "Q52",
+        "expect": "answer",
+        "pass": true,
+        "rank": null,
+        "mode": "ok",
+        "hasBatch": false,
+        "grounded": true
+      },
+      {
+        "id": "Q53",
+        "expect": "answer",
+        "pass": true,
+        "rank": null,
+        "mode": "ok",
+        "hasBatch": false,
+        "grounded": true
+      },
+      {
+        "id": "Q54",
+        "expect": "refuse",
+        "pass": true,
+        "rank": null,
+        "mode": "unknown_batch",
+        "hasBatch": false,
+        "grounded": false
+      },
+      {
+        "id": "Q55",
+        "expect": "refuse",
+        "pass": true,
+        "rank": null,
+        "mode": "out_of_scope",
+        "hasBatch": false,
+        "grounded": false
+      },
+      {
+        "id": "Q56",
+        "expect": "refuse",
+        "pass": false,
+        "rank": null,
+        "mode": "ok",
+        "hasBatch": false,
+        "grounded": true
+      },
+      {
+        "id": "Q57",
+        "expect": "refuse",
+        "pass": true,
+        "rank": null,
+        "mode": "out_of_scope",
+        "hasBatch": false,
+        "grounded": false
+      },
+      {
+        "id": "Q58",
+        "expect": "refuse",
+        "pass": true,
+        "rank": null,
+        "mode": "out_of_scope",
+        "hasBatch": false,
+        "grounded": false
+      },
+      {
+        "id": "Q59",
+        "expect": "refuse",
+        "pass": true,
+        "rank": null,
+        "mode": "out_of_scope",
+        "hasBatch": false,
+        "grounded": false
+      },
+      {
+        "id": "Q60",
+        "expect": "refuse",
+        "pass": false,
+        "rank": null,
+        "mode": "ok",
+        "hasBatch": false,
+        "grounded": true
       }
     ]
   },
   "improved": {
     "tag": "v2（BM25 + RRF + 意图路由）",
     "metrics": {
-      "cases": 40,
-      "answerCases": 26,
-      "refuseCases": 14,
+      "cases": 60,
+      "answerCases": 39,
+      "refuseCases": 21,
       "answerAccuracy": 1.0,
       "refusalAccuracy": 1.0,
       "recallAt5": 1.0,
       "top1Accuracy": 1.0,
       "mrr": 1.0,
       "refusalBreakdown": {
-        "unknown_batch": 3,
-        "out_of_scope": 6,
-        "no_anchor": 4,
-        "comparison_unsupported": 1
+        "unknown_batch": 4,
+        "out_of_scope": 10,
+        "no_anchor": 5,
+        "comparison_unsupported": 2
       },
       "failedCaseIds": []
     },
@@ -763,6 +945,186 @@
         "pass": true,
         "rank": null,
         "mode": "out_of_scope",
+        "hasBatch": false,
+        "grounded": false
+      },
+      {
+        "id": "Q41",
+        "expect": "answer",
+        "pass": true,
+        "rank": 1,
+        "mode": "ok",
+        "hasBatch": true,
+        "grounded": true
+      },
+      {
+        "id": "Q42",
+        "expect": "answer",
+        "pass": true,
+        "rank": 1,
+        "mode": "ok",
+        "hasBatch": true,
+        "grounded": true
+      },
+      {
+        "id": "Q43",
+        "expect": "answer",
+        "pass": true,
+        "rank": 1,
+        "mode": "ok",
+        "hasBatch": true,
+        "grounded": true
+      },
+      {
+        "id": "Q44",
+        "expect": "answer",
+        "pass": true,
+        "rank": 1,
+        "mode": "ok",
+        "hasBatch": true,
+        "grounded": true
+      },
+      {
+        "id": "Q45",
+        "expect": "answer",
+        "pass": true,
+        "rank": 1,
+        "mode": "ok",
+        "hasBatch": true,
+        "grounded": true
+      },
+      {
+        "id": "Q46",
+        "expect": "answer",
+        "pass": true,
+        "rank": 1,
+        "mode": "ok",
+        "hasBatch": true,
+        "grounded": true
+      },
+      {
+        "id": "Q47",
+        "expect": "answer",
+        "pass": true,
+        "rank": 1,
+        "mode": "ok",
+        "hasBatch": true,
+        "grounded": true
+      },
+      {
+        "id": "Q48",
+        "expect": "answer",
+        "pass": true,
+        "rank": 1,
+        "mode": "ok",
+        "hasBatch": true,
+        "grounded": true
+      },
+      {
+        "id": "Q49",
+        "expect": "answer",
+        "pass": true,
+        "rank": 1,
+        "mode": "ok",
+        "hasBatch": true,
+        "grounded": true
+      },
+      {
+        "id": "Q50",
+        "expect": "answer",
+        "pass": true,
+        "rank": null,
+        "mode": "ok",
+        "hasBatch": false,
+        "grounded": true
+      },
+      {
+        "id": "Q51",
+        "expect": "answer",
+        "pass": true,
+        "rank": null,
+        "mode": "ok",
+        "hasBatch": false,
+        "grounded": true
+      },
+      {
+        "id": "Q52",
+        "expect": "answer",
+        "pass": true,
+        "rank": null,
+        "mode": "ok",
+        "hasBatch": false,
+        "grounded": true
+      },
+      {
+        "id": "Q53",
+        "expect": "answer",
+        "pass": true,
+        "rank": null,
+        "mode": "ok",
+        "hasBatch": false,
+        "grounded": true
+      },
+      {
+        "id": "Q54",
+        "expect": "refuse",
+        "pass": true,
+        "rank": null,
+        "mode": "unknown_batch",
+        "hasBatch": false,
+        "grounded": false
+      },
+      {
+        "id": "Q55",
+        "expect": "refuse",
+        "pass": true,
+        "rank": null,
+        "mode": "out_of_scope",
+        "hasBatch": false,
+        "grounded": false
+      },
+      {
+        "id": "Q56",
+        "expect": "refuse",
+        "pass": true,
+        "rank": null,
+        "mode": "comparison_unsupported",
+        "hasBatch": false,
+        "grounded": false
+      },
+      {
+        "id": "Q57",
+        "expect": "refuse",
+        "pass": true,
+        "rank": null,
+        "mode": "out_of_scope",
+        "hasBatch": false,
+        "grounded": false
+      },
+      {
+        "id": "Q58",
+        "expect": "refuse",
+        "pass": true,
+        "rank": null,
+        "mode": "out_of_scope",
+        "hasBatch": false,
+        "grounded": false
+      },
+      {
+        "id": "Q59",
+        "expect": "refuse",
+        "pass": true,
+        "rank": null,
+        "mode": "out_of_scope",
+        "hasBatch": false,
+        "grounded": false
+      },
+      {
+        "id": "Q60",
+        "expect": "refuse",
+        "pass": true,
+        "rank": null,
+        "mode": "no_anchor",
         "hasBatch": false,
         "grounded": false
       }

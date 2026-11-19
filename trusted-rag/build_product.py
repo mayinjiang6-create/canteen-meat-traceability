@@ -32,6 +32,8 @@ data_js = json.dumps(payload, ensure_ascii=False, separators=(",", ":"))
 html = TEMPLATE.read_text(encoding="utf-8")
 if "__RAG_DATA__" not in html:
     raise SystemExit("模板里找不到 __RAG_DATA__ 占位符，请先检查 product.template.html")
+# 评测条数不写死在模板里：扩集后重新生成即可，避免"页面写 40 条、实际 60 条"
+html = html.replace("__EVAL_COUNT__", str(len(cases)))
 OUT.write_text(html.replace("__RAG_DATA__", data_js), encoding="utf-8")
 print(f"已生成 {OUT}")
 print(f"  事件 {len(events)} / 规则 {len(docs)} / 评测 {len(cases)}")

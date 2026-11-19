@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """公平的前后对比：v1 baseline（单路 TF-IDF）vs v2（BM25+RRF+意图路由）。
 
-两者跑**同一份 40 条评测集**，指标用统一口径重算（不依赖各自 evaluate 的实现差异），
+两者跑**同一份评测集**，指标用统一口径重算（不依赖各自 evaluate 的实现差异），
 输出 comparison.json。用来回答「这次改动到底改好了什么、哪些没变」。
 
     python compare.py
@@ -107,14 +107,14 @@ def main() -> None:
     b = measure(v2, "v2（BM25 + RRF + 意图路由）")
     gain = query_rewrite_gain()
     report = {
-        "note": "同一份 40 条评测集、统一口径重算。答案类指标两者均满分，"
+        "note": f"同一份 {len(cases)} 条评测集、统一口径重算。答案类指标两者均满分，"
                 "说明语料与问题同分布；真实提升在拒答纪律。",
         "baseline": a, "improved": b, "queryRewrite": gain,
     }
     out = ROOT / "comparison.json"
     out.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
 
-    print("=== 前后对比（40 条同一评测集）===")
+    print(f"=== 前后对比（{len(cases)} 条同一评测集）===")
     keys = ["cases", "answerAccuracy", "refusalAccuracy", "recallAt5",
             "top1Accuracy", "mrr"]
     print(f"  {'指标':<20}{'v1':>10}{'v2':>10}{'变化':>12}")
