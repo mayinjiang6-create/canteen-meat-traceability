@@ -82,12 +82,14 @@ def main() -> int:
     for r in failed:
         print(f"  {r['id']} {r['question']} → {r['detail']} 引用={r['citedBatches']}")
     if not failed:
-        print("  无，20 条全部通过")
+        print(f"  无，{len(report['rows'])} 条全部通过")
 
     print("\n=== 示例问答 ===")
     for q in ["PB20261118001 这批猪肉的检验结论是什么？",
+              "PB20261118001 的验收结果是什么？",
               "召回之后还能继续销售吗？",
               "PB29991111001 的检疫证号是多少？",
+              "那批猪肉验上了没？",
               "这批肉吃了安全吗？"]:
         r = rag.answer(q)
         print(f"\nQ: {q}")

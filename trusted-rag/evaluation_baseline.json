@@ -1,0 +1,580 @@
+{
+  "meta": {
+    "corpus": {
+      "generatedAt": "2026-11-18T23:53:21",
+      "source": "meat_trace.event_snapshot（真实运行数据）",
+      "chainVerified": true,
+      "rule": "链上摘要 == 本地 data_digest 才收录；链不可达时降级为 CONFIRMED 任务并标注",
+      "totalSnapshots": 186,
+      "included": 186,
+      "excluded": 0,
+      "matched": 186
+    },
+    "chunks": 190,
+    "threshold": 0.08,
+    "topK": 5,
+    "generator": "extractive-offline",
+    "note": "离线模式为词面检索 + 抽取式回答，非语义 embedding / 非 LLM 生成"
+  },
+  "metrics": {
+    "cases": 40,
+    "answerCases": 26,
+    "refuseCases": 14,
+    "answerAccuracy": 1.0,
+    "refusalAccuracy": 0.7143,
+    "recallAt5": 1.0,
+    "citationConsistency": 1.0,
+    "avgLatencyMs": 0.53,
+    "maxLatencyMs": 2.64
+  },
+  "rows": [
+    {
+      "id": "Q01",
+      "question": "PB20261118001 这批猪肉的检验结论是什么？",
+      "expect": "answer",
+      "pass": true,
+      "detail": "grounded=True 关键词=True 批次=True",
+      "citeOk": true,
+      "recallAt5": true,
+      "citedBatches": [
+        "PB20261118001"
+      ],
+      "grounded": true,
+      "latencyMs": 2.64
+    },
+    {
+      "id": "Q02",
+      "question": "PB20261118001 的验收人是谁？",
+      "expect": "answer",
+      "pass": true,
+      "detail": "grounded=True 关键词=True 批次=True",
+      "citeOk": true,
+      "recallAt5": true,
+      "citedBatches": [
+        "PB20261118001"
+      ],
+      "grounded": true,
+      "latencyMs": 0.52
+    },
+    {
+      "id": "Q03",
+      "question": "PB20261118001 到货中心温度是多少？",
+      "expect": "answer",
+      "pass": true,
+      "detail": "grounded=True 关键词=True 批次=True",
+      "citeOk": true,
+      "recallAt5": true,
+      "citedBatches": [
+        "PB20261118001"
+      ],
+      "grounded": true,
+      "latencyMs": 0.5
+    },
+    {
+      "id": "Q04",
+      "question": "PB20261118035 的检疫合格证号是什么？",
+      "expect": "answer",
+      "pass": true,
+      "detail": "grounded=True 关键词=True 批次=True",
+      "citeOk": true,
+      "recallAt5": true,
+      "citedBatches": [
+        "PB20261118035"
+      ],
+      "grounded": true,
+      "latencyMs": 0.52
+    },
+    {
+      "id": "Q05",
+      "question": "PR20261118033 投入了多少公斤，产出多少？",
+      "expect": "answer",
+      "pass": true,
+      "detail": "grounded=True 关键词=True 批次=True",
+      "citeOk": true,
+      "recallAt5": true,
+      "citedBatches": [
+        "PR20261118033"
+      ],
+      "grounded": true,
+      "latencyMs": 0.46
+    },
+    {
+      "id": "Q06",
+      "question": "PR20261118033 的留样号是什么？",
+      "expect": "answer",
+      "pass": true,
+      "detail": "grounded=True 关键词=True 批次=True",
+      "citeOk": true,
+      "recallAt5": true,
+      "citedBatches": [
+        "PR20261118033"
+      ],
+      "grounded": true,
+      "latencyMs": 0.72
+    },
+    {
+      "id": "Q07",
+      "question": "PR20261118036 销售到了哪个窗口？",
+      "expect": "answer",
+      "pass": true,
+      "detail": "grounded=True 关键词=True 批次=True",
+      "citeOk": true,
+      "recallAt5": true,
+      "citedBatches": [
+        "PR20261118036"
+      ],
+      "grounded": true,
+      "latencyMs": 0.83
+    },
+    {
+      "id": "Q08",
+      "question": "PB20261118035 的冷链温控登记结果是什么？",
+      "expect": "answer",
+      "pass": true,
+      "detail": "grounded=True 关键词=True 批次=True",
+      "citeOk": true,
+      "recallAt5": true,
+      "citedBatches": [
+        "PB20261118035"
+      ],
+      "grounded": true,
+      "latencyMs": 0.69
+    },
+    {
+      "id": "Q09",
+      "question": "哪些批次的冷链温度判定超限？",
+      "expect": "answer",
+      "pass": true,
+      "detail": "grounded=True 关键词=True 批次=True",
+      "citeOk": true,
+      "recallAt5": null,
+      "citedBatches": [
+        "PB20261118035",
+        "PB20261118069",
+        "PB20261118038"
+      ],
+      "grounded": true,
+      "latencyMs": 0.82
+    },
+    {
+      "id": "Q10",
+      "question": "哪些批次发起过召回？",
+      "expect": "answer",
+      "pass": true,
+      "detail": "grounded=True 关键词=True 批次=True",
+      "citeOk": true,
+      "recallAt5": null,
+      "citedBatches": [
+        "PR20261118033",
+        "PR20261118039",
+        "PR20261118036"
+      ],
+      "grounded": true,
+      "latencyMs": 0.66
+    },
+    {
+      "id": "Q11",
+      "question": "有验收不合格的批次吗？",
+      "expect": "answer",
+      "pass": true,
+      "detail": "grounded=True 关键词=True 批次=True",
+      "citeOk": true,
+      "recallAt5": null,
+      "citedBatches": [
+        "PB20261118043"
+      ],
+      "grounded": true,
+      "latencyMs": 0.63
+    },
+    {
+      "id": "Q12",
+      "question": "SUP-0004 这家供应商叫什么名字？",
+      "expect": "answer",
+      "pass": true,
+      "detail": "grounded=True 关键词=True 批次=True",
+      "citeOk": true,
+      "recallAt5": true,
+      "citedBatches": [
+        "SUP-0004"
+      ],
+      "grounded": true,
+      "latencyMs": 0.43
+    },
+    {
+      "id": "Q13",
+      "question": "SUP-0004 的许可证号是多少？",
+      "expect": "answer",
+      "pass": true,
+      "detail": "grounded=True 关键词=True 批次=True",
+      "citeOk": true,
+      "recallAt5": true,
+      "citedBatches": [
+        "SUP-0004"
+      ],
+      "grounded": true,
+      "latencyMs": 0.37
+    },
+    {
+      "id": "Q14",
+      "question": "SUP-0004 的供应商状态是什么？",
+      "expect": "answer",
+      "pass": true,
+      "detail": "grounded=True 关键词=True 批次=True",
+      "citeOk": true,
+      "recallAt5": true,
+      "citedBatches": [
+        "SUP-0004"
+      ],
+      "grounded": true,
+      "latencyMs": 0.45
+    },
+    {
+      "id": "Q15",
+      "question": "召回之后还能继续销售吗？",
+      "expect": "answer",
+      "pass": true,
+      "detail": "grounded=True 关键词=True 批次=True",
+      "citeOk": true,
+      "recallAt5": null,
+      "citedBatches": [
+        null
+      ],
+      "grounded": true,
+      "latencyMs": 0.58
+    },
+    {
+      "id": "Q16",
+      "question": "冷鲜猪肉的冷链温度超过多少度算超限？",
+      "expect": "answer",
+      "pass": true,
+      "detail": "grounded=True 关键词=True 批次=True",
+      "citeOk": true,
+      "recallAt5": null,
+      "citedBatches": [
+        null
+      ],
+      "grounded": true,
+      "latencyMs": 1.09
+    },
+    {
+      "id": "Q17",
+      "question": "PB29991111001 的检疫证号是多少？",
+      "expect": "refuse",
+      "pass": true,
+      "detail": "正确拒答",
+      "citeOk": false,
+      "recallAt5": null,
+      "citedBatches": [],
+      "grounded": false,
+      "latencyMs": 0.58
+    },
+    {
+      "id": "Q18",
+      "question": "这批肉吃了安全吗？",
+      "expect": "refuse",
+      "pass": true,
+      "detail": "正确拒答",
+      "citeOk": false,
+      "recallAt5": null,
+      "citedBatches": [],
+      "grounded": false,
+      "latencyMs": 0.01
+    },
+    {
+      "id": "Q19",
+      "question": "明天该进多少肉？",
+      "expect": "refuse",
+      "pass": true,
+      "detail": "正确拒答",
+      "citeOk": false,
+      "recallAt5": null,
+      "citedBatches": [],
+      "grounded": false,
+      "latencyMs": 0.0
+    },
+    {
+      "id": "Q20",
+      "question": "帮我写一段项目总结",
+      "expect": "refuse",
+      "pass": true,
+      "detail": "正确拒答",
+      "citeOk": false,
+      "recallAt5": null,
+      "citedBatches": [],
+      "grounded": false,
+      "latencyMs": 0.0
+    },
+    {
+      "id": "Q21",
+      "question": "PB20261118001 的验收结果是什么？",
+      "expect": "answer",
+      "pass": true,
+      "detail": "grounded=True 关键词=True 批次=True",
+      "citeOk": true,
+      "recallAt5": true,
+      "citedBatches": [
+        "PB20261118001"
+      ],
+      "grounded": true,
+      "latencyMs": 0.48
+    },
+    {
+      "id": "Q22",
+      "question": "PB20261118001 是谁负责验收的？",
+      "expect": "answer",
+      "pass": true,
+      "detail": "grounded=True 关键词=True 批次=True",
+      "citeOk": true,
+      "recallAt5": true,
+      "citedBatches": [
+        "PB20261118001"
+      ],
+      "grounded": true,
+      "latencyMs": 0.41
+    },
+    {
+      "id": "Q23",
+      "question": "PR20261118033 的产量是多少？",
+      "expect": "answer",
+      "pass": true,
+      "detail": "grounded=True 关键词=True 批次=True",
+      "citeOk": true,
+      "recallAt5": true,
+      "citedBatches": [
+        "PR20261118033"
+      ],
+      "grounded": true,
+      "latencyMs": 0.35
+    },
+    {
+      "id": "Q24",
+      "question": "PB20261118035 的检疫证明编号是什么？",
+      "expect": "answer",
+      "pass": true,
+      "detail": "grounded=True 关键词=True 批次=True",
+      "citeOk": true,
+      "recallAt5": true,
+      "citedBatches": [
+        "PB20261118035"
+      ],
+      "grounded": true,
+      "latencyMs": 0.51
+    },
+    {
+      "id": "Q25",
+      "question": "PR20261118036 卖到了哪个食堂窗口？",
+      "expect": "answer",
+      "pass": true,
+      "detail": "grounded=True 关键词=True 批次=True",
+      "citeOk": true,
+      "recallAt5": true,
+      "citedBatches": [
+        "PR20261118036"
+      ],
+      "grounded": true,
+      "latencyMs": 0.45
+    },
+    {
+      "id": "Q26",
+      "question": "SUP-0004 这家公司的全称是什么？",
+      "expect": "answer",
+      "pass": true,
+      "detail": "grounded=True 关键词=True 批次=True",
+      "citeOk": true,
+      "recallAt5": true,
+      "citedBatches": [
+        "SUP-0004"
+      ],
+      "grounded": true,
+      "latencyMs": 0.54
+    },
+    {
+      "id": "Q27",
+      "question": "冷鲜猪肉冷链温度上限是几度？",
+      "expect": "answer",
+      "pass": true,
+      "detail": "grounded=True 关键词=True 批次=True",
+      "citeOk": true,
+      "recallAt5": null,
+      "citedBatches": [
+        null
+      ],
+      "grounded": true,
+      "latencyMs": 0.45
+    },
+    {
+      "id": "Q28",
+      "question": "召回之后还能继续卖吗？",
+      "expect": "answer",
+      "pass": true,
+      "detail": "grounded=True 关键词=True 批次=True",
+      "citeOk": true,
+      "recallAt5": null,
+      "citedBatches": [
+        null
+      ],
+      "grounded": true,
+      "latencyMs": 0.52
+    },
+    {
+      "id": "Q29",
+      "question": "那批猪肉验上了没？",
+      "expect": "refuse",
+      "pass": false,
+      "detail": "错误作答",
+      "citeOk": true,
+      "recallAt5": null,
+      "citedBatches": [
+        "PB20261118035"
+      ],
+      "grounded": true,
+      "latencyMs": 0.68
+    },
+    {
+      "id": "Q30",
+      "question": "最近怎么样？",
+      "expect": "refuse",
+      "pass": false,
+      "detail": "错误作答",
+      "citeOk": true,
+      "recallAt5": null,
+      "citedBatches": [
+        "PR20261118033"
+      ],
+      "grounded": true,
+      "latencyMs": 0.62
+    },
+    {
+      "id": "Q31",
+      "question": "有啥新消息吗？",
+      "expect": "refuse",
+      "pass": false,
+      "detail": "错误作答",
+      "citeOk": true,
+      "recallAt5": null,
+      "citedBatches": [
+        "SUP-0005"
+      ],
+      "grounded": true,
+      "latencyMs": 0.41
+    },
+    {
+      "id": "Q32",
+      "question": "随便说点什么吧",
+      "expect": "refuse",
+      "pass": true,
+      "detail": "正确拒答",
+      "citeOk": false,
+      "recallAt5": null,
+      "citedBatches": [],
+      "grounded": false,
+      "latencyMs": 0.34
+    },
+    {
+      "id": "Q33",
+      "question": "PB20261118001 和 PB20261118035 哪个温度高？",
+      "expect": "refuse",
+      "pass": false,
+      "detail": "错误作答",
+      "citeOk": true,
+      "recallAt5": null,
+      "citedBatches": [
+        "PB20261118001"
+      ],
+      "grounded": true,
+      "latencyMs": 0.38
+    },
+    {
+      "id": "Q34",
+      "question": "有哪几批做过召回处理？",
+      "expect": "answer",
+      "pass": true,
+      "detail": "grounded=True 关键词=True 批次=True",
+      "citeOk": true,
+      "recallAt5": null,
+      "citedBatches": [
+        "PR20261118033",
+        "PR20261118039",
+        "PR20261118036"
+      ],
+      "grounded": true,
+      "latencyMs": 0.67
+    },
+    {
+      "id": "Q35",
+      "question": "验收不合格的有几批？",
+      "expect": "answer",
+      "pass": true,
+      "detail": "grounded=True 关键词=True 批次=True",
+      "citeOk": true,
+      "recallAt5": null,
+      "citedBatches": [
+        "PB20261118043",
+        "PB20261118035",
+        "PB20261118036"
+      ],
+      "grounded": true,
+      "latencyMs": 0.55
+    },
+    {
+      "id": "Q36",
+      "question": "PB29991111002 的验收人是谁？",
+      "expect": "refuse",
+      "pass": true,
+      "detail": "正确拒答",
+      "citeOk": false,
+      "recallAt5": null,
+      "citedBatches": [],
+      "grounded": false,
+      "latencyMs": 0.39
+    },
+    {
+      "id": "Q37",
+      "question": "SUP-9999 的许可证号是多少？",
+      "expect": "refuse",
+      "pass": true,
+      "detail": "正确拒答",
+      "citeOk": false,
+      "recallAt5": null,
+      "citedBatches": [],
+      "grounded": false,
+      "latencyMs": 0.5
+    },
+    {
+      "id": "Q38",
+      "question": "这批肉能吃吗？",
+      "expect": "refuse",
+      "pass": true,
+      "detail": "正确拒答",
+      "citeOk": false,
+      "recallAt5": null,
+      "citedBatches": [],
+      "grounded": false,
+      "latencyMs": 0.32
+    },
+    {
+      "id": "Q39",
+      "question": "预测一下明天的采购量",
+      "expect": "refuse",
+      "pass": true,
+      "detail": "正确拒答",
+      "citeOk": false,
+      "recallAt5": null,
+      "citedBatches": [],
+      "grounded": false,
+      "latencyMs": 0.0
+    },
+    {
+      "id": "Q40",
+      "question": "帮我写一份报告",
+      "expect": "refuse",
+      "pass": true,
+      "detail": "正确拒答",
+      "citeOk": false,
+      "recallAt5": null,
+      "citedBatches": [],
+      "grounded": false,
+      "latencyMs": 0.0
+    }
+  ]
+}

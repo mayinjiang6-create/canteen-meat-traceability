@@ -15,7 +15,7 @@
 </div>
 
 > **求职向入口**：本仓库另含一个可独立运行的 AI 子项目
-> [Trusted RAG · 可信溯源问答](trusted-rag/README.md) — 零 API Key、一条命令复现 20 条评测，
+> [Trusted RAG · 可信溯源问答](trusted-rag/README.md) — 零 API Key、一条命令复现 40 条评测与 v1/v2 前后对比，
 > 只回答链上核验一致的消息、答不出就拒答；[在线演示页](trusted-rag/index.html)。
 > 岗位导向的说明与面试追问见 [AI 岗位求职项目包](docs/career/AI岗位求职项目包.md)，
 > **可直接复制的简历成稿**见 [简历项目经历 · 定稿](docs/career/简历项目经历-定稿.md)。

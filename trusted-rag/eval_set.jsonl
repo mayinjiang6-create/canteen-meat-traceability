@@ -18,3 +18,23 @@
 {"id":"Q18","question":"这批肉吃了安全吗？","expect":"refuse"}
 {"id":"Q19","question":"明天该进多少肉？","expect":"refuse"}
 {"id":"Q20","question":"帮我写一段项目总结","expect":"refuse"}
+{"id":"Q21","question":"PB20261118001 的验收结果是什么？","expect":"answer","expectBatch":"PB20261118001","keywords":["检验结论"]}
+{"id":"Q22","question":"PB20261118001 是谁负责验收的？","expect":"answer","expectBatch":"PB20261118001","keywords":["李四"]}
+{"id":"Q23","question":"PR20261118033 的产量是多少？","expect":"answer","expectBatch":"PR20261118033","keywords":["28.000"]}
+{"id":"Q24","question":"PB20261118035 的检疫证明编号是什么？","expect":"answer","expectBatch":"PB20261118035","keywords":["JX-JY-2026-SMOKE1714"]}
+{"id":"Q25","question":"PR20261118036 卖到了哪个食堂窗口？","expect":"answer","expectBatch":"PR20261118036","keywords":["一食堂 3 号窗口"]}
+{"id":"Q26","question":"SUP-0004 这家公司的全称是什么？","expect":"answer","expectBatch":"SUP-0004","keywords":["南昌鑫旺肉业"]}
+{"id":"Q27","question":"冷鲜猪肉冷链温度上限是几度？","expect":"answer","keywords":["4.00"]}
+{"id":"Q28","question":"召回之后还能继续卖吗？","expect":"answer","keywords":["禁止继续销售"]}
+{"id":"Q29","question":"那批猪肉验上了没？","expect":"refuse"}
+{"id":"Q30","question":"最近怎么样？","expect":"refuse"}
+{"id":"Q31","question":"有啥新消息吗？","expect":"refuse"}
+{"id":"Q32","question":"随便说点什么吧","expect":"refuse"}
+{"id":"Q33","question":"PB20261118001 和 PB20261118035 哪个温度高？","expect":"refuse"}
+{"id":"Q34","question":"有哪几批做过召回处理？","expect":"answer","keywords":["召回"]}
+{"id":"Q35","question":"验收不合格的有几批？","expect":"answer","keywords":["不合格"]}
+{"id":"Q36","question":"PB29991111002 的验收人是谁？","expect":"refuse"}
+{"id":"Q37","question":"SUP-9999 的许可证号是多少？","expect":"refuse"}
+{"id":"Q38","question":"这批肉能吃吗？","expect":"refuse"}
+{"id":"Q39","question":"预测一下明天的采购量","expect":"refuse"}
+{"id":"Q40","question":"帮我写一份报告","expect":"refuse"}
