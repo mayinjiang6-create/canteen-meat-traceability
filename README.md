@@ -179,6 +179,15 @@ curl -s "http://localhost:8080/api/public/trace/PR20261118001" | python -m json.
 
 ## 一条命令自检
 
+**先跑体检**，它会告诉你哪些组件就绪、现在能跑哪条路线（零基础完整步骤见
+[小白运行指南](docs/product/08-小白运行指南.md)）：
+
+```bash
+python scripts/doctor.py
+```
+
+再跑全链路回归：
+
 ```bash
 python scripts/smoke_test.py
 ```
@@ -279,6 +288,7 @@ cd backend && mvn test -DforkCount=0
 | [快速开始](docs/product/05-快速开始.md) | 10 分钟跑通 |
 | [AI 问答功能说明](docs/product/06-AI问答功能说明.md) | 能力边界、三种兜底、评测指标 |
 | [前端使用与演示指南](docs/product/07-前端使用与演示指南.md) | 启动命令、页面与接口对照、15 分钟答辩演示脚本、四类状态演示方法、FAQ |
+| [小白运行指南](docs/product/08-小白运行指南.md) | 三条路线（AI 子项目 / 后端前端 / 完整含链）、环境体检、成功标志、常见问题 |
 
 ### 技术文档
 
