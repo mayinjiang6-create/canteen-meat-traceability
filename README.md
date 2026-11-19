@@ -19,6 +19,7 @@
 > 只回答链上核验一致的消息、答不出就拒答；[在线演示页](trusted-rag/index.html)。
 > 岗位导向的说明与面试追问见 [AI 岗位求职项目包](docs/career/AI岗位求职项目包.md)，
 > **可直接复制的简历成稿**见 [简历项目经历 · 定稿](docs/career/简历项目经历-定稿.md)。
+> **在线 Demo**：https://trusted-rag-trace.app.workbuddy.host/?sharecode=6TQLACPETO
 
 ---
 

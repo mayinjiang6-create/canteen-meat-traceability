@@ -15,6 +15,10 @@
 
 ---
 
+## 在线 Demo
+
+https://trusted-rag-trace.app.workbuddy.host/?sharecode=6TQLACPETO（静态展示页，可看实测结果与示例问答）
+
 ## 快速开始
 
 ```bash

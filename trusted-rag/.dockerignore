@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.git/
+.gitignore
+.wbapp*.genie
+*.log
+.DS_Store

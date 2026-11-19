@@ -62,3 +62,6 @@ tmp/
 *.mp4
 *.mov
 *.avi
+
+# ---- 发布应用内部标记 ----
+.wbapp*.genie
