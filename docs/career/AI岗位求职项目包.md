@@ -20,7 +20,7 @@
 - 一个天然差异化场景：**只回答能被证明的记录**——比"又一个通用知识库问答"值钱得多
 
 **这一层已经落地了**：`trusted-rag/` 子项目（零 API Key、一条命令出评测报告、拒答正确率 100%）。
-在线链接已发布：https://trusted-rag-trace.app.workbuddy.host/?sharecode=6TQLACPETO；Docker 交付清单已补；还差真 embedding / LLM 实测这些加分项。
+现在还差的是「让别人点开就能看」的在线链接，以及 Docker / 真 LLM 接入这些加分项。
 
 > 一句话定位（建议直接用作简历项目名）：
 > **「可信溯源 AI 问答系统 —— 面向食品安全场景的 RAG 落地、幻觉治理与评测」**
@@ -207,7 +207,7 @@
 |---|---|---|---|---|
 | **P0** ✅ **已完成** | 可信 RAG 离线 Demo：逐条查链核验语料 → 自然语言渲染 → TF-IDF 检索 → 四类拦截 → grounded 校验 → 引用回链 | `trusted-rag/`：`demo.py` 一条命令出 `evaluation.json`，`index.html` 静态演示页 | 「实现可信 RAG 问答，零 API Key 可复现，拒答正确率 100%」 | 无 |
 | **P1** | 20 条评测集 + 一条命令出评测 JSON | `eval_set.jsonl`、`evaluation.json` | 「R@5 / 引用命中率 / 拒答正确率 100% 可一键复跑」 | P0 |
-| **P2** ✅ **已完成** | 演示页已发布为公开链接 | https://trusted-rag-trace.app.workbuddy.host/?sharecode=6TQLACPETO | 招聘方 30 秒可看 | 无 |
+| **P2** | 把问答页发布成**在线链接** | 简历里可点的 Demo URL | 招聘方 30 秒能看到，不再依赖虚拟机 | P0 |
 | **P3** | 接真 LLM（本地已有 chat 配置）+ Docker Compose | `docker-compose up` 一条命令起全栈 | 「私有化部署 / 容器化交付」 | 有 Key 即可 |
 | **P4** | 用 Dify 或 LangChain 搭一个同场景对照，写选型对比 | 一页方案对比 | 「熟悉主流编排框架，知道什么时候不该用」 | 可选，加分 |
 
@@ -233,15 +233,14 @@
 
 ---
 
-## 8 进度与下一步（P0 ~ P4 已完成）
+## 8 下一步（P0 已完成）
 
-1. **P2 在线 Demo** ✅ 已完成：`https://trusted-rag-trace.app.workbuddy.host/?sharecode=6TQLACPETO`。
-   静态展示页，招聘方 30 秒可看；如需现场提问，把 `server.py` 的 API 发布成在线服务
-2. **P3 交付形态** ✅ 已完成：`trusted-rag/Dockerfile` / `docker-compose.yml` / `.dockerignore`
-   + `DEPLOY.md` 现场验收清单；新增 `server.py` HTTP API 并本地实测三接口全过
-   （Docker 本机未实测，Hyper-V 关闭，文档已如实标注）
-3. **P4 框架对照** ✅ 已完成：`docs/career/框架选型对照.md`，手写 / LangChain / Dify 三方案对照
-   + 面试标准答案；本机根分区仅剩 2.9 G，Dify 只做方案对照不实装
+1. **P2 在线 Demo**：把 `trusted-rag/index.html` 发布成可点开的链接，放简历首行。
+   招聘方不会为了看你的项目去装 FISCO BCOS 四节点——能点开比什么都重要
+2. **P3 交付形态**：给子项目补 `Dockerfile` / `docker-compose.yml` 和一份「客户现场部署清单」，
+   直接命中 JD 里的「私有化部署 / 容器化 / 交付文档」
+3. **P4 框架对照**：用 Dify 或 LangChain 搭一个同场景极简版，写一页「什么时候该用框架、
+   什么时候该手写」，把「没用框架」从劣势讲成取舍
 4. **简历成稿已出，不用先选岗位**：`简历项目经历-定稿.md`（CAREER-02）给了
    「只放一个项目 / 放两个项目」两套可直接复制的版本，以及按岗位换动词的对照表。
    先投起来，等面试反馈再微调措辞
