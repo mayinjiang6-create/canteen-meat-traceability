@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>可信溯源 AI 问答 · 产品演示</title>
+<style>
+  :root{
+    --ink:#1f2328; --muted:#5f6672; --line:#e3e6ea; --bg:#f7f8fa; --card:#fff;
+    --green:#3b6d11; --green-bg:#eaf3de; --green-line:#c0dd97;
+    --blue:#185fa5; --blue-bg:#e6f1fb; --blue-line:#b5d4f4;
+    --amber:#854f0b; --amber-bg:#faeeda; --amber-line:#f0d9a8;
+    --red:#a32d2d; --red-bg:#fcebeb; --red-line:#f7c1c1;
+    --gray-bg:#f1efe8;
+    --mono:ui-monospace,Consolas,"Courier New",monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+       font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",sans-serif;
+       line-height:1.65;font-size:14px}
+  .wrap{max-width:960px;margin:0 auto;padding:28px 20px 48px}
+  header{background:var(--card);border:1px solid var(--line);border-radius:14px;
+         padding:22px 26px;margin-bottom:14px}
+  .eyebrow{font-size:12px;letter-spacing:.08em;color:var(--blue);font-weight:500}
+  h1{font-size:24px;font-weight:500;margin:6px 0 8px}
+  .lead{color:var(--muted);margin:0;max-width:720px;font-size:14px}
+  .badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+  .badge{font-size:11px;padding:4px 10px;border-radius:20px;background:var(--gray-bg);
+         border:1px solid var(--line);color:var(--muted)}
+  .metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+  .metric{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+  .metric b{display:block;font-size:22px;font-weight:500;line-height:1.2}
+  .metric span{font-size:11px;color:var(--muted)}
+  .metric.hot b{color:var(--green)}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:14px;
+         padding:20px 24px;margin-bottom:14px}
+  h2{font-size:16px;font-weight:500;margin:0 0 14px;padding-bottom:10px;
+     border-bottom:1px solid var(--line)}
+  .examples{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+  .ex{font-size:12px;padding:7px 12px;border-radius:8px;border:1px solid var(--blue-line);
+      background:var(--blue-bg);color:#0c447c;cursor:pointer;text-align:left}
+  .ex:hover{background:#d3e7fa}
+  .ex.warn{border-color:var(--amber-line);background:var(--amber-bg);color:#633806}
+  .ex.warn:hover{background:#f7e2bb}
+  .inputrow{display:flex;gap:10px}
+  input#q{flex:1;padding:11px 14px;border:1px solid var(--line);border-radius:9px;
+          font-size:14px;font-family:inherit;outline:none;background:var(--card)}
+  input#q:focus{border-color:var(--blue)}
+  button.primary{padding:11px 22px;border:none;border-radius:9px;background:var(--blue);
+                 color:#fff;font-size:14px;font-family:inherit;cursor:pointer}
+  button.primary:hover{background:#0c447c}
+  button.ghost{padding:10px 18px;border:1px solid var(--line);border-radius:9px;
+               background:var(--card);color:var(--ink);font-size:13px;font-family:inherit;cursor:pointer}
+  button.ghost:hover{background:var(--gray-bg)}
+  #result{margin-top:16px;min-height:20px}
+  .state{display:inline-block;font-size:11px;padding:3px 9px;border-radius:6px;margin-bottom:10px}
+  .state.ok{background:var(--green-bg);color:#27500a;border:1px solid var(--green-line)}
+  .state.no{background:var(--amber-bg);color:#633806;border:1px solid var(--amber-line)}
+  .state.err{background:var(--red-bg);color:#791f1f;border:1px solid var(--red-line)}
+  .answer{background:var(--gray-bg);border:1px solid var(--line);border-radius:9px;
+          padding:14px 16px;white-space:pre-wrap;font-size:13px}
+  .answer.refuse{background:var(--amber-bg);border-color:var(--amber-line);color:#633806}
+  .mark{display:inline-block;background:var(--blue-bg);color:var(--blue);
+        border-radius:4px;padding:0 5px;font-family:var(--mono);font-size:12px;margin:0 1px}
+  .cites{margin-top:12px}
+  .cite{background:var(--card);border:1px solid var(--green-line);border-radius:9px;
+        padding:11px 14px;margin-bottom:8px;font-size:12px}
+  .cite .top{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:5px}
+  .chip{padding:2px 8px;border-radius:5px;background:var(--green-bg);color:#27500a;
+        border:1px solid var(--green-line);font-size:11px}
+  .chip.gray{background:var(--gray-bg);color:var(--muted);border-color:var(--line)}
+  .cite .meta{color:var(--muted);font-family:var(--mono);font-size:11px;word-break:break-all}
+  .why{color:var(--muted);font-size:12px;margin-top:6px}
+  .evalgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px}
+  .ev{background:var(--gray-bg);border-radius:8px;padding:10px 12px}
+  .ev b{display:block;font-size:17px;font-weight:500}
+  .ev span{font-size:10px;color:var(--muted)}
+  .evalbox{margin-top:12px;max-height:190px;overflow:auto;font-family:var(--mono);
+           font-size:11px;background:var(--gray-bg);border-radius:8px;padding:12px;display:none}
+  details{background:var(--card);border:1px solid var(--line);border-radius:12px;
+          padding:14px 20px;margin-bottom:10px}
+  summary{cursor:pointer;font-size:14px;font-weight:500}
+  details .body{margin-top:12px;color:var(--muted);font-size:13px}
+  details ol{padding-left:20px;margin:8px 0}
+  details li{margin-bottom:6px}
+  code{font-family:var(--mono);font-size:12px;background:var(--gray-bg);
+       border:1px solid var(--line);border-radius:5px;padding:2px 6px;color:var(--ink)}
+  .flow{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+  .step{flex:1 1 150px;background:var(--blue-bg);border:1px solid var(--blue-line);
+        border-radius:9px;padding:10px;min-width:140px}
+  .step b{display:block;font-size:12px;color:#0c447c;font-weight:500}
+  .step span{font-size:11px;color:#2b5b87}
+  footer{text-align:center;color:var(--muted);font-size:11px;margin-top:22px}
+  @media (max-width:700px){.metrics,.evalgrid{grid-template-columns:repeat(2,1fr)}
+    .inputrow{flex-direction:column}.wrap{padding:16px 12px 32px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">可信 AI · 溯源问答</div>
+  <h1>可信溯源 AI 问答</h1>
+  <p class="lead">只回答能被链上摘要证明的记录。每条结论都带出处，答不出就明确拒答。
+     本页完全离线运行：数据内嵌、检索与拦截逻辑在浏览器里实时计算，不需要服务器、数据库或 API Key。</p>
+  <div class="badges">
+    <span class="badge">186 条链上核验事件</span>
+    <span class="badge">190 个知识片段</span>
+    <span class="badge">BM25 + RRF 混合检索</span>
+    <span class="badge">六类拒答拦截</span>
+    <span class="badge">零依赖 · 可离线</span>
+  </div>
+</header>
+
+<div class="metrics">
+  <div class="metric"><b>186</b><span>逐条查链核验证实</span></div>
+  <div class="metric"><b>40</b><span>内置评测用例</span></div>
+  <div class="metric hot"><b>100%</b><span>拒答正确率</span></div>
+  <div class="metric"><b>毫秒级</b><span>纯内存检索 · 无网络请求</span></div>
+</div>
+
+<section class="panel">
+  <h2>现场提问</h2>
+  <div class="examples" id="examples"></div>
+  <div class="inputrow">
+    <input id="q" placeholder="例如：PB20261118001 的检验结论是什么？" autocomplete="off">
+    <button class="primary" id="ask">提问</button>
+  </div>
+  <div id="result"></div>
+</section>
+
+<section class="panel">
+  <h2>一键复现评测</h2>
+  <p style="color:var(--muted);margin:0 0 12px;font-size:13px">
+    点一下，浏览器会实时跑完 40 条评测题并给出通过率——和仓库里
+    <code>python demo.py</code> 的结果一致，不是预先写死的数字。</p>
+  <button class="ghost" id="runEval">运行 40 条评测</button>
+  <div class="evalgrid" id="evalGrid"></div>
+  <div class="evalbox" id="evalBox"></div>
+</section>
+
+<details>
+  <summary>给面试官的 30 秒演示流程（照着点、照着说）</summary>
+  <div class="body">
+    <ol>
+      <li>点「PB20261118001 的检验结论」→ 看绿色答案和下方引用卡片。
+          说：<b>「每个结论都能点回那条链上核验过的事件，不是模型随口说的。」</b></li>
+      <li>点「那批猪肉验上了没」→ 看黄色拒答。
+          说：<b>「没有批次号就不硬答，会拒答的系统才可信。」</b></li>
+      <li>点「A 和 B 哪个温度高」→ 看拒答。
+          说：<b>「知道自己不会什么，比什么都答更专业。」</b></li>
+      <li>点「运行 40 条评测」→ 看全部通过。
+          说：<b>「所有数字当场可复现，仓库里也有同一份脚本。」</b></li>
+    </ol>
+    <p>四步讲完，核心就三件事：数据有门槛、答案有出处、不会就拒答。</p>
+  </div>
+</details>
+
+<details>
+  <summary>这个页面是怎么跑的</summary>
+  <div class="body">
+    <div class="flow">
+      <div class="step"><b>链上核验</b><span>186 条事件逐条比对 SHA-256</span></div>
+      <div class="step"><b>查询改写</b><span>口语归一 + 同义归一</span></div>
+      <div class="step"><b>双路召回</b><span>TF-IDF + BM25 → RRF 融合</span></div>
+      <div class="step"><b>六类拦截</b><span>越界 / 比较 / 无锚点等</span></div>
+      <div class="step"><b>引用回链</b><span>grounded 三重校验</span></div>
+    </div>
+    <p style="margin-top:12px">页面里的检索逻辑与仓库 <code>trusted_rag.py</code> 同源，
+       用 <code>verify_product.mjs</code> 做过一致性验证。语料是导出时刻的快照，
+       <code>MATCHED</code> 状态为导出时核验结果。</p>
+  </div>
+</details>
+
+<details>
+  <summary>诚实的边界（面试主动讲更稳）</summary>
+  <div class="body">
+    <ul style="padding-left:20px;margin:0">
+      <li>离线模式是<b>词面混合检索</b>，不是语义 embedding；答案是<b>抽取式呈现</b>，不是 LLM 生成</li>
+      <li>40 条评测满分不等于真实场景准确率：语料与问题同分布，多为带批次号的精确查询</li>
+      <li>仍未解决：实体消歧（同名供应商）、无锚点泛问的语义判断</li>
+      <li>接真 embedding / LLM 后必须重跑评测——换检索器不改评测集，等于没测</li>
+    </ul>
+  </div>
+</details>
+
+<footer>单文件离线产品 · 双击即可打开 · 可复制到 U 盘或发给面试官 · 不含任何密钥</footer>
+</div>
+
+<script id="rag-core">
+/* 与 trusted_rag.py 同源的浏览器实现。verify_product.mjs 会加载本段做一致性验证。 */
+const RAG_DATA = __RAG_DATA__;
+
+const REFUSAL = "未在已核验记录中找到依据。";
+const OUT_OF_SCOPE = "该问题超出溯源记录范围。";
+const NO_ANCHOR_MSG = "问题缺少可核验的批次号或字段，请补充后再问。例如：PB20261118001 的检验结论是什么？";
+const COMPARISON_MSG = "该问题需要跨记录比较推理，当前离线版不提供此类结论，请分别查询各批次。";
+
+const OUT_OF_SCOPE_PATTERNS = [
+  /安全吗|能不能吃|能吃吗|可以吃吗|会不会中毒|好不好|质量怎么样/,
+  /明天|下周|预测|该进多少|建议采购/,
+  /帮我写|写一段|总结全文|翻译|作诗/,
+  /你是谁|你是.*模型|GPT|ChatGPT/,
+];
+const COMPARISON_RE = /哪个.*(?:高|低|多|少|大|小|好)|哪个更|相比|对比|两者.*比较|哪一个.*更/;
+const ANCHOR_RE = /(?:PB|PR|SUP|SL|RC|AB)[A-Z0-9-]{4,}|检疫|验收|温度|留样|许可证|窗口|产出|产量|召回|冷链|供应商|核验|阈值|超限|合格|结论|状态|证号|编号|规则|流程/;
+const BATCH_RE = /\b((?:PB|PR|SUP|SL|RC|AB|AC|CC|LY)[A-Z0-9-]{4,})\b/gi;
+const FILLER_RE = /请问|麻烦|帮我看一下|一下|呗|啊|吧|随便|有啥|最近/g;
+const CJK_RE = /[\u4e00-\u9fff]+/g;
+const ASCII_RE = /[A-Za-z0-9][A-Za-z0-9._-]*/g;
+const SYNONYMS = [
+  ["检疫证明编号","检疫合格证号"],["检疫证编号","检疫合格证号"],
+  ["验收结果","检验结论"],["负责验收","验收人"],["谁验","验收人"],
+  ["产量","产出"],["食堂窗口","窗口"],["公司的全称","名称"],
+  ["上限是几度","阈值"],["继续卖","继续销售"],
+  ["做过召回处理","召回"],["哪几批","哪些批次"],["几批","哪些批次"],
+];
+const FIELD_EVIDENCE = [
+  [/检疫证号|检疫合格证号/, /检疫合格证号|JX-JY-|JY-360/],
+  [/许可证号/, /许可证号/],
+  [/留样号/, /留样号/],
+  [/验收人|谁验的/, /验收人/],
+  [/到货.*温度|中心温度|温度是多少/, /℃/],
+  [/销售.*窗口|哪个窗口/, /窗口/],
+  [/产出多少|产出量/, /产出/],
+  [/检验结论|合格吗|合格不|是否合格/, /检验结论/],
+];
+const MULTI_RE = /哪些|哪几|几批|有没有|列出|对比/;
+
+function tokenize(text){
+  const out=[]; let m;
+  ASCII_RE.lastIndex=0;
+  while((m=ASCII_RE.exec(text))!==null) out.push(m[0].toLowerCase());
+  CJK_RE.lastIndex=0;
+  while((m=CJK_RE.exec(text))!==null){
+    const seg=m[0];
+    for(const ch of seg) out.push(ch);
+    for(let i=0;i<seg.length-1;i++) out.push(seg.slice(i,i+2));
+  }
+  return out;
+}
+function rewrite(q){
+  let s=q.replace(FILLER_RE,"");
+  for(const [a,b] of SYNONYMS) s=s.split(a).join(b);
+  return s.trim()||q;
+}
+function counterOf(tokens){
+  const m=new Map();
+  for(const t of tokens) m.set(t,(m.get(t)||0)+1);
+  return m;
+}
+
+class TrustedRAG{
+  constructor(data, threshold=0.08, topK=5){
+    this.threshold=threshold; this.topK=topK;
+    this.meta=data.meta||{};
+    this.chunks=[];
+    for(const e of data.events){
+      if(e.verifyStatus!=="MATCHED") continue;
+      this.chunks.push({sourceType:"EVENT",sourceId:e.eventId,batchId:e.batchId,
+        eventType:e.eventType,bizTime:e.bizTime,verifyStatus:e.verifyStatus,
+        dataDigest:e.dataDigest,content:e.text});
+    }
+    for(const d of data.docs||[]){
+      this.chunks.push({sourceType:"STANDARD",sourceId:d.docId,batchId:null,
+        eventType:null,bizTime:null,verifyStatus:"DOCUMENT",dataDigest:null,
+        content:d.content});
+    }
+    this._buildIndex();
+  }
+  _buildIndex(){
+    const n=this.chunks.length; this.n=n;
+    this.counters=this.chunks.map(c=>counterOf(tokenize(c.content)));
+    const df=new Map();
+    for(const m of this.counters) for(const t of m.keys()) df.set(t,(df.get(t)||0)+1);
+    this.idf=new Map();
+    for(const [t,d] of df) this.idf.set(t,Math.log((n+1)/(d+1))+1);
+    this.vecs=this.counters.map(m=>{
+      const v=new Map(); let norm=0;
+      for(const [t,f] of m){const x=(1+Math.log(f))*(this.idf.get(t)||1);v.set(t,x);norm+=x*x;}
+      norm=Math.sqrt(norm)||1;
+      for(const [t,x] of v) v.set(t,x/norm);
+      return v;
+    });
+    this.docTokens=this.chunks.map(c=>tokenize(c.content));
+    this.docLen=this.docTokens.map(t=>t.length);
+    this.avgdl=this.docLen.reduce((a,b)=>a+b,0)/n||1;
+    const bdf=new Map();
+    for(const toks of this.docTokens) for(const t of new Set(toks)) bdf.set(t,(bdf.get(t)||0)+1);
+    this.bm25Idf=new Map();
+    for(const [t,d] of bdf) this.bm25Idf.set(t,Math.log(1+(n-d+0.5)/(d+0.5)));
+    this.bm25Tf=this.docTokens.map(toks=>counterOf(toks));
+  }
+  _qvec(q){
+    const m=counterOf(tokenize(q)); const v=new Map(); let norm=0;
+    for(const [t,f] of m){const x=(1+Math.log(f))*(this.idf.get(t)||1);v.set(t,x);norm+=x*x;}
+    norm=Math.sqrt(norm)||1;
+    for(const [t,x] of v) v.set(t,x/norm);
+    return v;
+  }
+  _bm25Scores(qTokens){
+    const k1=1.5,b=0.75; const scores=[];
+    for(let i=0;i<this.n;i++){
+      let s=0;
+      for(const t of new Set(qTokens)){
+        const f=this.bm25Tf[i].get(t)||0;
+        if(!f) continue;
+        const idf=this.bm25Idf.get(t)||0;
+        s+=idf*(f*(k1+1))/(f+k1*(1-b+b*this.docLen[i]/this.avgdl));
+      }
+      scores.push(s);
+    }
+    return scores;
+  }
+  retrieve(question){
+    const qt=rewrite(question);
+    const qvec=this._qvec(qt), qTokens=tokenize(qt);
+    const batchIds=new Set([...question.matchAll(BATCH_RE)].map(m=>m[1].toUpperCase()));
+    const cos=this.vecs.map(v=>{let s=0;for(const [t,w] of qvec)s+=w*(v.get(t)||0);return s;});
+    const bm=this._bm25Scores(qTokens);
+    const width=Math.max(this.topK*4,40);
+    const rc=[...cos.keys()].sort((a,b)=>cos[b]-cos[a]||a-b).slice(0,width);
+    const rb=[...bm.keys()].sort((a,b)=>bm[b]-bm[a]||a-b).slice(0,width);
+    const K=60, fused=new Map();
+    rc.forEach((i,r)=>fused.set(i,(fused.get(i)||0)+1/(K+r+1)));
+    rb.forEach((i,r)=>fused.set(i,(fused.get(i)||0)+1/(K+r+1)));
+    for(const i of [...fused.keys()]){
+      const bid=this.chunks[i].batchId;
+      if(batchIds.size&&bid&&batchIds.has(bid.toUpperCase())) fused.set(i,fused.get(i)+2/(K+1));
+    }
+    const order=[...fused.keys()].sort((a,b)=>fused.get(b)-fused.get(a)||a-b).slice(0,this.topK);
+    return order.map((i,rank)=>{
+      let score=cos[i];
+      const bid=this.chunks[i].batchId;
+      if(batchIds.size&&bid&&batchIds.has(bid.toUpperCase())) score+=0.15;
+      return {chunk:this.chunks[i],score:Math.round(score*10000)/10000,index:rank+1};
+    });
+  }
+  answer(question){
+    const t0=performance.now(); const q=question.trim();
+    for(const p of OUT_OF_SCOPE_PATTERNS)
+      if(p.test(q)) return this._result(q,OUT_OF_SCOPE,[],[],"out_of_scope",false,t0);
+    if(COMPARISON_RE.test(q))
+      return this._result(q,COMPARISON_MSG,[],[],"comparison_unsupported",false,t0);
+    const asked=new Set([...q.matchAll(BATCH_RE)].map(m=>m[1].toUpperCase()));
+    if(asked.size===0&&!ANCHOR_RE.test(q))
+      return this._result(q,NO_ANCHOR_MSG,[],[],"no_anchor",false,t0);
+    const hits=this.retrieve(q);
+    const best=hits.length?Math.max(...hits.map(h=>h.score)):0;
+    if(!hits.length||best<this.threshold)
+      return this._result(q,REFUSAL,[],hits,"low_score",false,t0);
+    const known=new Set(this.chunks.filter(c=>c.batchId).map(c=>c.batchId.toUpperCase()));
+    if(asked.size&&![...asked].some(a=>known.has(a)))
+      return this._result(q,REFUSAL,[],hits,"unknown_batch",false,t0);
+    const chosen=MULTI_RE.test(q)?hits.slice(0,3):hits.slice(0,1);
+    const contexts=chosen.map(h=>({index:h.index,eventId:h.chunk.sourceId,
+      batchId:h.chunk.batchId,eventType:h.chunk.eventType,
+      verifyStatus:h.chunk.verifyStatus,score:h.score,content:h.chunk.content}));
+    let ans=contexts.map(c=>c.content+" ["+c.index+"]").join("\n");
+    for(const [qp,ap] of FIELD_EVIDENCE)
+      if(qp.test(q)&&!ap.test(ans))
+        return this._result(q,REFUSAL,[],hits,"evidence_not_covered",false,t0);
+    const hasMarker=/\[\d+\]/.test(ans);
+    const grounded=contexts.length>0&&best>=this.threshold&&hasMarker;
+    if(!grounded) return this._result(q,REFUSAL,[],hits,"grounded_rejected",false,t0);
+    const valid=new Set(contexts.map(c=>c.index));
+    const used=new Set([...ans.matchAll(/\[(\d+)\]/g)].map(m=>Number(m[1])));
+    const citations=contexts.filter(c=>used.has(c.index)).map(c=>({
+      index:c.index,eventId:c.eventId,batchId:c.batchId,eventType:c.eventType,
+      verifyStatus:c.verifyStatus,score:c.score,content:c.content}));
+    return this._result(q,ans,citations,hits,"ok",true,t0);
+  }
+  _result(q,ans,citations,hits,mode,grounded,t0){
+    return {question:q,answer:ans,grounded:!!grounded&&citations.length>0,
+      citations:citations,retrieved:hits.map(h=>({batchId:h.chunk.batchId,
+        eventType:h.chunk.eventType,sourceType:h.chunk.sourceType,score:h.score})),
+      mode:mode,latencyMs:Math.round((performance.now()-t0)*100)/100};
+  }
+  evaluate(cases){
+    const rows=cases.map(c=>{
+      const r=this.answer(c.question); let ok;
+      if(c.expect==="refuse") ok=!r.grounded;
+      else{
+        const batches=new Set(r.citations.map(x=>x.batchId));
+        const kw=c.keywords.every(k=>r.answer.includes(k));
+        const bo=!c.expectBatch||batches.has(c.expectBatch);
+        ok=r.grounded&&kw&&bo;
+      }
+      const eb=c.expectBatch;
+      const rank=r.retrieved.findIndex(x=>eb&&x.batchId===eb);
+      return {id:c.id,expect:c.expect,pass:ok,rank:rank<0?null:rank+1,
+        recallAt5:eb?(rank>=0&&rank<5):null,mode:r.mode,grounded:r.grounded};
+    });
+    const ans=rows.filter(r=>r.expect==="answer"), ref=rows.filter(r=>r.expect==="refuse");
+    const ranked=ans.filter(r=>r.recallAt5!==null);
+    return {cases:rows.length,answerCases:ans.length,refuseCases:ref.length,
+      answerAccuracy:ans.filter(r=>r.pass).length/ans.length,
+      refusalAccuracy:ref.filter(r=>r.pass).length/ref.length,
+      recallAt5:ranked.filter(r=>r.rank).length/ranked.length,
+      top1Accuracy:ranked.filter(r=>r.rank===1).length/ranked.length,
+      mrr:ranked.reduce((s,r)=>s+(r.rank?1/r.rank:0),0)/ranked.length,
+      failedCaseIds:rows.filter(r=>!r.pass).map(r=>r.id),rows:rows};
+  }
+}
+if(typeof window!=="undefined"){window.TrustedRAG=TrustedRAG;window.RAG_DATA=RAG_DATA;}
+if(typeof module!=="undefined"&&module.exports){module.exports={TrustedRAG,RAG_DATA};}
+</script>
+
+<script>
+const rag = new TrustedRAG(RAG_DATA);
+const EXAMPLES = [
+  {q:"PB20261118001 这批猪肉的检验结论是什么？", warn:false},
+  {q:"PR20261118033 投入了多少公斤，产出多少？", warn:false},
+  {q:"召回之后还能继续销售吗？", warn:false},
+  {q:"PB20261118001 的验收结果是什么？", warn:false},
+  {q:"那批猪肉验上了没？", warn:true},
+  {q:"PB20261118001 和 PB20261118035 哪个温度高？", warn:true},
+  {q:"PB29991111001 的检疫证号是多少？", warn:true},
+  {q:"这批肉吃了安全吗？", warn:true},
+];
+const MODE_CN = {
+  ok:"已核验回答",out_of_scope:"越界拦截",comparison_unsupported:"比较推理不提供",
+  no_anchor:"缺少可核验锚点",low_score:"相似度不足",unknown_batch:"批次不存在",
+  evidence_not_covered:"证据未覆盖所问字段",grounded_rejected:"grounded 校验未通过"
+};
+function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function renderAnswer(d){
+  const box=document.getElementById("result");
+  let html="";
+  if(d.grounded){
+    html+='<span class="state ok">✓ '+MODE_CN[d.mode]+' · '+d.citations.length+' 条引用 · '+d.latencyMs+' ms</span>';
+    html+='<div class="answer">'+esc(d.answer).replace(/\[(\d+)\]/g,'<span class="mark">[$1]</span>')+'</div>';
+    html+='<div class="cites">';
+    for(const c of d.citations){
+      html+='<div class="cite"><div class="top">'
+        +'<span class="chip">['+c.index+'] '+esc(c.eventType||"业务规则")+'</span>'
+        +(c.batchId?'<span class="chip">'+esc(c.batchId)+'</span>':'')
+        +'<span class="chip">'+esc(c.verifyStatus)+'</span>'
+        +'<span class="chip gray">score '+c.score+'</span></div>'
+        +'<div class="meta">eventId '+esc(String(c.eventId).slice(0,24))+'…'
+        +(c.eventId&&c.eventId.length>24?'':'')+'</div></div>';
+    }
+    html+='</div>';
+  }else{
+    html+='<span class="state no">拒答 · '+MODE_CN[d.mode]+'</span>';
+    html+='<div class="answer refuse">'+esc(d.answer)+'</div>';
+    html+='<div class="why">拦截发生在生成答案之前：系统不会把「检索到一点相关文字」当成「可以回答」。</div>';
+  }
+  box.innerHTML=html;
+}
+function ask(){
+  const q=document.getElementById("q").value.trim();
+  if(!q) return;
+  renderAnswer(rag.answer(q));
+}
+document.getElementById("ask").addEventListener("click",ask);
+document.getElementById("q").addEventListener("keydown",e=>{if(e.key==="Enter")ask();});
+const exBox=document.getElementById("examples");
+EXAMPLES.forEach(e=>{
+  const b=document.createElement("button");
+  b.className="ex"+(e.warn?" warn":""); b.textContent=e.q;
+  b.addEventListener("click",()=>{document.getElementById("q").value=e.q;ask();});
+  exBox.appendChild(b);
+});
+document.getElementById("runEval").addEventListener("click",()=>{
+  const btn=document.getElementById("runEval"); btn.disabled=true; btn.textContent="运行中…";
+  setTimeout(()=>{
+    const m=rag.evaluate(RAG_DATA.evalCases);
+    const grid=document.getElementById("evalGrid");
+    const cells=[
+      ["用例总数",m.cases],["答案正确率",(m.answerAccuracy*100).toFixed(0)+"%"],
+      ["拒答正确率",(m.refusalAccuracy*100).toFixed(0)+"%"],["失败用例",m.failedCaseIds.length]
+    ];
+    grid.innerHTML=cells.map(c=>'<div class="ev"><b>'+c[1]+'</b><span>'+c[0]+'</span></div>').join("");
+    const box=document.getElementById("evalBox"); box.style.display="block";
+    box.textContent="R@5 "+m.recallAt5.toFixed(2)+"  Top-1 "+m.top1Accuracy.toFixed(2)
+      +"  MRR "+m.mrr.toFixed(2)+"\n失败用例: "+(m.failedCaseIds.join(", ")||"无")
+      +"\n\n"+m.rows.map(r=>(r.pass?"PASS":"FAIL")+"  "+r.id+"  "+r.mode).join("\n");
+    btn.disabled=false; btn.textContent="重新运行评测";
+  },30);
+});
+renderAnswer(rag.answer(EXAMPLES[0].q));
+document.getElementById("q").value=EXAMPLES[0].q;
+</script>
+</body>
+</html>
