@@ -1,0 +1,39 @@
+{
+  "meta": {
+    "capturedAt": "2026-11-19T05:19:15.195Z",
+    "provider": "DeepSeek OpenAI-compatible API",
+    "modelRequested": "deepseek-chat",
+    "modeLabel": "LLM 工具规划（自由提问）",
+    "question": "给我一份业务整体概览",
+    "note": "真实调用取证；密钥只在浏览器本机，输出文件不含密钥或 Authorization 头"
+  },
+  "result": {
+    "llmUsed": true,
+    "llmError": null,
+    "model": "deepseek-chat",
+    "planner": "LLM 工具规划",
+    "plannerFallback": false,
+    "traceSteps": 4,
+    "tools": [
+      "compute_stats",
+      "list_suppliers",
+      "list_abnormals",
+      "list_recalls"
+    ],
+    "modeName": "LLM 工具规划 · 4 步",
+    "badge": "LLM 增强模式",
+    "finalAnswer": "业务整体概览如下：\n\n采购情况\n- 采购批次数：71 个 [T1]\n- 采购总量：3092.000 kg [T1]\n- 采购总量（折合斤）：6184.000 斤 [T1]\n\n供应商情况\n- 供应商命中 26 家 [T2]\n- 样例中状态为 ACTIVE 的供应商：江西绿源肉业有限公司（SUP-0001）[T2]、赣州康泰食品有限公司（SUP-0002）[T2]\n- 样例中状态为 SUSPENDED 的供应商：新余顺发屠宰场（SUP-0003）[T2]\n\n异常工单情况\n- 异常工单命中 7 条 [T3]\n- 样例记录：\n  - AB20261118001，批次 3，类型 TEMPERATURE_EXCEEDED，等级 HIGH，状态 CLOSED，处理人李四 [T3]\n  - AB20261118002，批次 35，类型 TEMPERATURE_EXCEEDED，等级 HIGH，状态 OPEN，处理人系统自动 [T3]\n  - AB20261118003，加工批次 42，类型 SENSORY_ABNORMAL，等级 HIGH，状态 CLOSED，处理人自检员 [T3]\n\n召回记录情况\n- 召回记录命中 3 条 [T4]\n- 样例记录：\n  - RC20261118001，加工批次 40，召回数量 28.000，状态 INITIATED，召回时间 2026-11-18 22:22:30 [T4]\n  - RC20261118002，加工批次 43，召回数量 28.000，状态 INITIATED，召回时间 2026-11-18 22:25:12 [T4]\n  - RC20261118003，加工批次 46，召回数量 28.000，状态 INITIATED，召回时间 2026-11-18 23:36:26 [T4]\n\n以上仅为已核验记录中呈现的内容，未在已核验记录中找到依据的信息未作补充。",
+    "deterministicText": "工具取数结果：\n[T1] compute_stats：汇总 12 项业务指标（代码精确计算）\n  {\"指标\":\"采购批次数\",\"值\":\"71 个\"}\n  {\"指标\":\"采购总量\",\"值\":\"3092.000 kg\"}\n  {\"指标\":\"采购总量（折合斤）\",\"值\":\"6184.000 斤\"}\n[T2] list_suppliers：命中 26 家供应商\n  {\"id\":1,\"supplier_code\":\"SUP-0001\",\"name\":\"江西绿源肉业有限公司\",\"license_no\":\"JX20240001\",\"contact_name\":\"张建国\",\"contact_phone\":\"13807911234\",\"address\":\"南昌市青山湖区昌东工业园 18 号\",\"status\":\"ACTIVE\"}\n  {\"id\":2,\"supplier_code\":\"SUP-0002\",\"name\":\"赣州康泰食品有限公司\",\"license_no\":\"GZ20240002\",\"contact_name\":\"刘美华\",\"contact_phone\":\"13979712233\",\"address\":\"赣州市章贡区沙河工业园 6 号\",\"status\":\"ACTIVE\"}\n  {\"id\":3,\"supplier_code\":\"SUP-0003\",\"name\":\"新余顺发屠宰场\",\"license_no\":\"XY20230003\",\"contact_name\":\"黄顺发\",\"contact_phone\":\"13707903344\",\"address\":\"新余市渝水区下村镇工业路 3 号\",\"status\":\"SUSPENDED\"}\n[T3] list_abnormals：命中 7 条异常工单\n  {\"id\":1,\"abnormal_no\":\"AB20261118001\",\"batch_id\":3,\"process_batch_id\":null,\"abnormal_type\":\"TEMPERATURE_EXCEEDED\",\"level\":\"HIGH\",\"description\":\"PB20261118003 到货温度 6.20℃，超过冷鲜猪肉 4.00℃ 限值 2.20℃；车厢制冷途中停机约 40 分钟\",\"status\":\"CLOSED\",\"handler\":\"李四\",\"conclusion\":\"供应商承担往返运费，记入季度考评扣分；本批次不进入加工环节\"}\n  {\"id\":2,\"abnormal_no\":\"AB20261118002\",\"batch_id\":35,\"process_batch_id\":null,\"abnormal_type\":\"TEMPERATURE_EXCEEDED\",\"level\":\"HIGH\",\"description\":\"运输段 ORIGIN_TO_WAREHOUSE 实测 6.50℃ 超出阈值 4.0℃（运输单号 TR-SMOKE-002）\",\"status\":\"OPEN\",\"handler\":\"系统自动\",\"conclusion\":null}\n  {\"id\":3,\"abnormal_no\":\"AB20261118003\",\"batch_id\":null,\"process_batch_id\":42,\"abnormal_type\":\"SENSORY_ABNORMAL\",\"level\":\"HIGH\",\"description\":\"抽检发现色泽异常，暂停销售待复检\",\"status\":\"CLOSED\",\"handler\":\"自检员\",\"conclusion\":\"复检合格，恢复销售\"}\n[T4] list_recalls：命中 3 条召回记录\n  {\"id\":1,\"recall_no\":\"RC20261118001\",\"process_batch_id\":40,\"reason\":\"同批次抽检发现兽药残留超标（自检模拟）\",\"affected_sales\":3,\"recalled_qty\":\"28.000\",\"status\":\"INITIATED\",\"recall_time\":\"2026-11-18 22:22:30\"}\n  {\"id\":2,\"recall_no\":\"RC20261118002\",\"process_batch_id\":43,\"reason\":\"同批次抽检发现兽药残留超标（自检模拟）\",\"affected_sales\":3,\"recalled_qty\":\"28.000\",\"status\":\"INITIATED\",\"recall_time\":\"2026-11-18 22:25:12\"}\n  {\"id\":3,\"recall_no\":\"RC20261118003\",\"process_batch_id\":46,\"reason\":\"同批次抽检发现兽药残留超标（自检模拟）\",\"affected_sales\":3,\"recalled_qty\":\"28.000\",\"status\":\"INITIATED\",\"recall_time\":\"2026-11-18 23:36:26\"}\n\n依据：[T1] compute_stats · [T2] list_suppliers · [T3] list_abnormals · [T4] list_recalls",
+    "usage": {
+      "prompt_tokens": 2020,
+      "completion_tokens": 463,
+      "total_tokens": 2483,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "prompt_cache_hit_tokens": 0,
+      "prompt_cache_miss_tokens": 2020
+    },
+    "http": 200
+  }
+}

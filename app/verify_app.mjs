@@ -146,6 +146,50 @@ ctx.fetch = mockFetch
 C.clearLLMConfig()
 check('清除密钥后回到离线模式', C.llmActive() === false)
 
+console.log('\n=== 5. 自由提问覆盖（计算类 + LLM 工具规划器，mock）===')
+const calc = runAgent('所有批次的肉类一共有多少斤？')
+check('计算类问题不再拒答', !calc.refused && calc.tools.includes('compute_stats'),
+  calc.refused ? calc.reason : calc.tools.join(','))
+const kg = S.purchases.reduce((s, x) => s + Number(x.quantity), 0)
+check('答案含 kg→斤 换算且数值由代码精确计算',
+  calc.text.includes('斤') && calc.text.includes((kg * 2).toFixed(3)),
+  '采购总量 ' + kg.toFixed(3) + ' kg → ' + (kg * 2).toFixed(3) + ' 斤')
+const calc2 = runAgent('帮我汇总一下采购、加工和销售的数量')
+check('换一种说法也能命中汇总工具', !calc2.refused && calc2.tools.includes('compute_stats'))
+
+C.setLLMConfig({ base: 'http://mock.local/v1', key: 'sk-mock', model: 'mock', enabled: true })
+ctx.fetch = async (url, opts) => {
+  const body = JSON.parse(opts.body)
+  const isPlanner = body.messages[0].content.includes('工具规划器')
+  return { ok: true, json: async () => ({ choices: [{ message: { content: isPlanner
+    ? JSON.stringify({ steps: [
+        { thought: '先汇总全部数量', tool: 'compute_stats', args: {} },
+        { thought: '再查供应商名单', tool: 'list_suppliers', args: {} },
+        { thought: '这个工具不存在', tool: 'hack_tool', args: {} }
+      ] })
+    : '[T1] 这是按工具结果组织的自然语言答案' } }] }) }
+}
+const planned = await C.planWithLLM('给我一份业务整体概览')
+check('LLM 规划器产出步骤', !!planned && planned.steps.length >= 1,
+  planned ? planned.name : 'null')
+check('非法工具被白名单过滤',
+  !!planned && planned.steps.every(s => !!TOOLS[s.tool]) && planned.steps.length === 2)
+const smart = await C.runAgentSmart('给我一份业务整体概览')
+check('自由提问不再落到"未匹配到可用工具"', !smart.refused,
+  smart.refused ? smart.reason : smart.modeName)
+check('规划方式标记为 LLM 工具规划', smart.planner === 'LLM 工具规划')
+check('轨迹仍由代码执行并记录', smart.trace.length >= 2 && smart.tools.includes('compute_stats'))
+check('答案仍由 LLM 组织且带依据', smart.llmUsed === true && smart.text.includes('[T1]'))
+const guardCase = await C.runAgentSmart('帮我预测明天的销量')
+check('越界护栏不交给 LLM 规划器',
+  guardCase.refused === true && guardCase.reason === '越界拦截')
+ctx.fetch = async () => { throw new Error('mock 规划器不可用') }
+const fb = await C.runAgentSmart('给我一份业务整体概览')
+check('规划器失败回退到友好拒答', fb.refused === true && !!fb.plannerFallback)
+ctx.fetch = mockFetch
+C.clearLLMConfig()
+check('工具集扩为 11 个', Object.keys(TOOLS).length === 11)
+
 console.log('\n=== 结论 ===')
 console.log(`  PASS ${pass} / FAIL ${fail}`)
 process.exit(fail ? 1 : 0)

@@ -134,6 +134,16 @@ try {
   await cdp.eval("C.clearLLMConfig(); window.fetch=undefined; 'ok'")
   check('清除后恢复离线模式', (await cdp.eval('C.llmActive()')) === false)
 
+  // 用户截图里的真实问题：换个说法也要能答（离线走 compute_stats）
+  await cdp.eval(`go('agent');
+    document.getElementById('agentQ').value='所有批次的肉类一共有多少斤？';
+    runAgentUI(); 'ok'`)
+  await sleep(350)
+  const calcText = await cdp.eval("document.getElementById('finalAnswer')?.textContent || ''")
+  check('自由计算类提问不再拒答', calcText.includes('斤') && calcText.includes('compute_stats'),
+    calcText.slice(0, 60).replace(/\n/g, ' '))
+  check('答案标明"代码精确汇总"', calcText.includes('代码精确汇总'))
+
   cdp.close()
   await fetch(`http://127.0.0.1:${PORT}/json/close/${tab.id}`).catch(() => {})
 } catch (e) {

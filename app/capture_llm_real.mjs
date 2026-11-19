@@ -20,8 +20,8 @@ const here = dirname(fileURLToPath(import.meta.url))
 const EDGE = 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe'
 const PORT = 9227
 const url = pathToFileURL(join(here, 'app.html')).href
-const outJson = join(here, 'evaluation_llm_real.json')
-const outPng = join(here, '..', 'backend', 'target', 'app-llm-real.png')
+const outJson = join(here, process.env.LLM_OUT || 'evaluation_llm_real.json')
+const outPng = join(here, '..', 'backend', 'target', process.env.LLM_PNG || 'app-llm-real.png')
 const sleep = ms => new Promise(r => setTimeout(r, ms))
 
 class CDP {
@@ -56,7 +56,8 @@ class CDP {
   close() { this.ws.close() }
 }
 
-const question = '哪些批次冷链温度超限？涉及哪些供应商？是否需要召回？'
+const question = process.env.LLM_QUESTION || '哪些批次冷链温度超限？涉及哪些供应商？是否需要召回？'
+const modeLabel = process.env.LLM_MODE || '确定性工作流'
 const profile = mkdtempSync(join(tmpdir(), 'mt-llm-'))
 const child = spawn(EDGE, ['--headless=new', '--disable-gpu', '--no-sandbox',
   '--hide-scrollbars', `--remote-debugging-port=${PORT}`,
@@ -106,6 +107,7 @@ try {
 
   result = await cdp.eval(`(()=>{const r=window.__lastAgent||{};return {
     llmUsed:!!r.llmUsed, llmError:r.llmError||null, model:r.llmModel||window.__llmModel||null,
+    planner:r.planner||null, plannerFallback:!!r.plannerFallback,
     traceSteps:(r.trace||[]).length, tools:(r.tools||[]),
     modeName:r.modeName||null, badge:document.getElementById('agentMode')?.textContent||'',
     finalAnswer:document.getElementById('finalAnswer')?.textContent||'',
@@ -130,6 +132,7 @@ const report = {
     capturedAt: new Date().toISOString(),
     provider: 'DeepSeek OpenAI-compatible API',
     modelRequested: 'deepseek-chat',
+    modeLabel,
     question,
     note: '真实调用取证；密钥只在浏览器本机，输出文件不含密钥或 Authorization 头',
   },

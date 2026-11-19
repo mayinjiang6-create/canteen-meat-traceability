@@ -42,9 +42,10 @@
 
 **它不是聊天框**：按意图规划步骤 → 调用工具 → 把每一步观察写进轨迹 → 答案只从工具结果生成。
 
-- **10 个工具**：`list_suppliers` / `get_purchase` / `list_cold_exceeded` /
+- **11 个工具**：`list_suppliers` / `get_purchase` / `list_cold_exceeded` /
   `list_abnormals` / `list_recalls` / `get_process` / `list_sales` /
-  `list_events` / `get_rule` / `verify_status`
+  `list_events` / `get_rule` / `verify_status` / `compute_stats`（代码精确汇总数量，
+  含 kg→斤 换算，不让模型做算术）
 - **两种执行模式**
   - 单步工具调用：意图明确，一次取数直接答
   - 确定性工作流：复杂问题拆成固定几步（例：冷链超限 → 关联供应商 → 查召回 → 取规则）
@@ -61,6 +62,33 @@
 > 为什么以确定性工作流为主、不放任 ReAct 自主乱逛：业务系统里**可控、可复现、成本可估**
 > 比"看起来更自主"重要。接 LLM 也只是替换最后的语言组织，工具集和护栏不变。
 > 这个取舍本身是面试里很值钱的一句话。
+
+---
+
+## 3.1 自由提问：以前"很多都搜不到"，现在怎么解决
+
+**根因**：旧版把意图路由写成固定关键词匹配，换个说法就落到
+「未匹配到可用工具 → 拒答」。不是模型不行，是这一层太死。
+
+**现在三层覆盖**：
+
+1. **确定性关键词路由**：常见问法零成本、可复现（冷链超限、异常召回、批次详情、
+   核验状态、供应商、销售、加工规则等）
+2. **计算类问题**：`compute_stats` 由代码精确汇总采购/加工/销售数量与 kg→斤 换算
+   ——像「所有批次的肉类一共有多少斤？」这种问法，**离线也能答**
+3. **匹配不到且已启用 LLM**：交给 **LLM 工具规划器**。模型只从 11 个白名单工具里
+   选、最多 4 步、只输出计划 JSON；代码负责执行、参数兜底、轨迹记录、答案校验。
+   非法工具名被直接丢弃；规划失败自动回退到友好拒答并给出示例问法；
+   **越界护栏（安全/预测/写作）不交给模型**。
+
+> 这正好回答「为什么不让模型决定调哪个工具」的演进版：
+> 规划可以交给 LLM，**执行权与护栏必须留在代码里**。
+> 面试时可以说「我用 LLM 做 planner、代码做 executor，白名单 + 参数校验 + 失败回退」。
+
+**真实验证**：自由提问「给我一份业务整体概览」（不含任何预设关键词）
+被规划成 4 步 `compute_stats → list_suppliers → list_abnormals → list_recalls`，
+生成 805 字带 `[T1][T2]` 依据的结构化概览。证据 `evaluation_llm_planner.json`，
+截图 `screenshots/03-智能体自由提问规划.png`。
 
 ---
 
@@ -106,10 +134,11 @@ node verify_app_browser.mjs    # 真实浏览器：登录 → 切模块 → 跑�
 - `app.template.html`：界面与逻辑模板
 - `build_app.py` 优先读快照；快照不存在时才尝试连 MySQL（需要 `pymysql`）
 
-**最近一次验证**：核心 `PASS 51 / FAIL 0`，浏览器交互 `PASS 12 / FAIL 0`，
-本机已接入版 `PASS 4 / FAIL 0`；另完成 **1 次真实 DeepSeek 调用**
+**最近一次验证**：核心 `PASS 63 / FAIL 0`，浏览器交互 `PASS 14 / FAIL 0`，
+本机已接入版 `PASS 4 / FAIL 0`；另完成 **2 次真实 DeepSeek 调用**
 （HTTP 200 / 4 步轨迹 / 1820 tokens / 带 `[Tn]` 依据的答案），
-证据见 `evaluation_llm_real.json` 与 `screenshots/03-智能体真实LLM调用.png`。
+证据见 `evaluation_llm_real.json`、`evaluation_llm_planner.json` 与
+`screenshots/03-智能体真实LLM调用.png`、`screenshots/03-智能体自由提问规划.png`。
 除这次真实调用外，其余 LLM 验证全部使用 mock，不产生费用。
 
 ```bash

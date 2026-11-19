@@ -395,6 +395,24 @@ const TOOLS={
     const rows=[{mode:mode,status:mode==='unreachable'?'UNREACHABLE':'MATCHED',
       note:mode==='unreachable'?'链不可达，熔断返回，业务数据仍可读':'链上摘要与本地重算一致'}];
     return {rows,summary:'当前核验状态：'+rows[0].status};}},
+  compute_stats:{label:'业务汇总计算',desc:'按代码精确汇总采购/加工/销售数量与批次、供应商数量，含 kg 与斤换算',run(a){
+    const sum=(arr,f)=>q3(arr.reduce((s,x)=>s+num(f(x)),0));
+    const purchaseKg=num(sum(S.purchases,x=>x.quantity));
+    const rows=[
+      {指标:'采购批次数',值:S.purchases.length+' 个'},
+      {指标:'采购总量',值:q3(purchaseKg)+' kg'},
+      {指标:'采购总量（折合斤）',值:q3(purchaseKg*2)+' 斤'},
+      {指标:'采购可用余量',值:sum(S.purchases,x=>x.available_qty)+' kg'},
+      {指标:'加工批次数',值:S.processes.length+' 个'},
+      {指标:'加工产出合计',值:sum(S.processes,x=>x.output_qty)+' kg'},
+      {指标:'加工可售余量',值:sum(S.processes,x=>x.available_qty)+' kg'},
+      {指标:'销售笔数',值:S.sales.length+' 笔'},
+      {指标:'销售合计',值:sum(S.sales,x=>x.quantity)+' kg'},
+      {指标:'供应商数',值:S.suppliers.length+' 家'},
+      {指标:'冷链记录 / 异常 / 召回',值:S.coldChain.length+' / '+S.abnormals.length+' / '+S.recalls.length},
+      {指标:'存证事件',值:S.events.length+' 条'},
+    ];
+    return {rows,summary:'汇总 '+rows.length+' 项业务指标（代码精确计算）'};}},
 };
 const GUARD=[
   {re:/安全吗|能不能吃|能吃吗|会不会中毒|好不好|质量怎么样/,msg:'食品安全由检疫机构判定，系统不推断'},
@@ -446,6 +464,14 @@ function plan(q){
         '异常登记会冻结在售批次，处置通过后可恢复销售；召回后禁止继续销售。\n\n'+
         '依据：[T1] 异常工单 '+ab.length+' 条 · [T2] 召回 '+rc.length+' 条 · [T3] 业务规则',empty:false};
     }};
+  if(has('多少','合计','一共','总共','汇总','统计','计算','斤','公斤','总量'))return {
+    mode:'single',name:'单步工具调用',
+    steps:[{thought:'这是汇总计算类问题，用代码精确汇总业务数量，不让模型做算术',
+      tool:'compute_stats',args:{}}],
+    build(ctx){const rows=ctx[0].rows;
+      return {text:'按代码精确汇总（不是模型估算）：\n'+
+        rows.map(r=>'· '+r.指标+'：'+r.值).join('\n')+
+        '\n\n依据：[T1] compute_stats '+rows.length+' 项指标',empty:false};}};
   if(/PB\d{6,}/i.test(q))return {
     mode:'single',name:'单步工具调用',
     steps:[{thought:'问题点名了批次号，直接查该批次的采购与验收记录',tool:'get_purchase',
@@ -491,31 +517,48 @@ function plan(q){
         '依据：[T1] get_process 命中 '+rows.length+' 条',empty:false};}};
   return null;
 }
-function runAgent(question){
-  const q=question.trim();
-  for(const g of GUARD)if(g.re.test(q))
-    return {refused:true,reason:'越界拦截',text:'该问题超出溯源系统职责：'+g.msg+'。',trace:[],tools:[]};
-  if(!/PB\d|PR\d|SUP-|冷链|超限|异常|召回|核验|供应商|销售|加工|投料|规则|温度|批次/i.test(q))
-    return {refused:true,reason:'缺少可核验锚点',text:'问题缺少可核验的批次号或业务对象，请补充后再问。',trace:[],tools:[]};
-  const p=plan(q);
-  if(!p)return {refused:true,reason:'未匹配到可用工具',text:'当前工具集无法回答该问题，已拒答而不是猜测。',trace:[],tools:[]};
+function executeSteps(q,planObj,buildFn){
   const trace=[],ctxRows=[],tools=[];const t0=performance.now();
-  p.steps.forEach((s,i)=>{
+  planObj.steps.forEach((s,i)=>{
     let args=s.args||{};
     if(s.args&&s.args.fromStep!==undefined){
       const prev=ctxRows[s.args.fromStep]||{rows:[]};
       args={ids:[...new Set(prev.rows.map(x=>x.batch_id))]};
     }
-    const t1=performance.now();const out=TOOLS[s.tool].run(args);
+    const t1=performance.now();
+    const out=(TOOLS[s.tool]||TOOLS.compute_stats).run(args);  // 白名单兜底
     const ms=Math.round((performance.now()-t1)*100)/100;
-    ctxRows.push(out);tools.push(s.tool);
+    ctxRows.push({...out,tool:s.tool});tools.push(s.tool);
     trace.push({no:i+1,thought:s.thought,tool:s.tool,args:args,
-      label:TOOLS[s.tool].label,observation:out.summary,rows:out.rows.slice(0,3),ms});
+      label:(TOOLS[s.tool]||TOOLS.compute_stats).label,
+      observation:out.summary,rows:out.rows.slice(0,3),ms});
   });
-  const built=p.build(ctxRows);
+  const built=buildFn?buildFn(ctxRows):genericBuild(ctxRows);
   if(built.empty)return {refused:true,reason:'工具未找到依据',text:built.text,trace,tools};
-  return {refused:false,mode:p.mode,modeName:p.name,text:built.text,trace,tools,
-    ms:Math.round((performance.now()-t0)*100)/100};
+  return {refused:false,mode:planObj.mode,modeName:planObj.name,text:built.text,
+    trace,tools,ms:Math.round((performance.now()-t0)*100)/100};
+}
+function genericBuild(ctxRows){
+  if(!ctxRows.some(o=>o.rows&&o.rows.length))
+    return {text:'未在已核验记录中找到依据。',empty:true};
+  const lines=ctxRows.map((o,i)=>'[T'+(i+1)+'] '+o.tool+'：'+o.summary+'\n'+
+    (o.rows||[]).slice(0,3).map(r=>'  '+JSON.stringify(r)).join('\n'));
+  return {text:'工具取数结果：\n'+lines.join('\n')+'\n\n依据：'+
+    ctxRows.map((o,i)=>'[T'+(i+1)+'] '+o.tool).join(' · '),empty:false};
+}
+function runAgent(question){
+  const q=question.trim();
+  for(const g of GUARD)if(g.re.test(q))
+    return {refused:true,reason:'越界拦截',text:'该问题超出溯源系统职责：'+g.msg+'。',trace:[],tools:[]};
+  if(!/PB\d|PR\d|SUP-|冷链|超限|异常|召回|核验|供应商|销售|加工|投料|规则|温度|批次|多少|合计|一共|总共|汇总|统计|计算|斤|公斤/i.test(q))
+    return {refused:true,reason:'缺少可核验锚点',text:'问题缺少可核验的批次号或业务对象，请补充后再问。',trace:[],tools:[]};
+  const p=plan(q);
+  if(!p)return {refused:true,reason:'未匹配到可用工具',
+    text:'这个问法暂时没匹配到固定工具，已拒答而不是猜测。\n'+
+      (llmActive()?'（已启用 LLM，将自动改用模型从白名单里规划工具）':'可以点下方示例问题，或换更具体的说法。')+
+      '\n例如：所有批次的肉类一共有多少斤？ / PB20261118001 的验收结论是什么？ / 哪些批次冷链超限？',
+    trace:[],tools:[]};
+  return executeSteps(q,p,p.build);
 }
 /* ===== 可插拔 LLM 生成层 =====
    设计取舍：工具选择、意图路由、护栏、引用校验全部由本地代码决定；
@@ -564,8 +607,63 @@ async function polishWithLLM(result,question){
     return {...result,llmUsed:false,llmError:String(e.message||e)};
   }finally{clearTimeout(timer);}
 }
+/* ===== LLM 工具规划器（解决「换个说法就搜不到」） =====
+   确定性关键词路由覆盖不到的自由提问，交给 LLM 从**固定白名单**里选工具；
+   代码负责执行、参数兜底、轨迹记录与答案校验。模型不能凭空造工具，
+   也不能直接给答案——它只产出计划。 */
+async function planWithLLM(q){
+  const cfg=getLLMConfig();
+  if(!cfg||!cfg.enabled||!cfg.key)return null;
+  const specs=Object.entries(TOOLS).map(([k,v])=>'- '+k+'：'+v.desc).join('\n');
+  const prompt=
+    '你是溯源系统的工具规划器。只输出 JSON，不要解释、不要回答问题本身。\n'+
+    '可用工具白名单（只能选这里的名字）：\n'+specs+'\n\n'+
+    '输出格式：{"steps":[{"thought":"为什么调这个工具","tool":"工具名","args":{}}]}\n'+
+    '规则：最多 4 步；tool 必须是白名单里的名字；args 必须是对象，无参数写 {}；'+
+    '需要汇总数量时用 compute_stats；需要取原文规则时用 get_rule。\n\n'+
+    '【问题】'+q+'\n【JSON】';
+  const ctrl=new AbortController();const timer=setTimeout(()=>ctrl.abort(),15000);
+  try{
+    const r=await fetch(cfg.base.replace(/\/+$/,'')+'/chat/completions',{
+      method:'POST',signal:ctrl.signal,
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+cfg.key},
+      body:JSON.stringify({model:cfg.model,messages:[{role:'user',content:prompt}],temperature:0})});
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    const d=await r.json();
+    let txt=(d.choices&&d.choices[0]&&d.choices[0].message&&d.choices[0].message.content||'').trim();
+    txt=txt.replace(/^```(?:json)?/i,'').replace(/```$/,'').trim();
+    const m=txt.match(/\{[\s\S]*\}/);
+    if(!m)throw new Error('规划器未返回 JSON');
+    const parsed=JSON.parse(m[0]);
+    if(!Array.isArray(parsed.steps))throw new Error('缺少 steps');
+    const steps=parsed.steps.slice(0,4).filter(s=>s&&TOOLS[s.tool]).map(s=>({
+      thought:String(s.thought||'按问题取数'),tool:s.tool,
+      args:(s.args&&typeof s.args==='object'&&!Array.isArray(s.args))?s.args:{}
+    }));
+    if(!steps.length)throw new Error('没有合法工具');
+    return {mode:'llm_planner',name:'LLM 工具规划 · '+steps.length+' 步',steps:steps,build:null};
+  }catch(e){return null;}
+  finally{clearTimeout(timer);}
+}
+async function runAgentSmart(question){
+  const q=question.trim();
+  const base=runAgent(q);                       // 确定性优先：常见问法零成本、可复现
+  if(!base.refused){
+    base.planner='确定性路由';
+    return llmActive()?await polishWithLLM(base,q):base;
+  }
+  if(base.reason==='越界拦截')return base;      // 护栏不交给模型
+  if(!llmActive())return base;
+  const p=await planWithLLM(q);                // 自由提问：LLM 只做规划
+  if(!p)return {...base,plannerFallback:true};
+  const r=executeSteps(q,p,null);              // 代码执行 + 轨迹 + 白名单兜底
+  r.planner='LLM 工具规划';
+  if(r.refused)return r;
+  return await polishWithLLM(r,q);             // LLM 只组织已取到的结果
+}
 if(typeof window!=='undefined'){window.APP_DATA=APP_DATA;window.APP_CORE={S,seed,save,resetDemo,
-  BIZ,TOOLS,runAgent,VIEWS,now,q3,num,getLLMConfig,setLLMConfig,clearLLMConfig,llmActive,polishWithLLM};}
+  BIZ,TOOLS,runAgent,runAgentSmart,planWithLLM,executeSteps,VIEWS,now,q3,num,
+  getLLMConfig,setLLMConfig,clearLLMConfig,llmActive,polishWithLLM};}
 </script>
 
 <script>
@@ -818,6 +916,8 @@ RENDER.agent=()=>{
 };
 const AGENT_EXS=[
  '哪些批次冷链温度超限？涉及哪些供应商？是否需要召回？',
+ '所有批次的肉类一共有多少斤？',
+ '帮我汇总一下采购、加工和销售的数量',
  '最近有哪些异常和召回？分别处理到哪一步了？',
  'PB20261118001 的验收结论和检疫证号是什么？',
  '这个系统的记录核验状态有哪几类？',
@@ -837,7 +937,8 @@ function renderAgentResult(r){
   if(badge)badge.textContent=C.llmActive()?'LLM 增强模式（本次拒答未调用模型）':'离线确定性模式';
  }else{
   h='<div class="stat"><span>模式：'+esc(r.modeName)+'</span><span>调用工具 '+r.tools.length+
-   ' 次</span><span>轨迹 '+r.trace.length+' 步</span><span>耗时 '+r.ms+' ms</span></div>';
+   ' 次</span><span>轨迹 '+r.trace.length+' 步</span><span>耗时 '+r.ms+' ms</span>'+
+   (r.planner?'<span>规划：'+esc(r.planner)+'</span>':'')+'</div>';
   if(r.llmUsed)h+='<div class="hint" style="color:var(--green)">答案由 '+esc(r.llmModel)+
    ' 依据工具结果组织；工具选择、护栏与引用校验仍由本地代码完成。'+
    '<button class="btn sm" style="margin-left:8px" onclick="showDet()">看确定性版本</button></div>';
@@ -861,13 +962,9 @@ function showDet(){const r=window.__lastAgent;if(!r||!r.deterministicText)return
  toast('已切换为确定性模板版本');}
 async function runAgentUI(){
  const q=$('agentQ').value.trim();if(!q)return;
- const r=C.runAgent(q);
- renderAgentResult(r);                       // 轨迹与确定性答案立即可见
- if(!r.refused&&C.llmActive()){
-  const badge=$('agentMode');if(badge)badge.textContent='LLM 正在组织答案…';
-  const polished=await C.polishWithLLM(r,q);
-  renderAgentResult(polished);
- }
+ const badge=$('agentMode');if(badge)badge.textContent='正在规划与取数…';
+ const r=await C.runAgentSmart(q);   // 确定性优先；自由提问交给 LLM 规划器
+ renderAgentResult(r);
 }
 function tg(btn){const raw=btn.closest('.step').querySelector('.raw');
  raw.style.display=raw.style.display==='block'?'none':'block';}
