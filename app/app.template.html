@@ -155,6 +155,7 @@ details .body{margin-top:10px;font-size:12px;color:var(--muted)}
     <div id="nav"></div>
     <div class="navgrp">智能能力</div>
     <button class="nav ai" data-view="agent" onclick="go('agent')">AI 溯源智能体</button>
+    <button class="nav" data-view="llm" onclick="go('llm')">LLM 接入设置</button>
     <div class="navgrp">系统</div>
     <button class="nav" data-view="about" onclick="go('about')">关于与边界</button>
     <div style="padding:14px 10px;color:#7e9ab2;font-size:10px;line-height:1.7">
@@ -516,7 +517,49 @@ function runAgent(question){
   return {refused:false,mode:p.mode,modeName:p.name,text:built.text,trace,tools,
     ms:Math.round((performance.now()-t0)*100)/100};
 }
-if(typeof window!=='undefined'){window.APP_DATA=APP_DATA;window.APP_CORE={S,seed,save,resetDemo,BIZ,TOOLS,runAgent,VIEWS,now,q3,num};}
+/* ===== 可插拔 LLM 生成层 =====
+   设计取舍：工具选择、意图路由、护栏、引用校验全部由本地代码决定；
+   LLM 只把「已经取到的工具结果」组织成自然语言，不能自行决定调哪个工具、
+   不能新增事实。这样即使换模型/断网/欠费，轨迹与拒答纪律都不变。
+   密钥只存本机浏览器 localStorage，不进仓库、不上传。 */
+const LLM_KEY='mt_llm_v1';
+function getLLMConfig(){try{return JSON.parse(localStorage.getItem(LLM_KEY)||'null');}catch(e){return null;}}
+function setLLMConfig(c){localStorage.setItem(LLM_KEY,JSON.stringify(c));}
+function clearLLMConfig(){localStorage.removeItem(LLM_KEY);}
+function llmActive(){const c=getLLMConfig();return !!(c&&c.enabled&&c.key&&c.base&&c.model);}
+async function polishWithLLM(result,question){
+  const cfg=getLLMConfig();
+  if(!cfg||!cfg.enabled||!cfg.key||result.refused)return {...result,llmUsed:false};
+  const blocks=result.trace.map((s,i)=>'T'+(i+1)+' '+s.tool+' → '+s.observation+
+    '\n'+(s.rows&&s.rows.length?JSON.stringify(s.rows).slice(0,700):'')).join('\n');
+  const prompt=
+    '你是高校食堂肉类溯源系统的查询助手。只能依据下面【工具结果】回答，禁止推测或补充常识。\n'+
+    '规则：\n1. 每个结论后必须标注来源编号，格式 [T1][T2]…，没有编号的结论无效。\n'+
+    '2. 工具结果里没有的信息不要写；无依据时直接说"未在已核验记录中找到依据"。\n'+
+    '3. 不评价食品是否安全，只陈述记录里写了什么。\n'+
+    '4. 数量带单位、时间带日期；多个批次分条列出，不要合并数字。\n'+
+    '5. 不要改动工具结果里的批次号、数量、供应商名称；不要新增任何数字。\n\n'+
+    '【工具结果】\n'+blocks+'\n\n'+
+    '【确定性编排给出的参考结论】（可复用措辞，但不得据此新增事实）\n'+result.text+'\n\n'+
+    '【问题】'+question+'\n【回答】';
+  const ctrl=new AbortController();
+  const timer=setTimeout(()=>ctrl.abort(),20000);
+  try{
+    const r=await fetch(cfg.base.replace(/\/+$/,'')+'/chat/completions',{
+      method:'POST',signal:ctrl.signal,
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+cfg.key},
+      body:JSON.stringify({model:cfg.model,messages:[{role:'user',content:prompt}],temperature:0.1})});
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    const d=await r.json();
+    const text=(d.choices&&d.choices[0]&&d.choices[0].message&&d.choices[0].message.content||'').trim();
+    if(!text)throw new Error('模型返回空内容');
+    return {...result,text:text,deterministicText:result.text,llmUsed:true,llmModel:cfg.model};
+  }catch(e){
+    return {...result,llmUsed:false,llmError:String(e.message||e)};
+  }finally{clearTimeout(timer);}
+}
+if(typeof window!=='undefined'){window.APP_DATA=APP_DATA;window.APP_CORE={S,seed,save,resetDemo,
+  BIZ,TOOLS,runAgent,VIEWS,now,q3,num,getLLMConfig,setLLMConfig,clearLLMConfig,llmActive,polishWithLLM};}
 </script>
 
 <script>
@@ -542,7 +585,8 @@ function logout(){sessionStorage.removeItem('mt_user');$('shell').style.display=
 function buildNav(){$('nav').innerHTML=C.VIEWS.map(v=>'<button class="nav" data-view="'+v[0]+'" onclick="go(\''+v[0]+'\')">'+v[1]+'</button>').join('');}
 function go(view){
  document.querySelectorAll('.nav').forEach(b=>b.classList.toggle('on',b.dataset.view===view));
- const name=(C.VIEWS.find(v=>v[0]===view)||['',''])[1]||(view==='agent'?'AI 溯源智能体':'关于与边界');
+ const extra={agent:'AI 溯源智能体',llm:'LLM 接入设置',about:'关于与边界'};
+ const name=(C.VIEWS.find(v=>v[0]===view)||['',''])[1]||extra[view]||'';
  $('crumb').textContent=name;$('view').innerHTML=RENDER[view]?RENDER[view]():'';
  if(view==='agent')initAgent();
 }
@@ -749,7 +793,10 @@ RENDER.trace=()=>{
 function pickTrace(v){sessionStorage.setItem('mt_trace',v);go('trace');}
 RENDER.agent=()=>{
  const toolList=Object.entries(C.TOOLS).map(([k,v])=>'<div class="toolitem"><code>'+k+'</code><span>'+v.desc+'</span></div>').join('');
- return '<h2>AI 溯源智能体</h2><div class="sub">不是聊天框：它按意图规划步骤、调用工具、把每一步的观察结果写进轨迹，答案只从工具结果生成。</div>'+
+ return '<h2>AI 溯源智能体 <span id="agentMode" class="pill b">'+
+ (C.llmActive()?'LLM 增强模式':'离线确定性模式')+'</span></h2>'+
+ '<div class="sub">不是聊天框：它按意图规划步骤、调用工具、把每一步的观察结果写进轨迹，答案只从工具结果生成。'+
+ (C.llmActive()?' 已启用 LLM 语言组织（工具与护栏仍由代码决定）。':' 可在「LLM 接入设置」里启用大模型语言组织。')+'</div>'+
  '<div class="agentwrap"><div>'+
  '<div class="panel"><div class="qrow"><input id="agentQ" placeholder="问一个业务问题，例如：哪些批次冷链超限，涉及哪些供应商，是否需要召回？">'+
  '<button class="btn primary" onclick="runAgentUI()">运行智能体</button></div>'+
@@ -776,23 +823,86 @@ function initAgent(){$('agentExs').innerHTML=AGENT_EXS.map(q=>'<button onclick="
  q.replace(/'/g,"\\'")+'\')">'+esc(q)+'</button>').join('');
  $('agentQ').addEventListener('keydown',e=>{if(e.key==='Enter')runAgentUI();});}
 function fillAgent(q){$('agentQ').value=q;runAgentUI();}
-function runAgentUI(){const q=$('agentQ').value.trim();if(!q)return;
- const r=C.runAgent(q);const box=$('agentOut');
- let h='';
- if(r.refused){h='<div class="final refuse"><b>拒答 · '+esc(r.reason)+'</b>\n\n'+esc(r.text)+'</div>';}
- else{h='<div class="stat"><span>模式：'+esc(r.modeName)+'</span><span>调用工具 '+r.tools.length+
-  ' 次</span><span>轨迹 '+r.trace.length+' 步</span><span>耗时 '+r.ms+' ms</span></div>'+
-  '<div class="trace">'+r.trace.map(s=>'<div class="step"><div class="h"><div class="no">'+s.no+
-  '</div><div class="th">'+esc(s.thought)+'</div></div>'+
-  '<div><span class="tool">'+esc(s.tool)+'('+esc(JSON.stringify(s.args))+')</span> '+
-  '<span class="pill b">'+esc(s.label)+'</span></div>'+
-  '<div class="obs">观察：'+esc(s.observation)+' · '+s.ms+' ms '+
-  (s.rows.length?'<button class="btn sm" style="margin-left:6px" onclick="tg(this)">看原始结果</button>':'')+'</div>'+
-  (s.rows.length?'<div class="raw">'+esc(JSON.stringify(s.rows,null,1))+'</div>':'')+'</div>').join('')+'</div>'+
-  '<div class="final">'+esc(r.text)+'</div>';}
- box.innerHTML=h;}
+function renderAgentResult(r){
+ const box=$('agentOut'),badge=$('agentMode');let h='';
+ if(r.refused){
+  h='<div class="final refuse"><b>拒答 · '+esc(r.reason)+'</b>\n\n'+esc(r.text)+'</div>';
+  if(badge)badge.textContent=C.llmActive()?'LLM 增强模式（本次拒答未调用模型）':'离线确定性模式';
+ }else{
+  h='<div class="stat"><span>模式：'+esc(r.modeName)+'</span><span>调用工具 '+r.tools.length+
+   ' 次</span><span>轨迹 '+r.trace.length+' 步</span><span>耗时 '+r.ms+' ms</span></div>';
+  if(r.llmUsed)h+='<div class="hint" style="color:var(--green)">答案由 '+esc(r.llmModel)+
+   ' 依据工具结果组织；工具选择、护栏与引用校验仍由本地代码完成。'+
+   '<button class="btn sm" style="margin-left:8px" onclick="showDet()">看确定性版本</button></div>';
+  else if(r.llmError)h+='<div class="hint" style="color:var(--amber)">LLM 调用失败（'+
+   esc(r.llmError)+'），已自动回退到确定性模板，软件仍可用。</div>';
+  h+='<div class="trace">'+r.trace.map(s=>'<div class="step"><div class="h"><div class="no">'+s.no+
+   '</div><div class="th">'+esc(s.thought)+'</div></div>'+
+   '<div><span class="tool">'+esc(s.tool)+'('+esc(JSON.stringify(s.args))+')</span> '+
+   '<span class="pill b">'+esc(s.label)+'</span></div>'+
+   '<div class="obs">观察：'+esc(s.observation)+' · '+s.ms+' ms '+
+   (s.rows.length?'<button class="btn sm" style="margin-left:6px" onclick="tg(this)">看原始结果</button>':'')+'</div>'+
+   (s.rows.length?'<div class="raw">'+esc(JSON.stringify(s.rows,null,1))+'</div>':'')+'</div>').join('')+'</div>'+
+   '<div class="final" id="finalAnswer">'+esc(r.text)+'</div>';
+  if(badge)badge.textContent=r.llmUsed?'LLM 增强模式':'离线确定性模式';
+ }
+ box.innerHTML=h;
+ window.__lastAgent=r;
+}
+function showDet(){const r=window.__lastAgent;if(!r||!r.deterministicText)return;
+ const f=document.getElementById('finalAnswer');if(f)f.textContent=r.deterministicText;
+ toast('已切换为确定性模板版本');}
+async function runAgentUI(){
+ const q=$('agentQ').value.trim();if(!q)return;
+ const r=C.runAgent(q);
+ renderAgentResult(r);                       // 轨迹与确定性答案立即可见
+ if(!r.refused&&C.llmActive()){
+  const badge=$('agentMode');if(badge)badge.textContent='LLM 正在组织答案…';
+  const polished=await C.polishWithLLM(r,q);
+  renderAgentResult(polished);
+ }
+}
 function tg(btn){const raw=btn.closest('.step').querySelector('.raw');
  raw.style.display=raw.style.display==='block'?'none':'block';}
+RENDER.llm=()=>{
+ const c=C.getLLMConfig()||{};const active=C.llmActive();
+ const status=active?'<span class="pill g">LLM 增强模式已启用</span>':
+   '<span class="pill a">离线确定性模式（默认）</span>';
+ return '<h2>LLM 接入设置</h2><div class="sub">填自己的 Key 即可让智能体用大模型组织答案；不填也完全能用。</div>'+
+ '<div class="panel"><h3>当前状态</h3><p>'+status+'</p>'+
+ '<div class="hint" style="margin:0">'+
+ '· 工具选择、意图路由、护栏、引用校验<b>全部由本地代码决定</b>；LLM 只把已取到的工具结果组织成自然语言，不能自行决定调哪个工具、不能新增事实。<br>'+
+ '· 密钥只存这台机器的浏览器 localStorage，<b>不进仓库、不上传</b>；只有点击「运行智能体」时才会向服务商发请求。<br>'+
+ '· 调用失败 / 超时 / 欠费会<b>自动回退</b>到确定性模板，软件不会因此变砖。<br>'+
+ '· 默认关闭：离线可复现、零成本、断网可用。</div></div>'+
+ '<div class="panel"><h3>连接配置（OpenAI 兼容接口）</h3>'+
+ '<div class="field"><label>Base URL</label><input id="llmBase" value="'+esc(c.base||'https://api.deepseek.com')+'"></div>'+
+ '<div class="field"><label>API Key（只存本机）</label><input id="llmKey" type="password" value="'+esc(c.key||'')+'" placeholder="sk-..."></div>'+
+ '<div class="field"><label>模型</label><input id="llmModel" value="'+esc(c.model||'deepseek-chat')+'"></div>'+
+ '<div class="field"><label><input type="checkbox" id="llmEnabled" style="width:auto;margin-right:6px"'+
+ (c.enabled?' checked':'')+'>启用 LLM 语言组织</label></div>'+
+ '<div class="toolbar"><button class="btn primary sm" onclick="saveLLM()">保存到本机</button>'+
+ '<button class="btn sm" onclick="checkLLM()">检查配置</button>'+
+ '<button class="btn sm danger" onclick="clearLLM()">清除 Key</button></div>'+
+ '<div class="hint">「检查配置」只校验填写是否完整，<b>不会发起任何 API 调用、不产生费用</b>。</div></div>'+
+ '<div class="panel"><h3>技术说明与面试话术</h3><div class="hint" style="margin:0">'+
+ '浏览器从本地页面直连该服务商接口已实测可行：预检返回 200，'+
+ '放行 <code>authorization,content-type</code> 头，<code>Origin: null</code>（file://）被接受，'+
+ '因此<b>不需要代理服务、不需要后端</b>。<br><br>'+
+ '被问「你的 LLM 在哪」时可以这样答：<b>「我把生成层做成可插拔适配器，默认离线确定性编排，'+
+ '保证轨迹、指标和拒答纪律任何环境都能复现；有 Key 时接 LLM 只做语言组织，'+
+ '工具选择与护栏不交给模型——因为交付型 Agent 里可控性比自主性更重要。」</b></div></div>';
+};
+function saveLLM(){const base=$('llmBase').value.trim(),key=$('llmKey').value.trim(),
+ model=$('llmModel').value.trim(),enabled=$('llmEnabled').checked;
+ if(enabled&&(!base||!key||!model)){toast('启用前请把 Base URL / Key / 模型填完整',false);return;}
+ C.setLLMConfig({base,key,model,enabled});toast('已保存到本机浏览器');go('llm');}
+function clearLLM(){C.clearLLMConfig();toast('已清除密钥，回到离线确定性模式');go('llm');}
+function checkLLM(){const base=$('llmBase').value.trim(),key=$('llmKey').value.trim(),
+ model=$('llmModel').value.trim();
+ const ok=base.startsWith('http')&&key.length>=8&&model.length>0;
+ toast(ok?'配置格式完整，运行智能体时才会真正请求':'配置不完整：需要 http(s) Base URL、Key、模型名',ok);
+}
 RENDER.about=()=>'<h2>关于与边界</h2>'+
  '<div class="panel"><h3>这是什么</h3><p style="font-size:12px;color:var(--muted);margin:0">'+
  '把毕业设计的完整业务系统做成了单文件离线交互软件：10 个业务模块可真实操作，'+
@@ -806,8 +916,8 @@ RENDER.about=()=>'<h2>关于与边界</h2>'+
  '<details><summary>面试时主动讲清的边界</summary><div class="body">'+
  '· 离线演示版，不含用户权限体系、不连 MySQL、不上链<br>'+
  '· 语料与核验状态是导出时刻快照，运行时不会实时重算链上摘要<br>'+
- '· 智能体是确定性编排 + 工具调用，没有接 LLM 做自由生成；'+
- '接了 LLM 也只是替换最后的语言组织，工具与护栏不变<br>'+
+ '· 智能体默认是确定性编排 + 工具调用；LLM 是可选的语言组织层，'+
+ '工具选择、护栏、引用校验始终由代码决定，断网/欠费自动回退<br>'+
  '· 这些边界写清楚，比含糊地说"做了个 AI 系统"更容易通过技术面</div></details>';
 /* 登录页账号卡片 */
 $('accounts').innerHTML=APP_DATA.data.users.map(u=>'<button onclick="fillLogin(\''+u.username+'\')">'+

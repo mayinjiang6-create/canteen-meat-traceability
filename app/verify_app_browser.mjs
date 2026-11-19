@@ -111,6 +111,29 @@ try {
   check('可切换到其他业务模块',
     (await cdp.eval("document.getElementById('crumb').textContent")) === '供应商管理')
 
+  await cdp.eval("go('llm'); 'ok'")
+  await sleep(150)
+  check('LLM 接入设置页可渲染',
+    await cdp.eval("!!document.getElementById('llmBase') && !!document.getElementById('llmKey')"))
+
+  // 用 mock fetch 验证浏览器里 LLM 增强路径确实走通（不调用真实模型、不产生费用）
+  await cdp.eval(`
+    window.fetch=async()=>({ok:true,json:async()=>({choices:[{message:{
+      content:'[T1] LLM 依据工具结果组织的答案（浏览器 mock 验证）'}}]})});
+    C.setLLMConfig({base:'http://mock.local/v1',key:'sk-mock',model:'mock-model',enabled:true});
+    go('agent');
+    document.getElementById('agentQ').value='哪些批次冷链温度超限？涉及哪些供应商？是否需要召回？';
+    runAgentUI(); 'ok'`)
+  await sleep(600)
+  const llmAnswer = await cdp.eval("document.querySelector('#finalAnswer')?.textContent || ''")
+  check('浏览器里 LLM 增强模式生效', llmAnswer.includes('LLM 依据工具结果组织'),
+    llmAnswer.slice(0, 50))
+  check('模式徽标切换为 LLM 增强',
+    String(await cdp.eval("document.getElementById('agentMode')?.textContent || ''"))
+      .includes('LLM 增强'))
+  await cdp.eval("C.clearLLMConfig(); window.fetch=undefined; 'ok'")
+  check('清除后恢复离线模式', (await cdp.eval('C.llmActive()')) === false)
+
   cdp.close()
   await fetch(`http://127.0.0.1:${PORT}/json/close/${tab.id}`).catch(() => {})
 } catch (e) {

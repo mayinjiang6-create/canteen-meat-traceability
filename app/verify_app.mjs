@@ -22,9 +22,17 @@ const localStorage = {
   removeItem: k => store.delete(k),
 }
 const win = {}
+let fetchCalls = 0
+const mockFetch = async (url, opts) => {
+  fetchCalls++
+  return { ok: true, json: async () => ({ choices: [{ message: {
+    content: '[T1] 这是由 LLM 依据工具结果组织的答案（mock 验证，未调用真实模型）'
+  } }] }) }
+}
 const ctx = createContext({ window: win, localStorage, performance, console,
   Math, Date, JSON, Map, Set, Array, Object, String, Number, RegExp,
-  parseInt, parseFloat, isNaN })
+  parseInt, parseFloat, isNaN, fetch: mockFetch, AbortController,
+  setTimeout, clearTimeout })
 runInContext(m[1], ctx)
 
 const C = win.APP_CORE
@@ -115,6 +123,28 @@ check('复杂问题轨迹 >= 4 步', complex.trace.length >= 4, '实际 ' + comp
 check('每步都有 thought / tool / observation',
   complex.trace.every(s => s.thought && s.tool && s.observation))
 check('答案标注了工具依据', /依据：\[T\d+\]/.test(complex.text))
+
+console.log('\n=== 4. 可插拔 LLM 生成层（mock，不调用真实模型、不产生费用）===')
+check('默认离线确定性模式', C.llmActive() === false)
+C.setLLMConfig({ base: 'http://mock.local/v1', key: 'sk-mock-key', model: 'mock-model', enabled: true })
+check('启用后切换到 LLM 增强模式', C.llmActive() === true)
+const base = runAgent('哪些批次冷链温度超限？涉及哪些供应商？是否需要召回？')
+const polished = await C.polishWithLLM(base, '哪些批次冷链温度超限？涉及哪些供应商？是否需要召回？')
+check('LLM 组织答案成功', polished.llmUsed === true && polished.text.includes('[T1]'),
+  'fetch 调用 ' + fetchCalls + ' 次')
+check('保留确定性版本可对照', polished.deterministicText === base.text)
+check('轨迹与工具结果未被模型改动',
+  polished.trace.length === base.trace.length && polished.tools.join() === base.tools.join())
+const refusedCase = runAgent('这批肉吃了安全吗？')
+const noCall = await C.polishWithLLM(refusedCase, '这批肉吃了安全吗？')
+check('拒答不调用 LLM', noCall.llmUsed === false && fetchCalls === 1)
+ctx.fetch = async () => { throw new Error('mock 服务不可用') }
+const fallback = await C.polishWithLLM(base, '再问一次')
+check('LLM 失败自动回退到确定性模板',
+  fallback.llmUsed === false && fallback.text === base.text && !!fallback.llmError)
+ctx.fetch = mockFetch
+C.clearLLMConfig()
+check('清除密钥后回到离线模式', C.llmActive() === false)
 
 console.log('\n=== 结论 ===')
 console.log(`  PASS ${pass} / FAIL ${fail}`)
