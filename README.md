@@ -14,13 +14,15 @@
 
 </div>
 
-> **求职向入口**：本仓库另含一个可独立运行的 AI 子项目
-> [Trusted RAG · 可信溯源问答](trusted-rag/README.md) — 零 API Key、一条命令复现 40 条评测与 v1/v2 前后对比，
-> 只回答链上核验一致的消息、答不出就拒答；[在线演示页](trusted-rag/index.html)。
-> 岗位导向的说明与面试追问见 [AI 岗位求职项目包](docs/career/AI岗位求职项目包.md)，
-> **可直接复制的简历成稿**见 [简历项目经历 · 定稿](docs/career/简历项目经历-定稿.md)。
-> **给面试官的产品页**：[trusted-rag/product.html](trusted-rag/product.html) — 单文件离线，
-> 双击即可现场提问、看引用与拒答、一键复跑 40 条评测，不需要任何环境。
+> **给面试官的软件**：[app/app.html](app/app.html) — 单文件离线交互软件，**双击即用**。
+> 10 个业务模块可真实操作（采购→验收→多来源投料→销售→冷链→异常→召回→存证→公开溯源），
+> 内置 **AI 溯源智能体**模块（10 个工具、可见执行轨迹、答案附依据、越界拒答）。
+> 不需要 Java / MySQL / 区块链 / API Key，断网可用。
+>
+> 另有 AI 子项目 [Trusted RAG](trusted-rag/README.md) 的
+> [单文件演示页](trusted-rag/product.html)；岗位说明与面试追问见
+> [AI 岗位求职项目包](docs/career/AI岗位求职项目包.md)，可直接复制的简历成稿见
+> [简历项目经历 · 定稿](docs/career/简历项目经历-定稿.md)。
 
 ---
 

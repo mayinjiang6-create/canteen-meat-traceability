@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>高校食堂肉类供应链溯源系统 · 交互演示版</title>
+<style>
+:root{--ink:#1f2328;--muted:#5f6672;--line:#e3e6ea;--bg:#f5f7f9;--card:#fff;
+ --blue:#185fa5;--blue-bg:#e6f1fb;--blue-line:#b5d4f4;
+ --green:#3b6d11;--green-bg:#eaf3de;--green-line:#c0dd97;
+ --amber:#854f0b;--amber-bg:#faeeda;--amber-line:#f0d9a8;
+ --red:#a32d2d;--red-bg:#fcebeb;--red-line:#f7c1c1;--gray-bg:#f1efe8;
+ --mono:ui-monospace,Consolas,monospace}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-size:13px;line-height:1.6;
+ font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",sans-serif}
+button,input,select{font-family:inherit;font-size:13px}
+/* 登录 */
+#login{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--blue-bg)}
+.loginbox{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:32px;width:380px}
+.loginbox h1{font-size:20px;font-weight:500;margin:0 0 6px}
+.loginbox p{color:var(--muted);margin:0 0 20px;font-size:12px}
+.field{margin-bottom:12px}
+.field label{display:block;font-size:12px;color:var(--muted);margin-bottom:4px}
+.field input,.field select,.field textarea{width:100%;padding:9px 11px;border:1px solid var(--line);
+ border-radius:8px;background:var(--card);outline:none}
+.field input:focus,.field select:focus{border-color:var(--blue)}
+.btn{padding:9px 16px;border:1px solid var(--line);border-radius:8px;background:var(--card);
+ color:var(--ink);cursor:pointer}
+.btn:hover{background:var(--gray-bg)}
+.btn.primary{background:var(--blue);color:#fff;border-color:var(--blue)}
+.btn.primary:hover{background:#0c447c}
+.btn.sm{padding:5px 10px;font-size:12px}
+.btn.danger{color:var(--red);border-color:var(--red-line)}
+.accounts{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.accounts button{font-size:11px;padding:5px 9px;border-radius:6px;border:1px solid var(--blue-line);
+ background:var(--blue-bg);color:#0c447c;cursor:pointer}
+/* 布局 */
+#shell{display:none;min-height:100vh}
+.layout{display:flex;min-height:100vh}
+aside{width:212px;flex:0 0 212px;background:#152a3d;color:#c7d5e2;padding:16px 10px}
+.brand{font-size:14px;font-weight:500;color:#fff;padding:6px 10px 14px;border-bottom:1px solid #2b445c;margin-bottom:10px}
+.brand small{display:block;font-size:10px;color:#8aa4bb;font-weight:400;margin-top:3px}
+.navgrp{font-size:10px;color:#7e9ab2;padding:10px 10px 4px;letter-spacing:.06em}
+.nav{display:block;width:100%;text-align:left;padding:8px 11px;border:none;border-radius:7px;
+ background:transparent;color:#c7d5e2;cursor:pointer;font-size:12px;margin-bottom:2px}
+.nav:hover{background:#23405a;color:#fff}
+.nav.on{background:var(--blue);color:#fff}
+.nav.ai{background:#2a4a68;color:#e8f2fb}
+.nav.ai.on{background:#7F77DD;color:#fff}
+main{flex:1;min-width:0;padding:0 22px 40px}
+.topbar{height:56px;display:flex;align-items:center;justify-content:space-between;
+ border-bottom:1px solid var(--line);margin-bottom:18px}
+.topbar .crumb{font-size:14px;font-weight:500}
+.topbar .right{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:12px}
+.tag{font-size:10px;padding:2px 8px;border-radius:5px;background:var(--amber-bg);
+ color:#633806;border:1px solid var(--amber-line)}
+h2{font-size:16px;font-weight:500;margin:0 0 12px}
+.sub{color:var(--muted);font-size:12px;margin:-6px 0 14px}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:13px 15px}
+.card b{display:block;font-size:21px;font-weight:500;line-height:1.25}
+.card span{font-size:11px;color:var(--muted)}
+.card.hot b{color:var(--green)}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:14px}
+.panel h3{font-size:13px;font-weight:500;margin:0 0 10px}
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{text-align:left;color:var(--muted);font-weight:500;padding:8px 9px;border-bottom:1px solid var(--line);
+ white-space:nowrap;background:var(--gray-bg)}
+td{padding:8px 9px;border-bottom:1px solid #f0f2f4;vertical-align:top}
+tr:hover td{background:#fafbfc}
+.pill{display:inline-block;font-size:10px;padding:2px 7px;border-radius:5px;white-space:nowrap}
+.pill.g{background:var(--green-bg);color:#27500a;border:1px solid var(--green-line)}
+.pill.b{background:var(--blue-bg);color:#0c447c;border:1px solid var(--blue-line)}
+.pill.a{background:var(--amber-bg);color:#633806;border:1px solid var(--amber-line)}
+.pill.r{background:var(--red-bg);color:#791f1f;border:1px solid var(--red-line)}
+.pill.n{background:var(--gray-bg);color:var(--muted);border:1px solid var(--line)}
+.mono{font-family:var(--mono);font-size:11px}
+.hint{font-size:11px;color:var(--muted);margin-top:8px}
+.empty{padding:22px;text-align:center;color:var(--muted);font-size:12px}
+/* 弹窗 */
+#mask{display:none;position:absolute;inset:0;background:rgba(20,35,50,.42);z-index:50}
+#modal{display:none;position:absolute;left:50%;top:80px;transform:translateX(-50%);width:460px;
+ max-width:92vw;background:var(--card);border-radius:13px;padding:20px 22px;z-index:51;
+ box-shadow:0 12px 40px rgba(0,0,0,.16)}
+#modal h3{margin:0 0 14px;font-size:15px;font-weight:500}
+.modalbtns{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
+#toast{position:absolute;right:24px;bottom:22px;background:#152a3d;color:#fff;padding:10px 16px;
+ border-radius:9px;font-size:12px;display:none;z-index:80;max-width:360px}
+/* 公开溯源 */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.timeline{border-left:2px solid var(--blue-line);padding-left:14px;margin-left:6px}
+.tlitem{position:relative;margin-bottom:12px}
+.tlitem::before{content:"";position:absolute;left:-19px;top:6px;width:8px;height:8px;
+ border-radius:50%;background:var(--blue);border:2px solid #fff}
+.tlitem .t{font-size:11px;color:var(--muted)}
+.tlitem .d{font-size:12px}
+/* Agent */
+.agentwrap{display:grid;grid-template-columns:1fr 340px;gap:14px}
+.qrow{display:flex;gap:8px;margin-bottom:10px}
+.qrow input{flex:1;padding:10px 12px;border:1px solid var(--line);border-radius:8px;outline:none}
+.qrow input:focus{border-color:#7F77DD}
+.exs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.exs button{font-size:11px;padding:6px 10px;border-radius:7px;border:1px solid #d9d5f5;
+ background:#eeedfe;color:#3c3489;cursor:pointer;text-align:left}
+.exs button:hover{background:#cecbf6}
+.trace{margin-top:10px}
+.step{border:1px solid var(--line);border-radius:9px;padding:11px 13px;margin-bottom:8px;background:var(--card)}
+.step .h{display:flex;gap:8px;align-items:center;margin-bottom:6px}
+.step .no{width:20px;height:20px;border-radius:50%;background:#eeedfe;color:#3c3489;
+ font-size:11px;text-align:center;line-height:20px;flex:0 0 20px}
+.step .th{font-size:12px;font-weight:500}
+.step .tool{font-family:var(--mono);font-size:11px;color:var(--blue);
+ background:var(--blue-bg);padding:3px 7px;border-radius:5px;display:inline-block;margin:3px 0}
+.step .obs{font-size:11px;color:var(--muted)}
+.step .raw{font-family:var(--mono);font-size:10px;color:var(--muted);background:var(--gray-bg);
+ border-radius:6px;padding:8px;margin-top:6px;display:none;white-space:pre-wrap;max-height:150px;overflow:auto}
+.final{background:var(--green-bg);border:1px solid var(--green-line);border-radius:9px;
+ padding:13px 15px;margin-top:12px;white-space:pre-wrap;font-size:13px}
+.final.refuse{background:var(--amber-bg);border-color:var(--amber-line);color:#633806}
+.toolitem{display:flex;justify-content:space-between;gap:8px;padding:7px 0;border-bottom:1px solid #f0f2f4;font-size:11px}
+.toolitem code{font-family:var(--mono);font-size:10px;color:var(--blue)}
+.stat{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.stat span{font-size:11px;background:var(--gray-bg);padding:4px 9px;border-radius:6px}
+details{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin-bottom:10px}
+summary{cursor:pointer;font-size:13px;font-weight:500}
+details .body{margin-top:10px;font-size:12px;color:var(--muted)}
+.flow{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.flow div{flex:1 1 130px;background:var(--blue-bg);border:1px solid var(--blue-line);
+ border-radius:8px;padding:8px;font-size:11px;color:#0c447c}
+@media(max-width:900px){.cards{grid-template-columns:repeat(2,1fr)}.agentwrap,.split{grid-template-columns:1fr}
+ aside{width:170px;flex-basis:170px}main{padding:0 12px 30px}}
+</style>
+</head>
+<body>
+
+<div id="login">
+  <div class="loginbox">
+    <h1>高校食堂肉类供应链溯源系统</h1>
+    <p>交互演示版 · 本地运行 · 数据来自真实运行快照</p>
+    <div class="field"><label>账号</label><input id="lu" value="admin"></div>
+    <div class="field"><label>密码</label><input id="lp" type="password" value="Admin@123"></div>
+    <button class="btn primary" style="width:100%" onclick="doLogin()">登 录</button>
+    <div class="accounts" id="accounts"></div>
+    <p class="hint">演示环境任意密码均可登录；上方账号卡片可一键填充。</p>
+  </div>
+</div>
+
+<div id="shell">
+ <div class="layout">
+  <aside>
+    <div class="brand">肉类溯源系统<small>交互演示版 · 离线</small></div>
+    <div class="navgrp">业务管理</div>
+    <div id="nav"></div>
+    <div class="navgrp">智能能力</div>
+    <button class="nav ai" data-view="agent" onclick="go('agent')">AI 溯源智能体</button>
+    <div class="navgrp">系统</div>
+    <button class="nav" data-view="about" onclick="go('about')">关于与边界</button>
+    <div style="padding:14px 10px;color:#7e9ab2;font-size:10px;line-height:1.7">
+      数据：本地快照<br>操作：浏览器本地状态<br>不写库 · 不上链
+    </div>
+  </aside>
+  <main>
+    <div class="topbar">
+      <div class="crumb" id="crumb">概览</div>
+      <div class="right"><span class="tag">离线演示</span>
+        <span id="who"></span>
+        <button class="btn sm" onclick="resetDemo()">重置数据</button>
+        <button class="btn sm" onclick="logout()">退出</button></div>
+    </div>
+    <div id="view"></div>
+  </main>
+ </div>
+</div>
+
+<div id="mask" onclick="closeModal()"></div>
+<div id="modal"></div>
+<div id="toast"></div>
+
+<script id="app-core">
+/* ===== 数据、状态与业务规则（与 TECH-02 口径一致） ===== */
+const APP_DATA = __APP_DATA__;
+const LS_KEY = 'meat_trace_app_v1';
+const VIEWS = [
+  ['overview','概览'],['suppliers','供应商管理'],['purchases','采购批次'],
+  ['acceptance','入库验收'],['process','加工投料'],['sales','上架与销售'],
+  ['coldchain','冷链温控'],['abnormal','异常与召回'],['evidence','存证管理'],
+  ['trace','公开溯源'],
+];
+
+function seed(){
+  const d=APP_DATA.data;
+  return {
+    suppliers:d.suppliers.map(x=>({...x})), purchases:d.purchases.map(x=>({...x})),
+    acceptances:d.acceptances.map(x=>({...x})), processes:d.processes.map(x=>({...x})),
+    sources:d.sources.map(x=>({...x})), sales:d.sales.map(x=>({...x})),
+    coldChain:d.coldChain.map(x=>({...x})), abnormals:d.abnormals.map(x=>({...x})),
+    recalls:d.recalls.map(x=>({...x})), events:d.events.map(x=>({...x})),
+    docs:APP_DATA.docs.map(x=>({...x})), users:d.users.map(x=>({...x})),
+    seq:1, chainMode:'normal', log:[],
+  };
+}
+function loadState(){
+  try{const s=localStorage.getItem(LS_KEY);if(s)return JSON.parse(s);}catch(e){}
+  return seed();
+}
+let S=loadState();
+function save(){try{localStorage.setItem(LS_KEY,JSON.stringify(S));}catch(e){}}
+function resetDemo(){if(confirm('重置为初始快照？你在演示中所做的修改会被清除。')){
+  localStorage.removeItem(LS_KEY);location.reload();}}
+const num=v=>Number(String(v??0));
+const q3=v=>num(v).toFixed(3);
+const now=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')
+ +'-'+String(d.getDate()).padStart(2,'0')+' '+String(d.getHours()).padStart(2,'0')+':'
+ +String(d.getMinutes()).padStart(2,'0')+':'+String(d.getSeconds()).padStart(2,'0');};
+const stamp=()=>{const d=new Date();return ''+d.getFullYear()+String(d.getMonth()+1).padStart(2,'0')
+ +String(d.getDate()).padStart(2,'0');};
+function nextNo(prefix){const n=String(S.seq++).padStart(3,'0');return prefix+stamp()+n;}
+function addLog(action,detail){S.log.unshift({time:now(),action,detail});if(S.log.length>40)S.log.pop();}
+function pushEvent(batchId,eventType){S.events.push({event_id:'local'+Date.now()+S.seq,
+  batch_id:batchId,event_type:eventType,biz_time:now(),data_digest:'本地演示事件'});}
+
+/* 业务动作：全部改本地状态，规则与后端一致 */
+const BIZ={
+  addSupplier(v){
+    if(!v.name)return '供应商名称必填';
+    const code=nextNo('SUP-').replace(/^SUP-\d+/,'SUP-');
+    S.suppliers.push({id:Date.now(),supplier_code:'SUP-'+String(900+S.seq),
+      name:v.name,license_no:v.license_no||'待补',contact_name:v.contact_name||'—',
+      contact_phone:v.contact_phone||'—',address:'—',status:'ACTIVE',local:true});
+    addLog('新增供应商',v.name);save();return null;
+  },
+  toggleSupplier(id){const s=S.suppliers.find(x=>x.id==id);if(!s)return '未找到';
+    s.status=s.status==='ACTIVE'?'SUSPENDED':'ACTIVE';addLog('变更供应商状态',s.supplier_code+' → '+s.status);save();return null;},
+  addPurchase(v){
+    const sp=S.suppliers.find(x=>x.id==v.supplier_id);
+    if(!sp)return '请选择供应商';
+    if(sp.status!=='ACTIVE')return '供应商状态为 '+sp.status+'，不可新增采购';
+    if(!v.quarantine_no)return '检疫合格证号不能为空';
+    if(!(num(v.quantity)>0))return '数量必须大于 0';
+    const row={id:Date.now(),batch_no:nextNo('PB'),supplier_id:sp.id,
+      meat_type:v.meat_type||'冷鲜猪肉',quarantine_no:v.quarantine_no,
+      quantity:q3(v.quantity),available_qty:q3(v.quantity),unit:'kg',
+      unit_price:'25.50',arrive_time:now(),cold_chain_temp:'3.20',
+      status:'PENDING_ACCEPT',local:true};
+    S.purchases.unshift(row);pushEvent(row.batch_no,'PURCHASE_CREATE');
+    addLog('新建采购批次',row.batch_no);save();return null;
+  },
+  accept(id,v){
+    const p=S.purchases.find(x=>x.id==id);
+    if(!p||p.status!=='PENDING_ACCEPT')return '该批次已完成验收或状态不允许';
+    if(v.result==='FAIL'&&!v.reject_reason)return '不合格必须填写原因';
+    p.status=v.result==='PASS'?'PASSED':'REJECTED';
+    if(p.status==='REJECTED')p.available_qty='0.000';
+    S.acceptances.unshift({id:Date.now(),accept_no:nextNo('AC'),batch_id:p.id,
+      inspector:v.inspector||'演示员',temperature:v.temperature||'3.20',
+      appearance_ok:true,cert_complete:true,sample_retained:true,result:v.result,
+      reject_reason:v.reject_reason||null,accept_time:now(),local:true});
+    pushEvent(p.batch_no,'ACCEPT_RESULT');addLog('入库验收',p.batch_no+' → '+p.status);save();return null;
+  },
+  addProcess(v){
+    const src=[];
+    for(let i=1;i<=3;i++){
+      const id=v['src'+i],q=v['qty'+i];
+      if(id&&num(q)>0)src.push({pid:num(id),qty:num(q)});
+    }
+    if(!src.length)return '至少选择一个来源批次并填写投入量';
+    const seen=new Set();let total=0;
+    for(const s of src){
+      if(seen.has(s.pid))return '同一来源批次不可重复引用';seen.add(s.pid);
+      const p=S.purchases.find(x=>x.id==s.pid);
+      if(!p||p.status!=='PASSED')return '来源批次未通过验收，禁止加工';
+      if(num(p.available_qty)<s.qty)return '可用余量不足：'+p.batch_no+' 仅剩 '+p.available_qty;
+      total+=s.qty;
+    }
+    const out=num(v.output_qty);
+    if(!(out>0))return '产出量必须大于 0';
+    if(out>total)return '产出量不得大于投入总量 '+q3(total);
+    const pr=nextNo('PR');
+    const row={id:Date.now(),process_no:pr,meat_type:'冷鲜猪肉',output_qty:q3(out),
+      available_qty:q3(out),unit:'kg',process_time:now(),workshop:v.workshop||'演示后厨',
+      operator:'演示员',retain_sample_no:v.retain_sample_no||'—',status:'CREATED',local:true};
+    S.processes.unshift(row);
+    for(const s of src){
+      S.sources.push({id:Date.now()+Math.random(),process_batch_id:row.id,
+        purchase_batch_id:s.pid,used_qty:q3(s.qty)});
+      const p=S.purchases.find(x=>x.id==s.pid);
+      p.available_qty=q3(num(p.available_qty)-s.qty);
+      if(num(p.available_qty)<=0)p.status='CLOSED';
+    }
+    pushEvent(pr,'PROCESS_CREATE');addLog('加工投料',pr+' · '+src.length+' 个来源');save();return null;
+  },
+  onsale(id){const p=S.processes.find(x=>x.id==id);if(!p)return '未找到';
+    p.status='ON_SALE';addLog('上架',p.process_no);save();return null;},
+  addSale(v){
+    const p=S.processes.find(x=>x.id==v.process_id);if(!p)return '请选择加工批次';
+    if(p.status==='RECALLED')return '该批次已召回，禁止销售';
+    if(p.status==='ABNORMAL')return '异常冻结中，禁止销售';
+    if(p.status!=='ON_SALE')return '该批次尚未上架，无法销售';
+    const q=num(v.quantity);
+    if(!(q>0))return '数量必须大于 0';
+    if(num(p.available_qty)<q)return '超出可售余量 '+p.available_qty;
+    p.available_qty=q3(num(p.available_qty)-q);
+    if(num(p.available_qty)<=0)p.status='SOLD_OUT';
+    S.sales.unshift({id:Date.now(),sale_no:nextNo('SL'),process_batch_id:p.id,
+      channel:v.channel||'一食堂 3 号窗口',quantity:q3(q),unit_price:'38.00',
+      sale_time:now(),status:'NORMAL',local:true});
+    pushEvent(p.process_no,'SALE_CREATE');addLog('销售登记',p.process_no+' · '+q3(q)+' kg');save();return null;
+  },
+  addCold(v){
+    const p=S.purchases.find(x=>x.id==v.batch_id);if(!p)return '请选择批次';
+    const t=num(v.temperature);
+    const meat=p.meat_type||'';
+    const th=meat.includes('冻')?-15:(meat.includes('牛')||meat.includes('猪')?4:4);
+    const exceeded=t>th;
+    S.coldChain.unshift({id:Date.now(),log_no:nextNo('CC'),batch_id:p.id,
+      segment:v.segment||'WAREHOUSE_TO_CANTEEN',temperature:q3(t),threshold:q3(th),
+      is_exceeded:exceeded?1:0,recorded_at:now(),local:true});
+    if(exceeded){
+      S.abnormals.unshift({id:Date.now()+1,abnormal_no:nextNo('AB'),batch_id:p.id,
+        process_batch_id:null,abnormal_type:'TEMPERATURE_EXCEEDED',level:'MEDIUM',
+        description:'冷链登记温度 '+q3(t)+' ℃ 超过阈值 '+q3(th)+' ℃',
+        status:'OPEN',handler:'系统自动',conclusion:null,local:true});
+    }
+    pushEvent(p.batch_no,'COLD_CHAIN');
+    addLog('冷链登记',p.batch_no+' · '+q3(t)+'℃ · '+(exceeded?'超限并自动开工单':'正常'));
+    save();return null;
+  },
+  addAbnormal(v){
+    const row={id:Date.now(),abnormal_no:nextNo('AB'),batch_id:null,
+      process_batch_id:v.process_id?num(v.process_id):null,
+      abnormal_type:v.abnormal_type||'SENSORY_ABNORMAL',level:'HIGH',
+      description:v.description||'演示异常',status:'OPEN',handler:'演示员',conclusion:null,local:true};
+    if(row.process_batch_id){const p=S.processes.find(x=>x.id==row.process_batch_id);
+      if(p&&p.status==='ON_SALE')p.status='ABNORMAL';}
+    S.abnormals.unshift(row);addLog('异常登记',row.abnormal_no);save();return null;
+  },
+  dispose(id,v){
+    const a=S.abnormals.find(x=>x.id==id);if(!a)return '未找到';
+    a.status='CLOSED';a.conclusion=v.conclusion||'复检合格';a.action=v.action||'已处置';
+    if(v.resume==='yes'&&a.process_batch_id){
+      const p=S.processes.find(x=>x.id==a.process_batch_id);if(p&&p.status==='ABNORMAL')p.status='ON_SALE';}
+    addLog('异常处置',a.abnormal_no+' → CLOSED');save();return null;
+  },
+  addRecall(v){
+    const p=S.processes.find(x=>x.id==v.process_id);if(!p)return '请选择加工批次';
+    if(p.status==='RECALLED')return '该批次已召回';
+    const affected=S.sales.filter(x=>x.process_batch_id==p.id&&x.status==='NORMAL');
+    p.status='RECALLED';
+    affected.forEach(x=>x.status='RECALLED');
+    S.recalls.unshift({id:Date.now(),recall_no:nextNo('RC'),process_batch_id:p.id,
+      reason:v.reason||'演示召回',affected_sales:affected.length,
+      recalled_qty:q3(affected.reduce((s,x)=>s+num(x.quantity),0)),
+      status:'ACTIVE',recall_time:now(),local:true});
+    pushEvent(p.process_no,'RECALL');
+    addLog('发起召回',p.process_no+' · 波及 '+affected.length+' 笔销售');save();return null;
+  },
+  retryEvidence(id){addLog('存证重试','event '+String(id).slice(0,12)+'… 先查链再决定');save();return null;},
+};
+
+/* ===== AI 智能体：工具集 + 确定性编排 + 执行轨迹 ===== */
+const TOOLS={
+  list_suppliers:{label:'查询供应商',desc:'按状态筛选供应商档案',run(a){
+    const rows=S.suppliers.filter(x=>!a.status||x.status===a.status);
+    return {rows,summary:'命中 '+rows.length+' 家供应商'};}},
+  get_purchase:{label:'查询采购批次',desc:'按批次号取采购与验收详情',run(a){
+    let rows=S.purchases.filter(x=>!a.batchNo||x.batch_no===a.batchNo);
+    if(a.ids)rows=S.purchases.filter(x=>a.ids.includes(x.id));
+    return {rows,summary:'命中 '+rows.length+' 个采购批次'};}},
+  list_cold_exceeded:{label:'查询冷链超限',desc:'找出所有温度超阈值的冷链记录',run(){
+    const rows=S.coldChain.filter(x=>x.is_exceeded===1||x.is_exceeded===true);
+    return {rows,summary:'命中 '+rows.length+' 条冷链超限记录'};}},
+  list_abnormals:{label:'查询异常工单',desc:'按状态列出异常与处置记录',run(a){
+    const rows=S.abnormals.filter(x=>!a.status||x.status===a.status);
+    return {rows,summary:'命中 '+rows.length+' 条异常工单'};}},
+  list_recalls:{label:'查询召回记录',desc:'列出召回单及波及销售数',run(){
+    return {rows:S.recalls,summary:'命中 '+S.recalls.length+' 条召回记录'};}},
+  get_process:{label:'查询加工批次',desc:'取加工批次及其多来源投料关系',run(a){
+    let rows=S.processes.filter(x=>!a.processNo||x.process_no===a.processNo);
+    return {rows,summary:'命中 '+rows.length+' 个加工批次'};}},
+  list_sales:{label:'查询销售记录',desc:'按加工批次列销售流水',run(a){
+    const rows=S.sales.filter(x=>!a.processId||x.process_batch_id===a.processId);
+    return {rows,summary:'命中 '+rows.length+' 笔销售记录'};}},
+  list_events:{label:'查询事件快照',desc:'按批次列出存证事件与摘要',run(a){
+    const rows=S.events.filter(x=>!a.batchNo||x.batch_id===a.batchNo);
+    return {rows,summary:'命中 '+rows.length+' 条存证事件'};}},
+  get_rule:{label:'查询业务规则',desc:'取召回/冷链/核验门槛等规则原文',run(a){
+    const rows=S.docs.filter(x=>!a.topic||x.docId.toLowerCase().includes(String(a.topic).toLowerCase())
+      ||x.content.includes(a.topic));
+    return {rows:rows.length?rows:S.docs,summary:'命中 '+(rows.length||S.docs.length)+' 条规则'};}},
+  verify_status:{label:'核验记录状态',desc:'按当前链模式判定四类核验状态',run(a){
+    const mode=S.chainMode;
+    const rows=[{mode:mode,status:mode==='unreachable'?'UNREACHABLE':'MATCHED',
+      note:mode==='unreachable'?'链不可达，熔断返回，业务数据仍可读':'链上摘要与本地重算一致'}];
+    return {rows,summary:'当前核验状态：'+rows[0].status};}},
+};
+const GUARD=[
+  {re:/安全吗|能不能吃|能吃吗|会不会中毒|好不好|质量怎么样/,msg:'食品安全由检疫机构判定，系统不推断'},
+  {re:/预测|明天|下周|该进多少|建议采购/,msg:'预测与采购建议超出溯源记录范围'},
+  {re:/帮我写|写一段|作诗|翻译|总结全文/,msg:'通用写作不属于本系统职责'},
+];
+function plan(q){
+  const has=(...ks)=>ks.some(k=>q.includes(k));
+  if(has('冷链','超限','温度')&&has('供应商','召回','谁'))return {
+    mode:'workflow',name:'确定性工作流 · 4 步',
+    steps:[
+      {thought:'先找出所有温度超过阈值的冷链登记记录',tool:'list_cold_exceeded',args:{}},
+      {thought:'把超限记录关联回采购批次，取得对应供应商',tool:'get_purchase',args:{fromStep:0}},
+      {thought:'检查这些批次是否已发起过召回',tool:'list_recalls',args:{}},
+      {thought:'取召回规则，判断超限是否等于必须召回',tool:'get_rule',args:{topic:'RULE-RECALL'}},
+    ],
+    build(ctx){
+      const cold=ctx[0].rows,pur=ctx[1].rows,rec=ctx[2].rows,rule=ctx[3].rows;
+      if(!cold.length)return {text:'未发现冷链温度超限记录，无需进一步处置。',empty:true};
+      const ids=[...new Set(cold.map(x=>x.batch_id))];
+      const supIds=[...new Set(pur.filter(x=>ids.includes(x.id)).map(x=>x.supplier_id))];
+      const sups=supIds.map(i=>(S.suppliers.find(x=>x.id===i)||{}).name).filter(Boolean);
+      const recalled=[...new Set(rec.map(x=>x.process_batch_id))];
+      const lines=[
+        '共发现 '+cold.length+' 条冷链温度超限记录，涉及 '+ids.length+' 个采购批次。',
+        '关联供应商 '+sups.length+' 家'+(sups.length?'：'+sups.slice(0,4).join('、'):'')+'。',
+        '当前已有 '+rec.length+' 条召回记录；'+recalled.length+' 个加工批次被召回。',
+        '按召回规则：冷链温度超限会自动开异常工单，但不等于必须召回；',
+        '是否召回属后续处置决策，需结合检验结论与抽检结果判断。',
+        '',
+        '依据：[T1] 冷链超限 '+cold.length+' 条 · [T2] 采购批次 '+pur.length+' 条 · '+
+        '[T3] 召回记录 '+rec.length+' 条 · [T4] '+(rule[0]?rule[0].docId:'业务规则'),
+      ];
+      return {text:lines.join('\n'),empty:false};
+    }};
+  if(has('异常','召回','处置','处理到'))return {
+    mode:'workflow',name:'确定性工作流 · 3 步',
+    steps:[
+      {thought:'先列出全部异常工单及其状态',tool:'list_abnormals',args:{}},
+      {thought:'再列出召回记录，确认波及范围',tool:'list_recalls',args:{}},
+      {thought:'取处置规则，说明冻结与恢复的边界',tool:'get_rule',args:{topic:'RULE-RECALL'}},
+    ],
+    build(ctx){
+      const ab=ctx[0].rows,rc=ctx[1].rows;
+      const open=ab.filter(x=>x.status==='OPEN').length;
+      return {text:'当前异常工单 '+ab.length+' 条，其中未结案 '+open+' 条；\n'+
+        '召回记录 '+rc.length+' 条，累计波及 '+rc.reduce((s,x)=>s+num(x.affected_sales),0)+' 笔销售、'+
+        q3(rc.reduce((s,x)=>s+num(x.recalled_qty),0))+' kg。\n'+
+        '异常登记会冻结在售批次，处置通过后可恢复销售；召回后禁止继续销售。\n\n'+
+        '依据：[T1] 异常工单 '+ab.length+' 条 · [T2] 召回 '+rc.length+' 条 · [T3] 业务规则',empty:false};
+    }};
+  if(/PB\d{6,}/i.test(q))return {
+    mode:'single',name:'单步工具调用',
+    steps:[{thought:'问题点名了批次号，直接查该批次的采购与验收记录',tool:'get_purchase',
+      args:{batchNo:(q.match(/PB\d+/i)||[''])[0]}}],
+    build(ctx){const r=ctx[0].rows[0];if(!r)return {text:'未在已核验记录中找到该批次。',empty:true};
+      const ac=S.acceptances.find(x=>x.batch_id===r.id);
+      return {text:'批次 '+r.batch_no+'（'+r.meat_type+'，'+r.quantity+' '+r.unit+'）\n'+
+        '状态：'+r.status+'；检疫合格证号：'+r.quarantine_no+'。\n'+
+        (ac?'验收结论：'+ac.result+'；验收人 '+ac.inspector+'；到货温度 '+ac.temperature+' ℃。':'尚未验收。')+
+        '\n\n依据：[T1] get_purchase 命中 1 条'+(ac?' · 验收记录 1 条':''),empty:false};
+    }};
+  if(has('核验','状态','四类','MATCHED'))return {
+    mode:'single',name:'单步工具调用',
+    steps:[{thought:'查询当前核验状态与规则说明',tool:'verify_status',args:{}},
+      {thought:'补齐四类状态的规则原文',tool:'get_rule',args:{topic:'RULE-VERIFY-STATUS'}}],
+    build(ctx){const st=ctx[0].rows[0];return {text:'当前核验状态：'+st.status+'（'+st.note+'）。\n'+
+      '系统定义四类：MATCHED 记录一致 / MISMATCHED 摘要不同 / UNCONFIRMED 尚未上链 / UNREACHABLE 链暂不可达。\n'+
+      '记录核验状态与检验结论严格分栏，链挂了不会被读成数据造假。\n\n依据：[T1] verify_status · [T2] RULE-VERIFY-STATUS',empty:false};}};
+  if(has('供应商','哪几家','名单'))return {
+    mode:'single',name:'单步工具调用',
+    steps:[{thought:'直接查询供应商档案',tool:'list_suppliers',args:{}}],
+    build(ctx){const rows=ctx[0].rows;const active=rows.filter(x=>x.status==='ACTIVE').length;
+      return {text:'当前共 '+rows.length+' 家供应商，其中正常 '+active+' 家。\n'+
+        rows.slice(0,5).map(x=>'· '+x.supplier_code+' '+x.name+'（'+x.status+'）').join('\n')+
+        '\n\n依据：[T1] list_suppliers 命中 '+rows.length+' 条',empty:false};}};
+  if(has('销售','卖了多少','窗口'))return {
+    mode:'single',name:'单步工具调用',
+    steps:[{thought:'查询销售流水',tool:'list_sales',args:{}}],
+    build(ctx){const rows=ctx[0].rows;
+      const total=rows.reduce((s,x)=>s+num(x.quantity),0);
+      return {text:'当前共 '+rows.length+' 笔销售记录，合计 '+q3(total)+' kg。\n'+
+        '按状态：'+[...new Set(rows.map(x=>x.status))].join(' / ')+'。\n'+
+        '召回会联动把该批次全部销售记录置 RECALLED。\n\n依据：[T1] list_sales 命中 '+rows.length+' 条',empty:false};}};
+  if(has('加工','投料','来源','产出'))return {
+    mode:'single',name:'单步工具调用',
+    steps:[{thought:'查询加工批次与来源关系',tool:'get_process',args:{}}],
+    build(ctx){const rows=ctx[0].rows;
+      const multi=S.sources.filter(x=>rows.some(p=>p.id===x.process_batch_id))
+        .reduce((m,x)=>(m[x.process_batch_id]=(m[x.process_batch_id]||0)+1,m),{});
+      const mc=Object.values(multi).filter(n=>n>1).length;
+      return {text:'当前共 '+rows.length+' 个加工批次，其中 '+mc+' 个使用了多来源投料。\n'+
+        '规则：来源必须已验收、投入量受可用余量约束、产出不得大于投入、同一来源不可重复引用。\n\n'+
+        '依据：[T1] get_process 命中 '+rows.length+' 条',empty:false};}};
+  return null;
+}
+function runAgent(question){
+  const q=question.trim();
+  for(const g of GUARD)if(g.re.test(q))
+    return {refused:true,reason:'越界拦截',text:'该问题超出溯源系统职责：'+g.msg+'。',trace:[],tools:[]};
+  if(!/PB\d|PR\d|SUP-|冷链|超限|异常|召回|核验|供应商|销售|加工|投料|规则|温度|批次/i.test(q))
+    return {refused:true,reason:'缺少可核验锚点',text:'问题缺少可核验的批次号或业务对象，请补充后再问。',trace:[],tools:[]};
+  const p=plan(q);
+  if(!p)return {refused:true,reason:'未匹配到可用工具',text:'当前工具集无法回答该问题，已拒答而不是猜测。',trace:[],tools:[]};
+  const trace=[],ctxRows=[],tools=[];const t0=performance.now();
+  p.steps.forEach((s,i)=>{
+    let args=s.args||{};
+    if(s.args&&s.args.fromStep!==undefined){
+      const prev=ctxRows[s.args.fromStep]||{rows:[]};
+      args={ids:[...new Set(prev.rows.map(x=>x.batch_id))]};
+    }
+    const t1=performance.now();const out=TOOLS[s.tool].run(args);
+    const ms=Math.round((performance.now()-t1)*100)/100;
+    ctxRows.push(out);tools.push(s.tool);
+    trace.push({no:i+1,thought:s.thought,tool:s.tool,args:args,
+      label:TOOLS[s.tool].label,observation:out.summary,rows:out.rows.slice(0,3),ms});
+  });
+  const built=p.build(ctxRows);
+  if(built.empty)return {refused:true,reason:'工具未找到依据',text:built.text,trace,tools};
+  return {refused:false,mode:p.mode,modeName:p.name,text:built.text,trace,tools,
+    ms:Math.round((performance.now()-t0)*100)/100};
+}
+if(typeof window!=='undefined'){window.APP_DATA=APP_DATA;window.APP_CORE={S,seed,save,resetDemo,BIZ,TOOLS,runAgent,VIEWS,now,q3,num};}
+</script>
+
+<script>
+/* ===== UI ===== */
+/* S / BIZ / TOOLS 已在 app-core 的全局词法环境中，这里不要重复声明，
+   否则两段 script 共享作用域会抛 "Identifier 'S' has already been declared"。 */
+const C=window.APP_CORE;
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const pill=(v,map)=>{const cls=map[v]||'n';return '<span class="pill '+cls+'">'+esc(v)+'</span>';};
+const ST={'ACTIVE':'g','PASSED':'g','MATCHED':'g','ON_SALE':'g','CONFIRMED':'g','CLOSED':'n',
+ 'PENDING_ACCEPT':'a','CREATED':'a','OPEN':'a','UNCONFIRMED':'a','UNREACHABLE':'a',
+ 'REJECTED':'r','BLACKLISTED':'r','ABNORMAL':'r','RECALLED':'r','MISMATCHED':'r','SUSPENDED':'n','SOLD_OUT':'n'};
+function toast(msg,ok){const t=$('toast');t.textContent=msg;t.style.background=ok===false?'#a32d2d':'#152a3d';
+ t.style.display='block';clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',2600);}
+function sync(){C.save();S=C.S;}
+function doLogin(){const u=$('lu').value.trim()||'admin';
+ const user=APP_DATA.data.users.find(x=>x.username===u)||{username:u,display_name:u,role:'ADMIN'};
+ sessionStorage.setItem('mt_user',JSON.stringify(user));
+ $('login').style.display='none';$('shell').style.display='block';
+ $('who').textContent=user.display_name+'（'+user.role+'）';buildNav();go('overview');}
+function logout(){sessionStorage.removeItem('mt_user');$('shell').style.display='none';$('login').style.display='flex';}
+function buildNav(){$('nav').innerHTML=C.VIEWS.map(v=>'<button class="nav" data-view="'+v[0]+'" onclick="go(\''+v[0]+'\')">'+v[1]+'</button>').join('');}
+function go(view){
+ document.querySelectorAll('.nav').forEach(b=>b.classList.toggle('on',b.dataset.view===view));
+ const name=(C.VIEWS.find(v=>v[0]===view)||['',''])[1]||(view==='agent'?'AI 溯源智能体':'关于与边界');
+ $('crumb').textContent=name;$('view').innerHTML=RENDER[view]?RENDER[view]():'';
+ if(view==='agent')initAgent();
+}
+/* 通用表单弹窗 */
+let onSubmit=null;
+function form(title,fields,cb){
+ onSubmit=cb;$('modal').innerHTML='<h3>'+esc(title)+'</h3>'+fields.map(f=>{
+  let inp;
+  if(f.type==='select')inp='<select id="f_'+f.key+'">'+f.options.map(o=>'<option value="'+esc(o.v)+'"'+
+    (o.v==f.value?' selected':'')+'>'+esc(o.t)+'</option>').join('')+'</select>';
+  else inp='<input id="f_'+f.key+'" type="'+(f.type||'text')+'" value="'+esc(f.value??'')+'" placeholder="'+esc(f.ph||'')+'">';
+  return '<div class="field"><label>'+esc(f.label)+'</label>'+inp+'</div>';}).join('')+
+  '<div class="modalbtns"><button class="btn" onclick="closeModal()">取消</button>'+
+  '<button class="btn primary" onclick="submitForm()">确定</button></div>';
+ $('mask').style.display='block';$('modal').style.display='block';
+}
+function closeModal(){$('mask').style.display='none';$('modal').style.display='none';onSubmit=null;}
+function submitForm(){const vals={};document.querySelectorAll('#modal [id^=f_]').forEach(e=>vals[e.id.slice(2)]=e.value);
+ const err=onSubmit?onSubmit(vals):null;
+ if(err){toast(err,false);return;}closeModal();go(currentView());}
+function currentView(){const b=document.querySelector('.nav.on');return b?b.dataset.view:'overview';}
+function act(name,id){const err=C.BIZ[name](id);if(err)toast(err,false);else{toast('操作成功');go(currentView());}}
+
+const RENDER={};
+RENDER.overview=()=>{
+ const g=[
+  ['供应商',S.suppliers.length,'家'],['采购批次',S.purchases.length,'个'],
+  ['加工批次',S.processes.length,'个'],['销售记录',S.sales.length,'笔'],
+  ['冷链记录',S.coldChain.length,'条'],['异常工单',S.abnormals.length,'条'],
+  ['召回记录',S.recalls.length,'条'],['存证事件',S.events.length,'条']];
+ const recent=S.log.slice(0,6);
+ return '<h2>业务概览</h2><div class="sub">所有数字来自真实运行数据快照；你在演示中的操作会实时反映到这里。</div>'+
+ '<div class="cards">'+g.map(x=>'<div class="card"><b>'+x[1]+'</b><span>'+x[0]+'（'+x[2]+'）</span></div>').join('')+'</div>'+
+ '<div class="panel"><h3>业务链路</h3><div class="flow">'+
+ ['供应商备案','采购批次','入库验收','加工投料','上架销售','冷链温控','异常处置','批次召回','链上存证','公开溯源']
+ .map(x=>'<div>'+x+'</div>').join('')+'</div>'+
+ '<div class="hint">点击左侧菜单进入任意模块，表单提交会真实改变本地状态（刷新不丢，可一键重置）。</div></div>'+
+ '<div class="panel"><h3>最近操作</h3>'+(recent.length?'<table><tr><th>时间</th><th>动作</th><th>详情</th></tr>'+
+ recent.map(x=>'<tr><td class="mono">'+esc(x.time)+'</td><td>'+esc(x.action)+'</td><td>'+esc(x.detail)+'</td></tr>').join('')+'</table>':'<div class="empty">还没有操作，去左侧模块点一下试试</div>')+'</div>';
+};
+RENDER.suppliers=()=>'<h2>供应商管理</h2><div class="sub">状态为 BLACKLISTED / SUSPENDED 的供应商不能新建采购批次。</div>'+
+ '<div class="panel"><div class="toolbar"><button class="btn primary sm" onclick="supplierForm()">+ 新增供应商</button></div>'+
+ '<table><tr><th>编码</th><th>名称</th><th>许可证号</th><th>联系人</th><th>状态</th><th>操作</th></tr>'+
+ S.suppliers.slice().reverse().map(x=>'<tr><td class="mono">'+esc(x.supplier_code)+'</td><td>'+esc(x.name)+
+ (x.local?' <span class="pill b">新建</span>':'')+'</td><td class="mono">'+esc(x.license_no)+'</td><td>'+esc(x.contact_name)+
+ '</td><td>'+pill(x.status,ST)+'</td><td><button class="btn sm" onclick="act(\'toggleSupplier\','+x.id+')">切换状态</button></td></tr>').join('')+
+ '</table></div>';
+function supplierForm(){form('新增供应商',[
+ {key:'name',label:'供应商名称',ph:'××食品有限公司'},
+ {key:'license_no',label:'许可证号',ph:'JX2026xxxx'},
+ {key:'contact_name',label:'联系人'},
+ {key:'contact_phone',label:'联系电话'}],v=>C.BIZ.addSupplier(v));}
+RENDER.purchases=()=>{
+ const passed=S.purchases.filter(x=>x.status==='PASSED');
+ const opts=S.suppliers.filter(x=>x.status==='ACTIVE').map(x=>({v:x.id,t:x.supplier_code+' '+x.name}));
+ return '<h2>采购批次</h2><div class="sub">检疫证号必填；黑名单供应商会被拒绝；新建后状态为待验收。</div>'+
+ '<div class="panel"><div class="toolbar"><button class="btn primary sm" onclick="purchaseForm('+JSON.stringify(opts).replace(/"/g,'&quot;')+')">+ 新建采购批次</button></div>'+
+ '<table><tr><th>批次号</th><th>品类</th><th>数量</th><th>可用余量</th><th>检疫证号</th><th>状态</th></tr>'+
+ S.purchases.slice(0,40).map(x=>'<tr><td class="mono">'+esc(x.batch_no)+(x.local?' <span class="pill b">新建</span>':'')+
+ '</td><td>'+esc(x.meat_type)+'</td><td>'+esc(x.quantity)+' '+esc(x.unit)+'</td><td>'+esc(x.available_qty)+
+ '</td><td class="mono">'+esc(x.quarantine_no)+'</td><td>'+pill(x.status,ST)+'</td></tr>').join('')+
+ '</table><div class="hint">仅显示最近 40 条；已验收合格 '+passed.length+' 个，可用于加工投料。</div></div>';
+};
+function purchaseForm(opts){form('新建采购批次',[
+ {key:'supplier_id',label:'供应商',type:'select',options:opts},
+ {key:'meat_type',label:'肉类品类',value:'冷鲜猪肉'},
+ {key:'quantity',label:'采购数量 (kg)',value:'60.000'},
+ {key:'quarantine_no',label:'检疫合格证号',ph:'JX-JY-2026-xxxx'}],v=>C.BIZ.addPurchase({...v,supplier_id:Number(v.supplier_id)}));}
+RENDER.acceptance=()=>{
+ const todo=S.purchases.filter(x=>x.status==='PENDING_ACCEPT');
+ return '<h2>入库验收</h2><div class="sub">只能验收待验收批次；判定不合格必须填写原因；验收通过才可作为加工来源。</div>'+
+ '<div class="panel"><h3>待验收 ('+todo.length+')</h3>'+
+ (todo.length?'<table><tr><th>批次号</th><th>数量</th><th>到货温度</th><th>操作</th></tr>'+
+ todo.slice(0,20).map(x=>'<tr><td class="mono">'+esc(x.batch_no)+'</td><td>'+esc(x.quantity)+
+ '</td><td>'+esc(x.cold_chain_temp)+' ℃</td><td><button class="btn primary sm" onclick="acceptForm('+x.id+')">登记验收</button></td></tr>').join('')+'</table>':'<div class="empty">没有待验收批次</div>')+'</div>'+
+ '<div class="panel"><h3>验收记录</h3><table><tr><th>验收单号</th><th>结论</th><th>验收人</th><th>温度</th><th>原因</th></tr>'+
+ S.acceptances.slice(0,15).map(x=>'<tr><td class="mono">'+esc(x.accept_no)+'</td><td>'+pill(x.result,{'PASS':'g','FAIL':'r'})+
+ '</td><td>'+esc(x.inspector)+'</td><td>'+esc(x.temperature)+'</td><td>'+esc(x.reject_reason||'—')+'</td></tr>').join('')+'</table></div>';
+};
+function acceptForm(id){form('登记验收',[
+ {key:'result',label:'检验结论',type:'select',options:[{v:'PASS',t:'合格 PASS'},{v:'FAIL',t:'不合格 FAIL'}]},
+ {key:'temperature',label:'到货中心温度 ℃',value:'3.20'},
+ {key:'inspector',label:'验收人',value:'演示员'},
+ {key:'reject_reason',label:'不合格原因（FAIL 必填）'}],v=>C.BIZ.accept(id,v));}
+RENDER.process=()=>{
+ const passed=S.purchases.filter(x=>x.status==='PASSED');
+ const opts=passed.map(x=>({v:x.id,t:x.batch_no+'（余 '+x.available_qty+' kg）'}));
+ return '<h2>加工投料</h2><div class="sub">支持多来源；来源必须已验收、投入量不得超过余量、产出不得大于投入。</div>'+
+ '<div class="panel"><div class="toolbar"><button class="btn primary sm" onclick="processForm('+JSON.stringify(opts).replace(/"/g,'&quot;')+')">+ 新建加工投料</button>'+
+ '<button class="btn sm" onclick="go(\'sales\')">去上架 / 销售 →</button></div>'+
+ '<table><tr><th>加工批次</th><th>投入/产出</th><th>可售余量</th><th>状态</th><th>来源数</th><th>操作</th></tr>'+
+ S.processes.slice(0,30).map(x=>{const n=S.sources.filter(s=>s.process_batch_id===x.id).length;
+ return '<tr><td class="mono">'+esc(x.process_no)+(x.local?' <span class="pill b">新建</span>':'')+
+ '</td><td>'+esc(x.output_qty)+' kg 产出</td><td>'+esc(x.available_qty)+'</td><td>'+pill(x.status,ST)+
+ '</td><td>'+n+'</td><td>'+(x.status==='CREATED'?'<button class="btn sm" onclick="act(\'onsale\','+x.id+')">上架</button>':'—')+'</td></tr>';}).join('')+
+ '</table></div>';
+};
+function processForm(opts){const none=[{v:'',t:'— 不选 —'}].concat(opts);
+ form('新建加工投料（可填 1~3 个来源）',[
+ {key:'src1',label:'来源批次 1',type:'select',options:none},
+ {key:'qty1',label:'投入量 1 (kg)',value:'20.000'},
+ {key:'src2',label:'来源批次 2',type:'select',options:none},
+ {key:'qty2',label:'投入量 2 (kg)',value:''},
+ {key:'src3',label:'来源批次 3',type:'select',options:none},
+ {key:'qty3',label:'投入量 3 (kg)',value:''},
+ {key:'output_qty',label:'产出量 (kg)',value:'18.000'},
+ {key:'workshop',label:'车间',value:'演示后厨'},
+ {key:'retain_sample_no',label:'留样号',value:'LY-DEMO-001'}],v=>C.BIZ.addProcess(v));}
+RENDER.sales=()=>{
+ const on=S.processes.filter(x=>x.status==='ON_SALE');
+ const opts=S.processes.map(x=>({v:x.id,t:x.process_no+'（'+x.status+'，余 '+x.available_qty+'）'}));
+ return '<h2>上架与销售</h2><div class="sub">未上架 / 异常冻结 / 已召回的批次禁止销售；卖完自动置 SOLD_OUT。</div>'+
+ '<div class="panel"><div class="toolbar"><button class="btn primary sm" onclick="saleForm('+JSON.stringify(opts).replace(/"/g,'&quot;')+')">+ 登记销售</button></div>'+
+ '<table><tr><th>加工批次</th><th>状态</th><th>可售余量 kg</th><th>操作</th></tr>'+
+ S.processes.slice(0,20).map(x=>'<tr><td class="mono">'+esc(x.process_no)+'</td><td>'+pill(x.status,ST)+
+ '</td><td>'+esc(x.available_qty)+'</td><td>'+(x.status==='CREATED'?'<button class="btn sm" onclick="act(\'onsale\','+x.id+')">上架</button>':'—')+'</td></tr>').join('')+'</table></div>'+
+ '<div class="panel"><h3>销售流水</h3><table><tr><th>单号</th><th>窗口</th><th>数量</th><th>状态</th></tr>'+
+ S.sales.slice(0,15).map(x=>'<tr><td class="mono">'+esc(x.sale_no)+'</td><td>'+esc(x.channel)+
+ '</td><td>'+esc(x.quantity)+' kg</td><td>'+pill(x.status,{'NORMAL':'g','RECALLED':'r'})+'</td></tr>').join('')+'</table>'+
+ '<div class="hint">当前在售批次 '+on.length+' 个。</div></div>';
+};
+function saleForm(opts){form('登记销售',[
+ {key:'process_id',label:'加工批次',type:'select',options:opts},
+ {key:'quantity',label:'销售数量 (kg)',value:'5.000'},
+ {key:'channel',label:'销售窗口',value:'一食堂 3 号窗口'}],v=>C.BIZ.addSale({...v,process_id:Number(v.process_id)}));}
+RENDER.coldchain=()=>{
+ const opts=S.purchases.map(x=>({v:x.id,t:x.batch_no+'（'+(x.meat_type||'')+'）'}));
+ const ex=S.coldChain.filter(x=>x.is_exceeded==1||x.is_exceeded===true).length;
+ return '<h2>冷链温控</h2><div class="sub">按品类取阈值（冻品 −15℃ / 猪牛 4℃ / 兜底 4℃）；超限自动开异常工单，但不改变批次状态。</div>'+
+ '<div class="panel"><div class="toolbar"><button class="btn primary sm" onclick="coldForm('+JSON.stringify(opts).replace(/"/g,'&quot;')+')">+ 登记温度</button></div>'+
+ '<table><tr><th>单号</th><th>批次</th><th>实测</th><th>阈值</th><th>判定</th><th>时间</th></tr>'+
+ S.coldChain.slice().reverse().map(x=>{const p=S.purchases.find(y=>y.id===x.batch_id);
+ const over=x.is_exceeded==1||x.is_exceeded===true;
+ return '<tr><td class="mono">'+esc(x.log_no)+'</td><td class="mono">'+esc(p?p.batch_no:'—')+
+ '</td><td>'+esc(x.temperature)+' ℃</td><td>'+esc(x.threshold)+' ℃</td><td>'+
+ (over?'<span class="pill r">超限</span>':'<span class="pill g">正常</span>')+'</td><td class="mono">'+esc(x.recorded_at)+'</td></tr>';}).join('')+
+ '</table><div class="hint">累计 '+ex+' 条超限记录；可在「异常与召回」里看到自动生成的工单。</div></div>';
+};
+function coldForm(opts){form('登记冷链温度',[
+ {key:'batch_id',label:'采购批次',type:'select',options:opts},
+ {key:'temperature',label:'实测温度 ℃',value:'3.00'},
+ {key:'segment',label:'运输段',type:'select',options:[{v:'WAREHOUSE_TO_CANTEEN',t:'仓库 → 食堂'},{v:'ORIGIN_TO_WAREHOUSE',t:'产地 → 仓库'}]}],
+ v=>C.BIZ.addCold({...v,batch_id:Number(v.batch_id)}));}
+RENDER.abnormal=()=>{
+ const popts=S.processes.map(x=>({v:x.id,t:x.process_no}));
+ return '<h2>异常与召回</h2><div class="sub">异常登记冻结在售批次，处置可恢复；召回联动把该批次全部销售记录置 RECALLED。</div>'+
+ '<div class="panel"><div class="toolbar"><button class="btn primary sm" onclick="abForm('+JSON.stringify(popts).replace(/"/g,'&quot;')+')">+ 登记异常</button>'+
+ '<button class="btn sm" onclick="recallForm('+JSON.stringify(popts).replace(/"/g,'&quot;')+')">+ 发起召回</button></div>'+
+ '<h3>异常工单</h3><table><tr><th>单号</th><th>类型</th><th>说明</th><th>状态</th><th>操作</th></tr>'+
+ S.abnormals.slice().reverse().map(x=>'<tr><td class="mono">'+esc(x.abnormal_no)+'</td><td>'+esc(x.abnormal_type)+
+ '</td><td>'+esc(x.description)+'</td><td>'+pill(x.status,{'OPEN':'a','CLOSED':'g'})+'</td><td>'+
+ (x.status==='OPEN'?'<button class="btn sm" onclick="disposeForm('+x.id+')">处置</button>':'—')+'</td></tr>').join('')+'</table></div>'+
+ '<div class="panel"><h3>召回记录</h3><table><tr><th>单号</th><th>原因</th><th>波及销售</th><th>追回数量</th></tr>'+
+ S.recalls.slice().reverse().map(x=>'<tr><td class="mono">'+esc(x.recall_no)+'</td><td>'+esc(x.reason)+
+ '</td><td>'+esc(x.affected_sales)+' 笔</td><td>'+esc(x.recalled_qty)+' kg</td></tr>').join('')+'</table></div>';
+};
+function abForm(opts){form('登记异常',[
+ {key:'process_id',label:'关联加工批次',type:'select',options:[{v:'',t:'— 不关联 —'}].concat(opts)},
+ {key:'abnormal_type',label:'异常类型',type:'select',options:[{v:'SENSORY_ABNORMAL',t:'感官异常'},{v:'TEMPERATURE_EXCEEDED',t:'温度超限'},{v:'SAMPLING_FAILED',t:'抽检不合格'}]},
+ {key:'description',label:'异常描述',value:'抽检发现异常，暂停销售待复检'}],v=>C.BIZ.addAbnormal(v));}
+function disposeForm(id){form('处置异常',[
+ {key:'action',label:'处置动作',value:'封存留样并送第三方复检'},
+ {key:'conclusion',label:'处置结论',value:'复检合格，恢复销售'},
+ {key:'resume',label:'是否恢复销售',type:'select',options:[{v:'yes',t:'恢复 ON_SALE'},{v:'no',t:'保持冻结'}]}],
+ v=>C.BIZ.dispose(id,v));}
+function recallForm(opts){form('发起召回',[
+ {key:'process_id',label:'加工批次',type:'select',options:opts},
+ {key:'reason',label:'召回原因',value:'同批次抽检不合格（演示）'}],v=>C.BIZ.addRecall({...v,process_id:Number(v.process_id)}));}
+RENDER.evidence=()=>'<h2>存证管理</h2><div class="sub">链上只存 eventId / batchId / digest 三要素；业务明细留在库里。</div>'+
+ '<div class="panel"><table><tr><th>eventId</th><th>批次</th><th>事件类型</th><th>链模式</th><th>核验状态</th><th>操作</th></tr>'+
+ S.events.slice(0,25).map(x=>'<tr><td class="mono">'+esc(String(x.event_id).slice(0,18))+'…</td><td class="mono">'+
+ esc(x.batch_id)+'</td><td>'+esc(x.event_type)+'</td><td>'+esc(S.chainMode)+'</td><td>'+
+ pill(S.chainMode==='unreachable'?'UNREACHABLE':'MATCHED',ST)+'</td><td>'+
+ '<button class="btn sm" onclick="act(\'retryEvidence\',\''+esc(String(x.event_id).slice(0,12))+'\')">重试</button></td></tr>').join('')+
+ '</table><div class="hint">切换链模式后，公开溯源页的四类核验状态会相应变化。</div></div>'+
+ '<div class="panel"><h3>链模式（用于现场演示四类核验）</h3><div class="toolbar">'+
+ '<button class="btn sm '+(S.chainMode==='normal'?'primary':'')+'" onclick="setChain(\'normal\')">正常 MATCHED</button>'+
+ '<button class="btn sm '+(S.chainMode==='unreachable'?'primary':'')+'" onclick="setChain(\'unreachable\')">链不可达 UNREACHABLE</button>'+
+ '</div><div class="hint">这会同时影响 AI 智能体的 verify_status 工具结果。</div></div>';
+function setChain(m){S.chainMode=m;C.save();go('evidence');toast('链模式已切换为 '+m);}
+RENDER.trace=()=>{
+ const opts=[...new Set(S.events.map(x=>x.batch_id))].filter(Boolean).slice(0,80);
+ const sel=sessionStorage.getItem('mt_trace')||opts[0]||'';
+ const evs=S.events.filter(x=>x.batch_id===sel).sort((a,b)=>String(a.biz_time).localeCompare(String(b.biz_time)));
+ const ac=S.acceptances.find(x=>{const p=S.purchases.find(y=>y.batch_no===sel);return p&&x.batch_id===p.id;});
+ const st=S.chainMode==='unreachable'?'UNREACHABLE':'MATCHED';
+ return '<h2>公开溯源（免登录视角）</h2><div class="sub">「检验结论」与「记录核验」严格分栏；链挂了显示黄色而不是"数据造假"。</div>'+
+ '<div class="panel"><div class="toolbar"><select id="traceSel" onchange="pickTrace(this.value)">'+
+ opts.map(x=>'<option value="'+esc(x)+'"'+(x===sel?' selected':'')+'>'+esc(x)+'</option>').join('')+'</select>'+
+ '<span>当前链模式：'+esc(S.chainMode)+'</span></div>'+
+ '<div class="split"><div><h3>检验结论（业务事实）</h3>'+
+ (ac?'<p>验收单 '+esc(ac.accept_no)+' · 结论 <b>'+esc(ac.result)+'</b> · 验收人 '+esc(ac.inspector)+
+ ' · 到货温度 '+esc(ac.temperature)+' ℃</p>':'<p>该批次暂无验收记录，或为加工/供应商批次。</p>')+
+ '<div class="hint">这一栏说明「这批肉检验是否合格」，由检疫与验收流程决定。</div></div>'+
+ '<div><h3>记录核验（技术证明）</h3><p>'+pill(st,ST)+' · '+evs.length+' 条事件</p>'+
+ '<div class="hint">'+(st==='UNREACHABLE'?'链暂不可达，业务数据照常可读，但无法完成摘要比对；不显示为通过。':
+ '链上摘要与本地重算一致，说明记录写入后未被改动。')+'</div></div></div></div>'+
+ '<div class="panel"><h3>时间线（按业务时间排序）</h3><div class="timeline">'+
+ (evs.length?evs.map(x=>'<div class="tlitem"><div class="t">'+esc(x.biz_time)+' · '+esc(x.event_type)+
+ '</div><div class="d">'+(st==='UNREACHABLE'?'<span class="pill a">暂无法核验</span>':'<span class="pill g">记录已核验</span>')+
+ ' · <span class="mono">'+esc(String(x.event_id).slice(0,16))+'…</span></div></div>').join(''):'<div class="empty">无事件</div>')+
+ '</div></div>';
+};
+function pickTrace(v){sessionStorage.setItem('mt_trace',v);go('trace');}
+RENDER.agent=()=>{
+ const toolList=Object.entries(C.TOOLS).map(([k,v])=>'<div class="toolitem"><code>'+k+'</code><span>'+v.desc+'</span></div>').join('');
+ return '<h2>AI 溯源智能体</h2><div class="sub">不是聊天框：它按意图规划步骤、调用工具、把每一步的观察结果写进轨迹，答案只从工具结果生成。</div>'+
+ '<div class="agentwrap"><div>'+
+ '<div class="panel"><div class="qrow"><input id="agentQ" placeholder="问一个业务问题，例如：哪些批次冷链超限，涉及哪些供应商，是否需要召回？">'+
+ '<button class="btn primary" onclick="runAgentUI()">运行智能体</button></div>'+
+ '<div class="exs" id="agentExs"></div>'+
+ '<div id="agentOut"></div></div></div>'+
+ '<div><div class="panel"><h3>可用工具（'+Object.keys(C.TOOLS).length+' 个）</h3>'+toolList+'</div>'+
+ '<div class="panel"><h3>执行模式</h3><div class="hint" style="margin:0">'+
+ '<b>单步工具调用</b>：意图明确，一次取数直接答。<br>'+
+ '<b>确定性工作流</b>：复杂问题拆成固定几步，逐步取数再汇总。<br><br>'+
+ '业务系统里以工作流为主，而不是放任 ReAct 自主乱逛——可控、可复现、成本可估，'+
+ '这是交付型 Agent 和玩具 Demo 的区别。</div></div></div></div>';
+};
+const AGENT_EXS=[
+ '哪些批次冷链温度超限？涉及哪些供应商？是否需要召回？',
+ '最近有哪些异常和召回？分别处理到哪一步了？',
+ 'PB20261118001 的验收结论和检疫证号是什么？',
+ '这个系统的记录核验状态有哪几类？',
+ '目前有哪些供应商？',
+ '加工投料的多来源规则是什么？',
+ '这批肉吃了安全吗？',
+ '帮我预测明天的销量',
+];
+function initAgent(){$('agentExs').innerHTML=AGENT_EXS.map(q=>'<button onclick="fillAgent(\''+
+ q.replace(/'/g,"\\'")+'\')">'+esc(q)+'</button>').join('');
+ $('agentQ').addEventListener('keydown',e=>{if(e.key==='Enter')runAgentUI();});}
+function fillAgent(q){$('agentQ').value=q;runAgentUI();}
+function runAgentUI(){const q=$('agentQ').value.trim();if(!q)return;
+ const r=C.runAgent(q);const box=$('agentOut');
+ let h='';
+ if(r.refused){h='<div class="final refuse"><b>拒答 · '+esc(r.reason)+'</b>\n\n'+esc(r.text)+'</div>';}
+ else{h='<div class="stat"><span>模式：'+esc(r.modeName)+'</span><span>调用工具 '+r.tools.length+
+  ' 次</span><span>轨迹 '+r.trace.length+' 步</span><span>耗时 '+r.ms+' ms</span></div>'+
+  '<div class="trace">'+r.trace.map(s=>'<div class="step"><div class="h"><div class="no">'+s.no+
+  '</div><div class="th">'+esc(s.thought)+'</div></div>'+
+  '<div><span class="tool">'+esc(s.tool)+'('+esc(JSON.stringify(s.args))+')</span> '+
+  '<span class="pill b">'+esc(s.label)+'</span></div>'+
+  '<div class="obs">观察：'+esc(s.observation)+' · '+s.ms+' ms '+
+  (s.rows.length?'<button class="btn sm" style="margin-left:6px" onclick="tg(this)">看原始结果</button>':'')+'</div>'+
+  (s.rows.length?'<div class="raw">'+esc(JSON.stringify(s.rows,null,1))+'</div>':'')+'</div>').join('')+'</div>'+
+  '<div class="final">'+esc(r.text)+'</div>';}
+ box.innerHTML=h;}
+function tg(btn){const raw=btn.closest('.step').querySelector('.raw');
+ raw.style.display=raw.style.display==='block'?'none':'block';}
+RENDER.about=()=>'<h2>关于与边界</h2>'+
+ '<div class="panel"><h3>这是什么</h3><p style="font-size:12px;color:var(--muted);margin:0">'+
+ '把毕业设计的完整业务系统做成了单文件离线交互软件：10 个业务模块可真实操作，'+
+ 'AI 智能体作为其中一个功能模块，带工具集、执行轨迹与拒答纪律。<br><br>'+
+ '数据来自 2026-11-19 从本机 MySQL 导出的真实运行快照（26 供应商 / 71 采购 / 41 加工 / '+
+ '52 条来源关系 / 186 条存证事件）。业务动作只修改浏览器本地状态（localStorage），'+
+ '<b>不写真实数据库、不产生链上交易</b>；刷新不丢，可一键重置。</p></div>'+
+ '<div class="panel"><h3>和真实后端的关系</h3><p style="font-size:12px;color:var(--muted);margin:0">'+
+ '业务规则、状态流转、错误提示口径与 Spring Boot 后端一致（TECH-02 / PROD-01）；'+
+ '这里的目的是让面试官不装环境也能点开看全流程。真实系统仍以仓库里的 Java 后端为准。</p></div>'+
+ '<details><summary>面试时主动讲清的边界</summary><div class="body">'+
+ '· 离线演示版，不含用户权限体系、不连 MySQL、不上链<br>'+
+ '· 语料与核验状态是导出时刻快照，运行时不会实时重算链上摘要<br>'+
+ '· 智能体是确定性编排 + 工具调用，没有接 LLM 做自由生成；'+
+ '接了 LLM 也只是替换最后的语言组织，工具与护栏不变<br>'+
+ '· 这些边界写清楚，比含糊地说"做了个 AI 系统"更容易通过技术面</div></details>';
+/* 登录页账号卡片 */
+$('accounts').innerHTML=APP_DATA.data.users.map(u=>'<button onclick="fillLogin(\''+u.username+'\')">'+
+ esc(u.display_name)+'（'+u.role+'）</button>').join('');
+function fillLogin(u){$('lu').value=u;$('lp').value='Admin@123';}
+if(sessionStorage.getItem('mt_user'))doLogin();
+</script>
+</body>
+</html>
