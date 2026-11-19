@@ -9,7 +9,7 @@ import type { UserVO } from '@/types/api'
  *
  * 只存三样东西：token、用户信息、是否已登录。
  * **不存权限判断结果**——权限永远由后端 `@RequireRole` 判定，前端只负责"藏按钮"，
- * 藏了不等于安全，这点在论文 5.x 里要写清楚。
+ * 藏了不等于安全，真正的权限校验必须在服务端做。
  */
 export const useAuthStore = defineStore('auth', () => {
   const token = ref(tokenStorage.get())

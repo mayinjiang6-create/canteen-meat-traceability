@@ -1,5 +1,5 @@
 /**
- * 带登录态的页面截图（答辩素材用）。
+ * 带登录态的页面截图（README 与文档取图用）。
  *
  * 为什么不能直接 headless 截图：后台页面要求 Bearer token，而 token 存在 localStorage，
  * 浏览器命令行没有"预置 localStorage"的参数。这里走 CDP：

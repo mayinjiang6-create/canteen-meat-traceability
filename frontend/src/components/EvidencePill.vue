@@ -8,7 +8,7 @@ import type { EvidenceInfo } from '@/types/api'
  *
  * 关键认知：业务落库与上链是**异步**两件事（TECH-01 §异步存证）。
  * 接口返回 evidence.status = PENDING 是正常状态，页面必须能表达"已入库、正在上链"，
- * 而不是把它当失败弹红字。这条在答辩里是个加分点。
+ * 而不是把它当失败弹红字。这是四态设计的关键取舍。
  */
 const props = defineProps<{ evidence?: EvidenceInfo | null }>()
 

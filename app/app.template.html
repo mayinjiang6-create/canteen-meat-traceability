@@ -1002,7 +1002,7 @@ RENDER.llm=()=>{
  '<button class="btn sm" onclick="checkLLM()">检查配置</button>'+
  '<button class="btn sm danger" onclick="clearLLM()">清除 Key</button></div>'+
  '<div class="hint">「检查配置」只校验填写是否完整，<b>不会发起任何 API 调用、不产生费用</b>。</div></div>'+
- '<div class="panel"><h3>技术说明与面试话术</h3><div class="hint" style="margin:0">'+
+ '<div class="panel"><h3>技术说明</h3><div class="hint" style="margin:0">'+
  '浏览器从本地页面直连该服务商接口已实测可行：预检返回 200，'+
  '放行 <code>authorization,content-type</code> 头，<code>Origin: null</code>（file://）被接受，'+
  '因此<b>不需要代理服务、不需要后端</b>。<br><br>'+
@@ -1022,15 +1022,15 @@ function checkLLM(){const base=$('llmBase').value.trim(),key=$('llmKey').value.t
 }
 RENDER.about=()=>'<h2>关于与边界</h2>'+
  '<div class="panel"><h3>这是什么</h3><p style="font-size:12px;color:var(--muted);margin:0">'+
- '把毕业设计的完整业务系统做成了单文件离线交互软件：10 个业务模块可真实操作，'+
+ '把完整业务系统做成了单文件离线交互软件：10 个业务模块可真实操作，'+
  'AI 智能体作为其中一个功能模块，带工具集、执行轨迹与拒答纪律。<br><br>'+
  '数据来自 2026-11-19 从本机 MySQL 导出的真实运行快照（26 供应商 / 71 采购 / 41 加工 / '+
  '52 条来源关系 / 186 条存证事件）。业务动作只修改浏览器本地状态（localStorage），'+
  '<b>不写真实数据库、不产生链上交易</b>；刷新不丢，可一键重置。</p></div>'+
  '<div class="panel"><h3>和真实后端的关系</h3><p style="font-size:12px;color:var(--muted);margin:0">'+
  '业务规则、状态流转、错误提示口径与 Spring Boot 后端一致（TECH-02 / PROD-01）；'+
- '这里的目的是让面试官不装环境也能点开看全流程。真实系统仍以仓库里的 Java 后端为准。</p></div>'+
- '<details><summary>面试时主动讲清的边界</summary><div class="body">'+
+ '目的是不装任何环境也能点开看全流程。真实系统仍以仓库里的 Java 后端为准。</p></div>'+
+ '<details><summary>需要讲清的边界</summary><div class="body">'+
  '· 离线演示版，不含用户权限体系、不连 MySQL、不上链<br>'+
  '· 语料与核验状态是导出时刻快照，运行时不会实时重算链上摘要<br>'+
  '· 智能体默认是确定性编排 + 工具调用；LLM 是可选的语言组织层，'+

@@ -36,7 +36,7 @@ public interface ProcessBatchMapper extends BaseMapper<ProcessBatch> {
      *
      * <p>与扣减拆成两条语句，理由同采购侧的 {@code closeIfEmpty}：
      * MySQL 单表 UPDATE 的 SET 子句自左向右生效，同一语句里既改 available_qty 又读它，
-     * 结果取决于赋值顺序——这种 SQL 不该出现在答辩代码里。
+     * 结果取决于赋值顺序——这种 SQL 不该出现在业务代码里。
      */
     @Update("""
             UPDATE process_batch

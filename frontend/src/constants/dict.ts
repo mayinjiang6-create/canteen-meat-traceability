@@ -2,7 +2,7 @@
  * 状态字典——**全系统唯一出处**。
  *
  * 为什么单独拎一个文件：同样的 PASSED 在采购列表、详情、公开溯源页各写一遍中文，
- * 迟早出现「已验收 / 验收通过 / 合格」三种说法，答辩时被问"这两个是不是一个状态"就说不清。
+ * 迟早出现「已验收 / 验收通过 / 合格」三种说法，别人分不清这两个是不是一个状态。
  *
  * 配色口径（Element Plus tag type）：
  *   success=绿（正向终态） info=灰（中性） warning=橙（待处理/需关注） danger=红（异常/拒绝）
@@ -13,7 +13,7 @@ export type TagType = 'success' | 'info' | 'warning' | 'danger' | 'primary'
 export interface DictItem {
   label: string
   type: TagType
-  /** 鼠标悬停时的解释，答辩时鼠标一放就能说清楚 */
+  /** 鼠标悬停时的解释，放上去就能说清楚 */
   hint?: string
 }
 

@@ -49,7 +49,7 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* 数字用等宽，数量与摘要列对得齐，答辩投影时一眼能看出位数 */
+/* 数字用等宽，数量与摘要列对得齐，大屏展示时一眼能看出位数 */
 .mono {
   font-family: 'Cascadia Mono', 'Consolas', 'SF Mono', monospace;
   font-variant-numeric: tabular-nums;

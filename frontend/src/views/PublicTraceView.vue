@@ -465,7 +465,7 @@ function backToAdmin() {
           <div v-if="timeline.length === 0" class="tl-empty">该批次暂无业务事件记录</div>
         </section>
 
-        <!-- 技术说明：答辩时这一块很关键 -->
+        <!-- 技术说明：核验状态与检验结论必须分栏展示 -->
         <section class="tech-note">
           <h4>这些结论是怎么来的</h4>
           <div class="tn-grid">
@@ -505,7 +505,7 @@ function backToAdmin() {
     </main>
 
     <footer class="trace-footer">
-      高校食堂肉类供应链溯源系统 · 江西工程学院智慧产业学院 · 基于 FISCO BCOS 联盟链
+      高校食堂肉类供应链溯源系统 · 基于 FISCO BCOS 联盟链
     </footer>
   </div>
 </template>

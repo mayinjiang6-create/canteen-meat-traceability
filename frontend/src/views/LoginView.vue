@@ -19,7 +19,7 @@ const rules: FormRules = {
   password: [{ required: true, message: '请输入口令', trigger: 'blur' }],
 }
 
-/** 演示账号：答辩现场一个一个字母敲太浪费时间，点一下直接填 */
+/** 试用账号：本地体验时一个一个字母敲太麻烦，点一下直接填 */
 const demoAccounts = [
   { username: 'admin', password: 'Admin@123', role: '管理员', note: '全部写权限' },
   { username: 'inspector01', password: 'Inspector@123', role: '验收员', note: '同为 ADMIN 角色' },
@@ -98,7 +98,7 @@ async function submit() {
         </ul>
 
         <div class="brand-foot">
-          江西工程学院 · 智慧产业学院 · 区块链工程 · 2027 届毕业设计
+          基于 FISCO BCOS 联盟链 · 关键事件链上存证 · 公开可核验
         </div>
       </div>
     </section>
