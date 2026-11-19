@@ -1,0 +1,281 @@
+{
+  "meta": {
+    "model": "D:\\食堂肉类溯源系统\\trusted-rag\\.models\\bge-small-zh-v1.5",
+    "modelName": "BAAI/bge-small-zh-v1.5",
+    "note": "只替换检索器（词面 → BGE 余弦），意图路由/六类拦截/字段校验/批次过滤/grounded 全部不变",
+    "threshold": 0.45,
+    "thresholdSelection": "在公开集 60 条上网格搜索，held-out 不参与"
+  },
+  "thresholdGrid": [
+    {
+      "threshold": 0.45,
+      "answerAccuracy": 0.9231,
+      "refusalAccuracy": 1.0,
+      "mean": 0.9616,
+      "failed": [
+        "Q04",
+        "Q24",
+        "Q42"
+      ]
+    },
+    {
+      "threshold": 0.5,
+      "answerAccuracy": 0.9231,
+      "refusalAccuracy": 1.0,
+      "mean": 0.9616,
+      "failed": [
+        "Q04",
+        "Q24",
+        "Q42"
+      ]
+    },
+    {
+      "threshold": 0.55,
+      "answerAccuracy": 0.8718,
+      "refusalAccuracy": 1.0,
+      "mean": 0.9359,
+      "failed": [
+        "Q04",
+        "Q24",
+        "Q25",
+        "Q41",
+        "Q42"
+      ]
+    },
+    {
+      "threshold": 0.6,
+      "answerAccuracy": 0.641,
+      "refusalAccuracy": 1.0,
+      "mean": 0.8205,
+      "failed": [
+        "Q01",
+        "Q04",
+        "Q06",
+        "Q07",
+        "Q23",
+        "Q24",
+        "Q25",
+        "Q26",
+        "Q41",
+        "Q42",
+        "Q43",
+        "Q45",
+        "Q46",
+        "Q48"
+      ]
+    },
+    {
+      "threshold": 0.65,
+      "answerAccuracy": 0.3333,
+      "refusalAccuracy": 1.0,
+      "mean": 0.6666,
+      "failed": [
+        "Q01",
+        "Q04",
+        "Q05",
+        "Q06",
+        "Q07",
+        "Q10",
+        "Q11",
+        "Q12",
+        "Q13",
+        "Q14",
+        "Q15",
+        "Q21",
+        "Q23",
+        "Q24",
+        "Q25",
+        "Q26",
+        "Q28",
+        "Q34",
+        "Q35",
+        "Q41",
+        "Q42",
+        "Q43",
+        "Q44",
+        "Q45",
+        "Q46",
+        "Q48"
+      ]
+    },
+    {
+      "threshold": 0.7,
+      "answerAccuracy": 0.0513,
+      "refusalAccuracy": 1.0,
+      "mean": 0.5256,
+      "failed": [
+        "Q01",
+        "Q02",
+        "Q03",
+        "Q04",
+        "Q05",
+        "Q06",
+        "Q07",
+        "Q09",
+        "Q10",
+        "Q11",
+        "Q12",
+        "Q13",
+        "Q14",
+        "Q15",
+        "Q21",
+        "Q22",
+        "Q23",
+        "Q24",
+        "Q25",
+        "Q26",
+        "Q27",
+        "Q28",
+        "Q34",
+        "Q35",
+        "Q41",
+        "Q42",
+        "Q43",
+        "Q44",
+        "Q45",
+        "Q46",
+        "Q47",
+        "Q48",
+        "Q49",
+        "Q50",
+        "Q51",
+        "Q52",
+        "Q53"
+      ]
+    }
+  ],
+  "publicSet": {
+    "cases": 60,
+    "answerAccuracy": 0.9231,
+    "refusalAccuracy": 1.0,
+    "recallAt5": 0.9615,
+    "top1Accuracy": 0.9615,
+    "mrr": 0.9615,
+    "failed": [
+      "Q04",
+      "Q24",
+      "Q42"
+    ],
+    "refusalBreakdown": {
+      "unknown_batch": 4,
+      "out_of_scope": 10,
+      "no_anchor": 5,
+      "comparison_unsupported": 2
+    }
+  },
+  "holdoutSet": {
+    "cases": 20,
+    "answerAccuracy": 0.9231,
+    "refusalAccuracy": 1.0,
+    "recallAt5": 1.0,
+    "top1Accuracy": 1.0,
+    "mrr": 1.0,
+    "failed": [
+      "H02"
+    ],
+    "refusalBreakdown": {
+      "unknown_batch": 1,
+      "out_of_scope": 3,
+      "comparison_unsupported": 1,
+      "no_anchor": 1,
+      "evidence_not_covered": 1
+    }
+  },
+  "baseline": {
+    "publicSet": {
+      "cases": 60,
+      "answerAccuracy": 1.0,
+      "refusalAccuracy": 1.0,
+      "recallAt5": 1.0,
+      "top1Accuracy": 1.0,
+      "mrr": 1.0,
+      "failed": [],
+      "refusalBreakdown": {
+        "unknown_batch": 4,
+        "out_of_scope": 10,
+        "no_anchor": 5,
+        "comparison_unsupported": 2
+      }
+    },
+    "holdoutSet": {
+      "cases": 20,
+      "answerAccuracy": 1.0,
+      "refusalAccuracy": 1.0,
+      "recallAt5": 1.0,
+      "top1Accuracy": 1.0,
+      "mrr": 1.0,
+      "failed": [],
+      "refusalBreakdown": {
+        "unknown_batch": 1,
+        "out_of_scope": 3,
+        "comparison_unsupported": 1,
+        "no_anchor": 1,
+        "evidence_not_covered": 1
+      }
+    }
+  },
+  "probes": {
+    "embedding": {
+      "猪肉合格不？": {
+        "grounded": false,
+        "mode": "evidence_not_covered",
+        "answer": "未在已核验记录中找到依据。",
+        "cited": []
+      },
+      "供应商鑫旺的证号": {
+        "grounded": true,
+        "mode": "ok",
+        "answer": "2026-11-18 21:02，供应商 SUP-0005「南昌鑫旺肉业有限公司」完成备案。许可证号 JX20260099，状态 ACTIVE。 [1]",
+        "cited": [
+          "SUP-0005"
+        ]
+      },
+      "PB20261118001 的检验结论是什么？": {
+        "grounded": true,
+        "mode": "ok",
+        "answer": "2026-11-18 09:30，采购批次 PB20261118001（120.000 kg）完成入库验收。验收人 李四，到货中心温度 3.500 ℃，索证索票齐全，检验结论：合格",
+        "cited": [
+          "PB20261118001"
+        ]
+      },
+      "这批肉吃了安全吗？": {
+        "grounded": false,
+        "mode": "out_of_scope",
+        "answer": "该问题超出溯源记录范围。",
+        "cited": []
+      }
+    },
+    "baseline": {
+      "猪肉合格不？": {
+        "grounded": true,
+        "mode": "ok",
+        "answer": "2026-11-18 23:27，采购批次 PB20261118043（30.000 kg）完成入库验收。验收人 验收测试员，到货中心温度 3.200 ℃，索证索票不齐全，检验结论",
+        "cited": [
+          "PB20261118043"
+        ]
+      },
+      "供应商鑫旺的证号": {
+        "grounded": true,
+        "mode": "ok",
+        "answer": "2026-11-18 21:02，供应商 SUP-0004「南昌鑫旺肉业有限公司」完成备案。许可证号 JX20260099，状态 ACTIVE。 [1]",
+        "cited": [
+          "SUP-0004"
+        ]
+      },
+      "PB20261118001 的检验结论是什么？": {
+        "grounded": true,
+        "mode": "ok",
+        "answer": "2026-11-18 09:30，采购批次 PB20261118001（120.000 kg）完成入库验收。验收人 李四，到货中心温度 3.500 ℃，索证索票齐全，检验结论：合格",
+        "cited": [
+          "PB20261118001"
+        ]
+      },
+      "这批肉吃了安全吗？": {
+        "grounded": false,
+        "mode": "out_of_scope",
+        "answer": "该问题超出溯源记录范围。",
+        "cited": []
+      }
+    }
+  }
+}

@@ -160,7 +160,9 @@ v1（单路 TF-IDF）冻结在 `trusted_rag_v1.py`，与 v2 跑**同一份 60 �
 
 **离线模式不是语义检索，也不是语言模型生成。**
 
-- 检索器是**字符 n-gram + TF-IDF + BM25 混合词面检索**，不是语义 embedding 模型
+- 检索器是**字符 n-gram + TF-IDF + BM25 混合词面检索**，不是语义 embedding 模型。
+  （2026-11-19 实测换过 BGE 语义检索，答案正确率反而从 1.00 降到 0.9231——见上文「语义检索对照」，
+  所以保留词面检索并预留混合接口，而不是为了写"用了 embedding"而换）
 - 答案是**命中片段的抽取式陈列**，不是 LLM 生成的自然语言
 - 因此 80 条（60 公开 + 20 held-out）全过**不能等价于真实场景准确率**：题目是我照着这份语料出的，
   多为带批次号的精确查询；held-out 只能证明"没照着答案调参"，不能证明"能应付真实用户的任意问法"
@@ -214,6 +216,39 @@ RAGAS（`explodinggradients/ragas`）是行业通用口径，代价是要 LLM-as
 
 ---
 
+## 语义检索对照（2026-11-19 实跑，结论是「不换」）
+
+`fetch_model.py` + `embed_eval.py`：下载 **BAAI/bge-small-zh-v1.5**（95 MB，走 ModelScope），
+把检索器换成语义余弦，**其余全部不变**（意图路由、六类拦截、字段校验、批次过滤、grounded），
+同一份 60 + 20 条题重跑，产 `embedding_eval.json`。
+
+| 指标 | 词面（现方案 v2） | BGE 语义（θ=0.45，公开集选定） |
+|---|---|---|
+| 公开集 答案正确率 | **1.00** | 0.9231 |
+| 公开集 拒答正确率 | 1.00 | 1.00 |
+| 公开集 R@5 / Top-1 | 1.00 / 1.00 | 0.9615 / 0.9615 |
+| held-out 答案正确率 | **1.00** | 0.9231 |
+| held-out 拒答正确率 | 1.00 | 1.00 |
+
+**失败用例全是"检疫证号"类精确查询**（Q04 / Q24 / Q42 / H02）：稠密检索把"语义相近的
+其他采购记录"排到了前面，top-5 里没有目标批次，批次过滤后为空 → 拒答。
+
+反过来也有一条真实收益：**「猪肉合格不？」** 在词面版会撞出一条 `FAIL` 记录硬答，
+语义版正确拒答（`evidence_not_covered`）——泛问问题确实更适合语义判断。
+
+**结论：不把检索器换成纯向量。** 批次号、证号这类精确标识符是 BM25 的主场，
+口语与同义才是向量模型的主场；正确方向是**混合召回 + RRF 融合**，
+现方案的骨架（双路召回 + 按名次融合）本来就是为这一步留的位置。
+已知难题仍未解决：**同名供应商实体消歧**（问「鑫旺」仍会落在 SUP-0004 / 0005 之一）。
+
+> 这一段是「换检索器必须重跑同一份评测」的完整示范：指标掉了 7.7 个点，
+> 结论是回退而不是粉饰——**能拿自己的实验否掉自己的假设，比多一个功能更能说明问题。**
+
+> 依赖说明：这条对照需要 `torch` + `transformers`（仅此脚本），**不影响**
+> `demo.py` / `holdout.py` / `compare.py` 的零依赖运行。模型权重不入库（`.gitignore` 已挡）。
+
+---
+
 ## 生成层可插拔
 
 `TrustedRAG(generator=...)` 接受任意 `Callable[[question, contexts], str]`：
@@ -242,8 +277,10 @@ RAGAS（`explodinggradients/ragas`）是行业通用口径，代价是要 LLM-as
 | `demo.py` | 一条命令跑公开集评测 + 示例问答 |
 | `holdout.py` | 跑 held-out 集，产 `evaluation_holdout.json` |
 | `ragas_like.py` | RAGAS 四指标的零依赖近似，产 `ragas_like.json` |
+| `fetch_model.py` | 从 ModelScope 下载 BGE-small-zh-v1.5（仅语义对照用，权重不入库） |
+| `embed_eval.py` | 语义检索 vs 词面检索的同题对照，产 `embedding_eval.json` |
 | `evaluation.json` / `evaluation_baseline.json` | v2 / v1 实测报告 |
-| `evaluation_holdout.json` / `ragas_like.json` | held-out 报告 / 双口径对照报告 |
+| `evaluation_holdout.json` / `ragas_like.json` / `embedding_eval.json` | held-out / 双口径 / 语义对照三份报告 |
 | `comparison.json` | 前后对比报告（含查询改写增益） |
 | `index.html` | 静态演示页 |
 

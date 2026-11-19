@@ -67,13 +67,22 @@ class Encoder:
 class EmbeddingRAG(TrustedRAG):
     """只把检索通道换成语义向量，拦截与校验逻辑完全继承。"""
 
+    # 阈值网格搜索会反复构造实例，语料嵌入只算一次（CPU 上这一步最慢）
+    shared_encoder: Encoder | None = None
+    shared_vecs = None
+
     def __init__(self, model_dir: Path, threshold: float = 0.60, top_k: int = 5):
         self.model_dir = model_dir
         super().__init__(threshold=threshold, top_k=top_k)
 
     def _build_index(self) -> None:
-        self.encoder = Encoder(self.model_dir)
-        self.chunk_vecs = self.encoder.encode([c["content"] for c in self.chunks])
+        if EmbeddingRAG.shared_encoder is None:
+            print("编码 190 个片段（只做一次）…", flush=True)
+            EmbeddingRAG.shared_encoder = Encoder(self.model_dir)
+            EmbeddingRAG.shared_vecs = EmbeddingRAG.shared_encoder.encode(
+                [c["content"] for c in self.chunks])
+        self.encoder = EmbeddingRAG.shared_encoder
+        self.chunk_vecs = EmbeddingRAG.shared_vecs
 
     def retrieve(self, question: str):
         from trusted_rag import Hit

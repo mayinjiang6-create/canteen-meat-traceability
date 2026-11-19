@@ -63,6 +63,16 @@
   （4 条平台做不到）+ 判断清单 + 4 条面试标准答法。**平台未实跑，文档里写明**
 - `docs/career/AI产品作品说明.md`（CAREER-08）、`docs/career/90秒演示脚本.md`
 
+### 新增 · 语义检索对照（P5，结论是「不换」）
+- `trusted-rag/fetch_model.py`：从 ModelScope 拉 `BAAI/bge-small-zh-v1.5`（95 MB，权重不入库）
+- `trusted-rag/embed_eval.py`：只替换检索器（词面 → BGE 余弦），意图路由 / 六类拦截 /
+  字段校验 / 批次过滤 / grounded 全不动，同一份 60 + 20 条题重跑
+- **结果：答案正确率 1.00 → 0.9231（公开集与 held-out 一致），拒答仍 1.00**；
+  失败全是"检疫证号"类精确查询（稠密检索把语义相近的其他记录排在前面）；
+  一条真实收益：「猪肉合格不？」从硬答一条 `FAIL` 记录变成正确拒答
+- **决定：保留词面检索，方向改为 BM25 + 向量混合召回**；同名供应商消歧仍未解决
+- 报告 `embedding_eval.json`；叙述见 `trusted-rag/README.md`「语义检索对照」
+
 ### 修复 · 文档口径（P2）
 - `trusted-rag/README.md` 159–166 行表格表头重复串行（渲染错乱）
 - 根 README 补「三个 AI 不要混为一谈」表：Java 主项目未实装 / `trusted-rag` 已实现 / `app` 已实现
@@ -75,6 +85,7 @@
 - `python compare.py`：v1 拒答 0.7143 → v2 1.00（失败 6 条全修）
 - `node verify_app.mjs` 63/0、`node verify_app_browser.mjs` 14/0、`node verify_product.mjs` 8 项一致
 - `mvn test -DforkCount=0`：49 项（3 项需真链自动跳过）
+- `python embed_eval.py`（需 torch + transformers）：语义检索 vs 词面检索，80 条同题对照已出数
 - 本机实跑后端 jar：`/api/health` 200、登录 `code=0`、无链时公开溯源 1 条 `UNREACHABLE`
 - **未验证**：容器构建与 `docker compose up`（本机 Hyper-V 关闭、Docker Desktop 不可用）；
   Dify 平台实跑（同上原因）——两处都在文档里如实标注
