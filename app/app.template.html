@@ -530,15 +530,21 @@ function llmActive(){const c=getLLMConfig();return !!(c&&c.enabled&&c.key&&c.bas
 async function polishWithLLM(result,question){
   const cfg=getLLMConfig();
   if(!cfg||!cfg.enabled||!cfg.key||result.refused)return {...result,llmUsed:false};
-  const blocks=result.trace.map((s,i)=>'T'+(i+1)+' '+s.tool+' → '+s.observation+
-    '\n'+(s.rows&&s.rows.length?JSON.stringify(s.rows).slice(0,700):'')).join('\n');
+  const blocks=result.trace.map((s,i)=>{
+    const n=s.rows?s.rows.length:0;
+    return 'T'+(i+1)+' '+s.tool+' → '+s.observation+
+      (n?'\n【以下为前 '+n+' 行明细样例，不是全部命中数据】\n'+
+        JSON.stringify(s.rows).slice(0,700):'');
+  }).join('\n');
   const prompt=
     '你是高校食堂肉类溯源系统的查询助手。只能依据下面【工具结果】回答，禁止推测或补充常识。\n'+
     '规则：\n1. 每个结论后必须标注来源编号，格式 [T1][T2]…，没有编号的结论无效。\n'+
     '2. 工具结果里没有的信息不要写；无依据时直接说"未在已核验记录中找到依据"。\n'+
     '3. 不评价食品是否安全，只陈述记录里写了什么。\n'+
     '4. 数量带单位、时间带日期；多个批次分条列出，不要合并数字。\n'+
-    '5. 不要改动工具结果里的批次号、数量、供应商名称；不要新增任何数字。\n\n'+
+    '5. 不要改动工具结果里的批次号、数量、供应商名称；不要新增任何数字。\n'+
+    '6. 工具明细只展示前几行"样例"，观察里的"命中 N 条"是完整数量；'+
+    '不要因为样例行数少于 N 就判定数据缺失。\n\n'+
     '【工具结果】\n'+blocks+'\n\n'+
     '【确定性编排给出的参考结论】（可复用措辞，但不得据此新增事实）\n'+result.text+'\n\n'+
     '【问题】'+question+'\n【回答】';
@@ -569,6 +575,7 @@ if(typeof window!=='undefined'){window.APP_DATA=APP_DATA;window.APP_CORE={S,seed
 const C=window.APP_CORE;
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const renderAnswer=t=>esc(t).replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>');
 const pill=(v,map)=>{const cls=map[v]||'n';return '<span class="pill '+cls+'">'+esc(v)+'</span>';};
 const ST={'ACTIVE':'g','PASSED':'g','MATCHED':'g','ON_SALE':'g','CONFIRMED':'g','CLOSED':'n',
  'PENDING_ACCEPT':'a','CREATED':'a','OPEN':'a','UNCONFIRMED':'a','UNREACHABLE':'a',
@@ -843,7 +850,7 @@ function renderAgentResult(r){
    '<div class="obs">观察：'+esc(s.observation)+' · '+s.ms+' ms '+
    (s.rows.length?'<button class="btn sm" style="margin-left:6px" onclick="tg(this)">看原始结果</button>':'')+'</div>'+
    (s.rows.length?'<div class="raw">'+esc(JSON.stringify(s.rows,null,1))+'</div>':'')+'</div>').join('')+'</div>'+
-   '<div class="final" id="finalAnswer">'+esc(r.text)+'</div>';
+   '<div class="final" id="finalAnswer">'+renderAnswer(r.text)+'</div>';
   if(badge)badge.textContent=r.llmUsed?'LLM 增强模式':'离线确定性模式';
  }
  box.innerHTML=h;

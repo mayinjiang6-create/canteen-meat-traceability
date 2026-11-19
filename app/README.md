@@ -106,8 +106,22 @@ node verify_app_browser.mjs    # 真实浏览器：登录 → 切模块 → 跑�
 - `app.template.html`：界面与逻辑模板
 - `build_app.py` 优先读快照；快照不存在时才尝试连 MySQL（需要 `pymysql`）
 
-**最近一次验证**：核心 `PASS 51 / FAIL 0`（含 LLM 成功 / 拒答不调用 / 失败回退 /
-清除密钥 8 项），浏览器交互 `PASS 12 / FAIL 0`（含浏览器内 mock LLM 增强路径真实走通）。
-LLM 验证全部使用 mock，**未调用真实模型、未产生费用**。
+**最近一次验证**：核心 `PASS 51 / FAIL 0`，浏览器交互 `PASS 12 / FAIL 0`，
+本机已接入版 `PASS 4 / FAIL 0`；另完成 **1 次真实 DeepSeek 调用**
+（HTTP 200 / 4 步轨迹 / 1820 tokens / 带 `[Tn]` 依据的答案），
+证据见 `evaluation_llm_real.json` 与 `screenshots/03-智能体真实LLM调用.png`。
+除这次真实调用外，其余 LLM 验证全部使用 mock，不产生费用。
+
+```bash
+python build_app.py                                  # 重建公开版（无密钥）
+DEEPSEEK_API_KEY=xxx python make_local.py            # 生成本机已接入版（含密钥，已 gitignore）
+DEEPSEEK_API_KEY=xxx node capture_llm_real.mjs       # 真实调用取证 → evaluation_llm_real.json
+node verify_app.mjs / verify_app_browser.mjs / verify_local.mjs
+```
+
+- `app.html`：**公开版，不含任何密钥**，双击可用（默认离线确定性模式，
+  也可在「LLM 接入设置」里自己填 Key）
+- `app.local.html`：**本机已接入版**，双击直接是 LLM 增强模式。
+  含密钥、已在 `.gitignore` 中，**绝不提交到公开仓库，也不要随意外发**
 `app.html` 无 CDN、无 fetch、无外链，`file://` 双击可用、断网可用；
 可直接复制到 U 盘或发给面试官。

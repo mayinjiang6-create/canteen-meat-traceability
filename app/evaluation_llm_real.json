@@ -1,0 +1,36 @@
+{
+  "meta": {
+    "capturedAt": "2026-11-19T05:07:28.426Z",
+    "provider": "DeepSeek OpenAI-compatible API",
+    "modelRequested": "deepseek-chat",
+    "question": "哪些批次冷链温度超限？涉及哪些供应商？是否需要召回？",
+    "note": "真实调用取证；密钥只在浏览器本机，输出文件不含密钥或 Authorization 头"
+  },
+  "result": {
+    "llmUsed": true,
+    "llmError": null,
+    "model": "deepseek-chat",
+    "traceSteps": 4,
+    "tools": [
+      "list_cold_exceeded",
+      "get_purchase",
+      "list_recalls",
+      "get_rule"
+    ],
+    "modeName": "确定性工作流 · 4 步",
+    "badge": "LLM 增强模式",
+    "finalAnswer": "冷链温度超限的批次（共 4 条记录，涉及 4 个采购批次） [T1][T2]\n\n已核验明细中可见的批次：\n- 批次 3（采购单号 PB20261118003，冷鲜猪肉）：WAREHOUSE_TO_CANTEEN 环节温度 6.20，阈值 4.00，超限，记录时间 2026-11-18 07:05:00 [T1]\n- 批次 35（采购单号 PB20261118035，冷鲜猪肉）：ORIGIN_TO_WAREHOUSE 环节温度 6.50，阈值 4.00，超限，记录时间 2026-11-18 22:22:30 [T1]\n- 批次 38（采购单号 PB20261118038，冷鲜猪肉）：ORIGIN_TO_WAREHOUSE 环节温度 6.50，阈值 4.00，超限，记录时间 2026-11-18 22:25:12 [T1]\n\n说明：T1 命中 4 条，明细仅展示前 3 行样例，第 4 条记录的具体批次号未在已核验明细中展示 [T1]。\n\n涉及供应商（共 4 家） [T2]\n- 江西绿源肉业有限公司\n- 自检供应商-1795011714\n- 自检供应商-1795011890\n- 自检供应商-1795016164\n\n是否需要召回\n- 当前已有 3 条召回记录，3 个加工批次被召回（召回单号 RC20261118001、RC20261118002、RC20261118003，原因均为\"同批次抽检发现兽药残留超标（自检模拟）\"，状态 INITIATED）[T3]\n- 按召回规则：批次发起召回后，加工批次状态置为 RECALLED，该批次全部销售记录同步标记为 RECALLED，禁止继续销售；召回后再次销售会返回业务错误码 40902「该批次已召回，禁止销售」[T4]\n- 关于冷链温度超限是否必须召回：未在已核验记录中找到依据。已核验记录中未见\"冷链温度超限即触发召回\"的规则条文 [T1][T4]",
+    "deterministicText": "共发现 4 条冷链温度超限记录，涉及 4 个采购批次。\n关联供应商 4 家：江西绿源肉业有限公司、自检供应商-1795011714、自检供应商-1795011890、自检供应商-1795016164。\n当前已有 3 条召回记录；3 个加工批次被召回。\n按召回规则：冷链温度超限会自动开异常工单，但不等于必须召回；\n是否召回属后续处置决策，需结合检验结论与抽检结果判断。\n\n依据：[T1] 冷链超限 4 条 · [T2] 采购批次 4 条 · [T3] 召回记录 3 条 · [T4] RULE-RECALL",
+    "usage": {
+      "prompt_tokens": 1315,
+      "completion_tokens": 505,
+      "total_tokens": 1820,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "prompt_cache_hit_tokens": 0,
+      "prompt_cache_miss_tokens": 1315
+    },
+    "http": 200
+  }
+}
